@@ -1,3 +1,22 @@
+# This file is a part of Redmine CRM (redmine_contacts) plugin,
+# customer relationship management plugin for Redmine
+#
+# Copyright (C) 2011-2016 Kirill Bezrukov
+# http://www.redminecrm.com/
+#
+# redmine_people is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# redmine_people is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
+
 module Redmine
   module Acts
     module AttachableGlobal
@@ -7,9 +26,15 @@ module Redmine
 
       module ClassMethods
         def acts_as_attachable_global(options = {})
-          has_many :attachments, options.merge(:as => :container,
-                                               :order => "#{Attachment.table_name}.created_on",
-                                               :dependent => :destroy)
+          if ActiveRecord::VERSION::MAJOR >= 4
+            has_many :attachments, lambda { order("#{Attachment.table_name}.created_on") }, options.merge(:as => :container,
+                                                 :dependent => :destroy)            
+          else
+            has_many :attachments, options.merge(:as => :container,
+                                                 :order => "#{Attachment.table_name}.created_on",
+                                                 :dependent => :destroy)
+          end
+
           send :include, Redmine::Acts::AttachableGlobal::InstanceMethods
           before_save :attach_saved_attachments
 

@@ -1,9 +1,29 @@
+# This file is a part of Redmine CRM (redmine_contacts) plugin,
+# customer relationship management plugin for Redmine
+#
+# Copyright (C) 2011-2016 Kirill Bezrukov
+# http://www.redminecrm.com/
+#
+# redmine_people is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# redmine_people is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
+
 class DepartmentsController < ApplicationController
   unloadable
 
   before_filter :find_department, :except => [:index, :create, :new]
   before_filter :require_admin, :only => [:destroy, :new, :create]
   before_filter :authorize_people, :only => [:update, :edit, :add_people, :remove_person]
+  before_filter :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
 
   helper :attachments
 
@@ -24,7 +44,10 @@ class DepartmentsController < ApplicationController
   def update
     @department.safe_attributes = params[:department]
 
-    if @department.save 
+    if @department.save
+      attachments = Attachment.attach_files(@department, params[:attachments])
+      render_attachment_warning_if_needed(@department)
+
       respond_to do |format| 
         format.html { redirect_to :action => "show", :id => @department } 
         format.api  { head :ok }
@@ -69,8 +92,8 @@ class DepartmentsController < ApplicationController
   end  
 
   def add_people
-    @people = Person.find_all_by_id(params[:person_id] || params[:person_ids])
-    @department.people << @people if request.post?
+    @people = PeopleInformation.where(:user_id => params[:person_id] || params[:person_ids])
+    @department.people_information << @people if request.post?
     respond_to do |format|
       format.html { redirect_to :controller => 'departments', :action => 'edit', :id => @department, :tab => 'people' }
       format.js
@@ -79,7 +102,7 @@ class DepartmentsController < ApplicationController
   end
 
   def remove_person
-    @department.people.delete(Person.find(params[:person_id])) if request.delete?
+    @department.people_information.delete(PeopleInformation.find(params[:person_id])) if request.delete?
     respond_to do |format|
       format.html { redirect_to :controller => 'departments', :action => 'edit', :id => @department, :tab => 'people' }
       format.js
@@ -89,9 +112,13 @@ class DepartmentsController < ApplicationController
 
 
   def autocomplete_for_person
-    @people = Person.active.where(:type => 'User').not_in_department(@department).like(params[:q]).all(:limit => 100)
+    @people = Person.active.where(:type => 'User').not_in_department(@department).like(params[:q]).limit(100)
     render :layout => false
   end  
+
+  def load_tab
+
+  end
 
 private
   def find_department
@@ -120,5 +147,14 @@ private
       deny_access  
     end
   end  
+
+  def load_department_attachments
+    @department_attachments = @department.attachments
+  end
+
+  def load_department_events
+    events = Redmine::Activity::CrmFetcher.new(User.current, :author => @department.people_of_branch_department).events(nil, nil, :limit => 10)
+    @events_by_day = events.group_by(&:event_date)
+  end
 
 end
