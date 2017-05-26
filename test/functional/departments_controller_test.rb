@@ -1,10 +1,10 @@
 # encoding: utf-8
 #
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ class DepartmentsControllerTest < ActionController::TestCase
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
                             [:departments, :people_information, :attachments])
   def setup
+    Setting.plugin_redmine_people = {}
+
     @person = Person.find(4)
     @department = Department.find(2)
     set_fixtures_attachments_directory
@@ -142,6 +144,34 @@ class DepartmentsControllerTest < ActionController::TestCase
     post :remove_person, :id => @department.id, :person_id => @person.id
     assert_response 302
     assert (not @department.people.include? @person)
+  end
+
+  def test_create_with_manage_departments_access
+    PeopleAcl.create(2, ["manage_departments"])
+    @request.session[:user_id] = 2
+    post :create, :department => { :name => 'New Department' }
+    assert_response 302
+    assert_equal 'New Department', Department.last.name
+  end
+
+  def test_update_with_manage_departments_access
+    PeopleAcl.create(2, ["manage_departments"])
+    @request.session[:user_id] = 2
+    post :update, :id => @department.id,
+         :department => { :name => 'New Department Name' }
+
+    assert_response 302
+    assert_equal 'New Department Name', @department.reload.name
+  end
+
+  def test_destroy_with_manage_departments_access
+    PeopleAcl.create(2, ["manage_departments"])
+    @request.session[:user_id] = 2
+    post :destroy, :id => @department.id
+    assert_response 302
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Department.find(2)
+    end
   end
 
 end

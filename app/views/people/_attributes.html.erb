@@ -70,7 +70,7 @@
 
 	<% unless @person.birthday.blank? %>
 	<tr> <th class = "birthday"><%= l(:label_people_birthday) %>:</th><td class="birthday bday" title="<%= "#{format_date(@person.birthday)}" %>"><%= "#{@person.birthday.day} #{t('date.month_names')[@person.birthday.month]}"%></td> </tr>
-	<% unless Setting.plugin_redmine_people["hide_age"].to_i > 0 %>
+	<% unless RedminePeople.hide_age? %>
 		<tr> <th class = "age"><%= l(:label_people_age) %>:</th><td class="ega"><%= @person.age %></td> </tr>
 	<% end %>
 	<% end %>

@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,9 @@ class PeopleQuery < Query
     QueryColumn.new(:manager_id, :sortable => "#{Person.table_name}.firstname", :caption => :label_people_manager , :groupable => "#{PeopleInformation.table_name}.manager_id"),
     QueryColumn.new(:is_system, :sortable => "#{PeopleInformation.table_name}.is_system", :caption => :label_people_is_system),
     QueryColumn.new(:status, :sortable => "#{Person.table_name}.status", :caption => :field_status),
-    QueryColumn.new(:tags, :caption => :label_people_tags_plural)
+    QueryColumn.new(:tags, :caption => :label_people_tags_plural),
+    QueryColumn.new(:created_on, :sortable => "#{Person.table_name}.created_on"),
+    QueryColumn.new(:updated_on, :sortable => "#{Person.table_name}.updated_on")
   ]
 
   scope :visible, lambda {|*args|

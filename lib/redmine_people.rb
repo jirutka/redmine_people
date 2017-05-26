@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ Rails.configuration.to_prepare do
   require_dependency 'redmine_people/patches/application_helper_patch'
   require_dependency 'redmine_people/patches/users_controller_patch'
   require_dependency 'redmine_people/patches/my_controller_patch'
+  require_dependency 'redmine_people/patches/calendar_patch'
 
   require_dependency 'redmine_people/hooks/views_layouts_hook'
   require_dependency 'redmine_people/hooks/views_my_account_hook'
@@ -35,10 +36,11 @@ end
 
 module RedminePeople
   def self.available_permissions
-    [:edit_people, :view_people, :add_people,
-     :delete_people, :edit_departments, :delete_departments,
+    [:edit_people, :view_people, :add_people, :delete_people,
+     :manage_departments,
      :manage_tags, :manage_public_people_queries, :edit_subordinates,
-     :edit_notification]
+     :edit_announcement, :edit_work_experience, :edit_own_work_experience,
+     :manage_calendar]
   end
 
   def self.settings() Setting[:plugin_redmine_people] end
@@ -59,4 +61,7 @@ module RedminePeople
     end
   end
 
+  def self.hide_age?
+    Setting.plugin_redmine_people["hide_age"].to_i > 0
+  end
 end

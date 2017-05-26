@@ -1,10 +1,10 @@
 # encoding: utf-8
 #
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,10 +27,23 @@ class PeopleControllerTest < ActionController::TestCase
   fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
 
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                            [:departments, :people_information, :custom_fields, :custom_values, :attachments])
+                            [:people_work_experiences, :departments, :people_information, :custom_fields, :custom_values, :attachments])
 
   def setup
     @person = Person.find(4)
+    @person_params = {
+        :login => 'login',
+        :password => '12345678',
+        :password_confirmation => '12345678',
+        :firstname => 'Ivan',
+        :lastname => 'Ivanov',
+        :mail => 'ivan@ivanov.com',
+        :information_attributes => {
+            :facebook => 'Facebook',
+            :middlename => 'Ivanovich'
+        },
+        :tag_list => 'Tag1, Tag2'
+    }
     # Remove accesses operations
     Setting.plugin_redmine_people = {}
     set_fixtures_attachments_directory
@@ -97,7 +110,7 @@ class PeopleControllerTest < ActionController::TestCase
 
   def test_get_show
     @request.session[:user_id] = 1
-    get :show , :id => @person.id
+    get :show, :id => @person.id
     assert_response :success
     assert_select 'h1', /Robert Hill/
   end
@@ -118,19 +131,7 @@ class PeopleControllerTest < ActionController::TestCase
   def test_post_create
     @request.session[:user_id] = 1
     post :create,
-         :person => {
-                    :login => 'login',
-                    :password => '12345678',
-                    :password_confirmation => '12345678',
-                    :firstname => 'Ivan',
-                    :lastname => 'Ivanov',
-                    :mail => 'ivan@ivanov.com',
-                    :information_attributes => {
-                      :facebook => 'Facebook',
-                      :middlename => 'Ivanovich'
-                    },
-                    :tag_list => 'Tag1, Tag2'
-                   }
+         :person => @person_params
     person = Person.last
     assert_redirected_to :action => 'show', :id => person.id
     assert_equal ['ivan@ivanov.com','Ivanovich'], [person.email, person.middlename]
@@ -209,4 +210,39 @@ class PeopleControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  def test_get_new_without_default_group
+    with_people_settings 'default_group' => '' do
+      @request.session[:user_id] = 1
+      get :new
+      assert_response :success
+      assert_select "input[type=hidden][name='person[group_ids][]']", false, 'No groups'
+    end
+  end
+
+  def test_get_new_with_default_group
+    with_people_settings 'default_group' => '456' do
+      @request.session[:user_id] = 1
+      get :new
+      assert_response :success
+      assert_select "input[type=hidden][name='person[group_ids][]'][value='456']"
+    end
+  end
+
+  def test_post_create_with_default_group
+    @request.session[:user_id] = 1
+    @person_params[:group_ids] = [10]
+    post :create,
+         :person => @person_params
+    person = Person.last
+    assert_equal 10, person.groups.first.id
+  end
+
+  def test_post_create_with_deleted_default_group
+    @request.session[:user_id] = 1
+    @person_params[:group_ids] = [777]
+    post :create,
+         :person => @person_params
+    person = Person.last
+    assert_nil person.groups.first
+  end
 end

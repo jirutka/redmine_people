@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,18 +56,6 @@ class Department < ActiveRecord::Base
     Department.where("lft > ? AND rgt < ?", lft, rgt).order('lft')
   end
 
-  # Yields the given block for each department with its level in the tree
-  def self.department_tree(departments, &block)
-    ancestors = []
-    departments.sort_by(&:lft).each do |department|
-      while (ancestors.any? && !department.is_descendant_of?(ancestors.last))
-        ancestors.pop
-      end
-      yield department, ancestors.size
-      ancestors << department
-    end
-  end  
-
   def css_classes
     s = 'project'
     s << ' root' if root?
@@ -93,17 +81,34 @@ class Department < ActiveRecord::Base
 
   def attachments_visible?(user=User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
-    (user.allowed_people_to?(:edit_departments) || PeopleInformation.find_by_user_id(user.id).try(:department_id) == self.id)
+    (user.allowed_people_to?(:manage_departments) || PeopleInformation.find_by_user_id(user.id).try(:department_id) == self.id)
   end
 
   def attachments_editable?(user=User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
-      user.allowed_people_to?(:edit_departments)
+      user.allowed_people_to?(:manage_departments)
   end
 
   def attachments_deletable?(user=User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
-      user.allowed_people_to?(:edit_departments)
+      user.allowed_people_to?(:manage_departments)
   end
 
+  class << self
+    # Yields the given block for each department with its level in the tree
+    def department_tree(departments, &block)
+      ancestors = []
+      departments.sort_by(&:lft).each do |department|
+        while (ancestors.any? && !department.is_descendant_of?(ancestors.last))
+          ancestors.pop
+        end
+        yield department, ancestors.size
+        ancestors << department
+      end
+    end
+
+    def all_visible_departments
+      Department.order(:name)
+    end
+  end
 end

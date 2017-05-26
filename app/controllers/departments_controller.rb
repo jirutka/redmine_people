@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,7 @@ class DepartmentsController < ApplicationController
   unloadable
 
   before_filter :find_department, :except => [:index, :create, :new]
-  before_filter :require_admin, :only => [:destroy, :new, :create]
-  before_filter :authorize_people, :only => [:update, :edit, :add_people, :remove_person]
+  before_filter :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person]
   before_filter :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
 
   helper :attachments
@@ -60,13 +59,17 @@ class DepartmentsController < ApplicationController
     end    
   end  
 
-  def destroy  
+  def destroy
     if @department.destroy
       flash[:notice] = l(:notice_successful_delete)
-      respond_to do |format|
-        format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" } 
-        format.api { render_api_ok }
-      end      
+      if params[:from] == 'people_settings'
+        respond_to do |format|
+          format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" }
+          format.api { render_api_ok }
+        end
+      else
+        redirect_to :action => "index"
+      end
     else
       flash[:error] = l(:notice_unsuccessful_save)
     end
@@ -117,10 +120,10 @@ class DepartmentsController < ApplicationController
   end  
 
   def load_tab
-
   end
 
-private
+  private
+
   def find_department
     @department = Department.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -128,24 +131,7 @@ private
   end
 
   def authorize_people
-    allowed = case params[:action].to_s
-      when "create", "new"
-        User.current.allowed_people_to?(:add_departments, @person)
-      when "update", "edit", "add_people", "remove_person"
-        User.current.allowed_people_to?(:edit_departments, @person)
-      when "delete"
-        User.current.allowed_people_to?(:delete_departments, @person)
-      when "index", "show"
-        User.current.allowed_people_to?(:view_departments, @person)
-      else
-        false
-      end    
-
-    if allowed
-      true
-    else  
-      deny_access  
-    end
+    User.current.allowed_people_to?(:manage_departments, @person) || deny_access
   end  
 
   def load_department_attachments
@@ -156,5 +142,4 @@ private
     events = Redmine::Activity::CrmFetcher.new(User.current, :author => @department.people_of_branch_department).events(nil, nil, :limit => 10)
     @events_by_day = events.group_by(&:event_date)
   end
-
 end

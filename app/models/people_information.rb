@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,14 @@ class PeopleInformation < ActiveRecord::Base
 
   attr_accessible :phone, :address, :skype, :birthday, :job_title, :company, :middlename, :gender, :twitter,
                   :facebook, :linkedin, :department_id, :background, :appearance_date, :is_system, :manager_id
+
+  def start_date
+    birthday
+  end
+
+  def due_date
+    nil
+  end
 
   def self.reject_information(attributes)
     exists = attributes['id'].present?

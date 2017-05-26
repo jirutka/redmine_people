@@ -6,7 +6,7 @@
   </div>
   <h3><%= l(:label_contact_plural) %></h3>
 
-  <%= render :partial => 'person_data', :collection => @subordinates %>
+  <%= render :partial => 'person_data', :collection => @person.all_visible_subordinates(params[:page], @limit) %>
   <div style="clear:both;"> </div>
 </div>
 

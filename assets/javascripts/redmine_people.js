@@ -92,20 +92,20 @@ function showPeopleTab(name, url) {
   return false;
 }
 
-//show modal div for notifications
-function showNotification(url){
+//show modal div for announcements
+function showAnnouncement(url){
   $.ajax({
       url: url,
       type: 'post',
       data:{
-        people_notification:{ 
-          description: $("#notification_description").val(),
-          kind: $("#notification_kind").val()
+        people_announcement:{
+          description: $("#announcement_description").val(),
+          kind: $("#people_announcement_kind").val()
         }
       },
       success: function(data, status, xhr) {
-        $("#notification-show").html(data);
-        showModal('notification-show', '830px');
+        $("#announcement-show").html(data);
+        showModal('announcement-show', '50%');
       }
     });
 }

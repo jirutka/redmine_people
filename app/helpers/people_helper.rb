@@ -1,10 +1,10 @@
 # encoding: utf-8
 #
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,17 @@
 
 module PeopleHelper
 
+  def people_tabs(person)
+    tabs = []
+    tabs << {:name => 'activity', :partial => 'activity', :label => l(:label_activity)}
+    tabs << {:name => 'files', :partial => 'attachments', :label => l(:label_attachment_plural)}
+    tabs << {:name => 'projects', :partial => 'projects', :label => l(:label_project_plural)}
+    tabs << {:name => 'subordinates', :partial => 'subordinates', :label => l(:label_people_subordinates)} if person.subordinates.any?
+    tabs
+  end
+
   def person_age(age)
-    Setting.plugin_redmine_people["hide_age"].to_i > 0 ? '' : "(#{age + 1})"
+    RedminePeople.hide_age? ? '' : "(#{age + 1})"
   end
 
   def birthday_date(person)
@@ -32,6 +41,11 @@ module PeopleHelper
     else
       "#{person.birthday.day} #{t('date.month_names')[person.birthday.month]} #{ages}"
     end
+  end
+
+  def person_manager_full_name
+    manager = @person.manager_id ? Person.find(@person.manager_id) : ''
+    content_tag('span', manager, :class => 'manager')
   end
 
   def retrieve_people_query
@@ -70,6 +84,14 @@ module PeopleHelper
     s = ''
     principals.each do |principal|
       s << "<label>#{ check_box_tag name, principal.id, false, :id => nil } #{principal.is_a?(Group) ? l(:label_group) + ': ' + principal.to_s : principal}</label>\n"
+    end
+    s.html_safe
+  end
+
+  def people_principals_radio_button_tags(name, principals)
+    s = ''
+    principals.each do |principal|
+      s << "<label>#{ radio_button_tag name, principal.id, false, :id => nil } #{principal.is_a?(Group) ? l(:label_group) + ': ' + principal.to_s : principal}</label>\n"
     end
     s.html_safe
   end
@@ -113,6 +135,10 @@ module PeopleHelper
     else
       content_tag 'p', l(:label_no_data), :class => "nodata"
     end
+  end
+
+  def cleaned_phone(phone)
+    phone.scan(/[\d+()-]+/).join
   end
 
 end

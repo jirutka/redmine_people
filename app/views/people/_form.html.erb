@@ -21,8 +21,16 @@
 	  <p><%= information.text_field :middlename, :label => l(:label_people_middlename) %></p>
 		<p><%= f.text_field :lastname, :required => true %></p>
 
-    <% if (@person.available_managers.any? || @person.new_record?) %>
-		  <p><%= information.select :manager_id, options_for_select( @person.available_managers.map{ |u| [u.name, u.id]} , @person.manager_id), :include_blank => true, :label => l(:label_people_manager) %></p>
+    <% if @person.available_managers.any? || @person.new_record? %>
+			<p id="person_information_attributes_manager_id_wrap">
+        <%= label_tag l(:label_people_manager) %>
+        <%= person_manager_full_name %>
+        <%= hidden_field_tag 'person[information_attributes][manager_id]', @person.manager_id %>
+        <%= link_to content_tag(:span, l(:button_edit), :class => 'icon icon-edit'),
+                    manager_person_path(@person.id || 'new'),
+                    :remote => true,
+                    :method => 'get' %>
+      </p>
     <% end %>
 
 		<% if @person.id != User.current.id %>

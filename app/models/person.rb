@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 class Person < User
   unloadable
   include Redmine::SafeAttributes
+  include Redmine::Pagination
 
   self.inheritance_column = :_type_disabled
 
@@ -121,23 +122,6 @@ class Person < User
     return Date.parse("#{year}#{mmdd}")
   end
 
-  def self.next_birthdays(limit = 10)
-    Person.eager_load(:information).active.where("#{PeopleInformation.table_name}.birthday IS NOT NULL").sort_by(&:next_birthday).first(limit)
-  end
-
-  def self.tomorrow_birthdays
-    Person.next_birthdays.select{|p| p.next_birthday == Date.today + 1 }
-  end
-
-  def self.today_birthdays
-    Person.next_birthdays.select{|p| p.next_birthday == Date.today }
-  end
-
-  def self.week_birthdays
-    Person.next_birthdays.select{|p| p.next_birthday <= Date.today.end_of_week &&
-      p.next_birthday > Date.tomorrow }
-  end
-
   def age
     return nil if birthday.blank?
     now = Time.now
@@ -174,4 +158,63 @@ class Person < User
     subordinate.save
   end
 
+  def all_visible_attachments
+    attachments.select{|a| a != avatar} if visible?
+  end
+
+  def all_visible_memberships
+    memberships.where(Project.visible_condition(User.current)) if visible?
+  end
+
+  def all_visible_events
+    Redmine::Activity::Fetcher.new(User.current, :author => self).events(nil, nil, :limit => 10).group_by(&:event_date) if visible?
+  end
+
+  def all_visible_subordinates(page, limit)
+    if visible?
+      #limit = per_page_option
+      subordinates_count = subordinates.count
+
+      if Redmine::VERSION.to_s > '2.5'
+        subordinate_pages = Paginator.new(subordinates_count, limit, page)
+        offset =subordinate_pages.offset
+      else
+        subordinate_pages = Paginator.new(self, subordinates_count, limit, page)
+        offset = subordinate_pages.current.offset
+      end
+
+      subordinates.limit(limit).offset(offset)
+    end
+  end
+
+  class << self
+    def next_birthdays(limit = 10)
+      Person.eager_load(:information).active.where("#{PeopleInformation.table_name}.birthday IS NOT NULL").sort_by(&:next_birthday).first(limit)
+    end
+
+    def tomorrow_birthdays
+      Person.next_birthdays.select{|p| p.next_birthday == Date.today + 1 }
+    end
+
+    def today_birthdays
+      Person.next_birthdays.select{|p| p.next_birthday == Date.today }
+    end
+
+    def week_birthdays
+      Person.next_birthdays.select{|p| p.next_birthday <= Date.today.end_of_week &&
+          p.next_birthday > Date.tomorrow }
+    end
+
+    def all_visible_next_birthdays
+      next_birthdays = Person.active
+      next_birthdays = next_birthdays.visible if Redmine::VERSION.to_s >= "3.0"
+      next_birthdays.next_birthdays
+    end
+
+    def all_visible_new_people
+      new_people = Person.active
+      new_people = new_people.visible if Redmine::VERSION.to_s >= "3.0"
+      new_people.eager_load(:information).where("#{PeopleInformation.table_name}.appearance_date IS NOT NULL").order("#{PeopleInformation.table_name}.appearance_date desc").first(5)
+    end
+  end
 end

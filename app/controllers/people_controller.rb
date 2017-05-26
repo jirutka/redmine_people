@@ -1,8 +1,8 @@
-# This file is a part of Redmine CRM (redmine_contacts) plugin,
-# customer relationship management plugin for Redmine
+# This file is a part of Redmine People (redmine_people) plugin,
+# humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2016 Kirill Bezrukov
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,11 +23,11 @@ class PeopleController < ApplicationController
   Mime::Type.register "text/x-vcard", :vcf
 
   before_filter :find_person, :only => [:show, :edit, :update, :destroy, :edit_membership, :destroy_membership, :destroy_avatar, :load_tab, :remove_subordinate]
-  before_filter :authorize_people, :except => [:avatar, :context_menu, :autocomplete_tags]
+  before_filter :find_managers, :only => [:manager, :autocomplete_for_manager, :add_manager]
+  before_filter :authorize_people, :except => [:avatar, :context_menu, :autocomplete_tags, :manager, :autocomplete_for_manager, :add_manager]
 
   before_filter :bulk_find_people, :only => [:context_menu]
-  before_filter :visible?, :only => [:show, :load_tab]
-  before_filter :load_person_attachments, :load_person_memberships, :load_person_events, :load_subordinates, :only => [:show, :load_tab]
+  before_filter :limit_per_page_option, :only => [:load_tab, :show, :remove_subordinate]
 
   include PeopleHelper
   helper :queries
@@ -67,7 +67,7 @@ class PeopleController < ApplicationController
 
       @people_count_by_group = @query.object_count_by_group
       @people = @query.results_scope(
-        :include => [:avatar],
+        :include => [:avatar, :tags],
         :search => params[:search],
         :order => sort_clause,
         :limit  =>  @limit,
@@ -75,15 +75,6 @@ class PeopleController < ApplicationController
       )
 
       @groups = Group.all.sort
-      @departments = Department.order(:name)
-
-      @next_birthdays = Person.active
-      @next_birthdays = @next_birthdays.visible if Redmine::VERSION.to_s >= "3.0"
-      @next_birthdays = @next_birthdays.next_birthdays
-
-      @new_people = Person.active
-      @new_people = @new_people.visible if Redmine::VERSION.to_s >= "3.0"
-      @new_people = @new_people.eager_load(:information).where("#{PeopleInformation.table_name}.appearance_date IS NOT NULL").order("#{PeopleInformation.table_name}.appearance_date desc").first(5)
 
       respond_to do |format|
         format.html {render :partial => people_list_style, :layout => false if request.xhr?}
@@ -147,6 +138,7 @@ class PeopleController < ApplicationController
       @person.pref[:no_self_notified] = (params[:no_self_notified] == '1')
       @person.pref.save
       @person.notified_project_ids = (@person.mail_notification == 'selected' ? params[:notified_project_ids] : [])
+      @person.group_ids = params[:person][:group_ids] if groups_present?
       attach_avatar
       Mailer.account_information(@person, params[:person][:password]).deliver if params[:send_information]
 
@@ -217,7 +209,18 @@ class PeopleController < ApplicationController
   end
 
   def load_tab
+  end
 
+  def manager
+    @managers = @managers.limit(10)
+  end
+
+  def autocomplete_for_manager
+    @managers = @managers.like(params[:q]).limit(100).to_a
+    render :layout => false
+  end
+
+  def add_manager
   end
 
   def destroy_avatar
@@ -229,7 +232,7 @@ class PeopleController < ApplicationController
   def remove_subordinate
     @person.remove_subordinate(params[:subordinate_id])
 
-    load_subordinates
+    @person.all_visible_subordinates(params[:page], @limit)
     respond_to do |format|
       format.html { redirect_to :controller => 'people', :action => 'show', :tab => 'subordinates', :id => @person.id}
       format.js
@@ -277,14 +280,24 @@ private
   end
 
   def find_person
-    if params[:id] == 'current'
+    id = params[:person_id] || params[:id]
+    if id == 'current'
       require_login || return
       @person = User.current
     else
-      @person = Person.find(params[:id])
+      @person = Person.find(id)
     end
   rescue ActiveRecord::RecordNotFound
     render_404
+  end
+
+  def find_managers
+    if params[:id] == 'new'
+      @person  = Person.new(:language => Setting.default_language, :mail_notification => Setting.default_notification_option)
+    else
+      find_person
+    end
+    @managers = @person.available_managers
   end
 
   def bulk_find_people
@@ -298,39 +311,12 @@ private
     render_404
   end
 
-  def visible?
-    unless @person.visible?
-      render_404
-      return false
-    end
+  def groups_present?
+    groups = Group.where(:id => params[:person][:group_ids])
+    groups.present?
   end
 
-  def load_person_attachments
-    @person_attachments = @person.attachments.select{|a| a != @person.avatar}
-  end
-
-  def load_person_memberships
-    @memberships = @person.memberships.where(Project.visible_condition(User.current))
-  end
-
-  def load_person_events
-    events = Redmine::Activity::Fetcher.new(User.current, :author => @person).events(nil, nil, :limit => 10)
-    @events_by_day = events.group_by(&:event_date)
-  end
-
-  def load_subordinates
+  def limit_per_page_option
     @limit = per_page_option
-    @subordinates_count = @person.subordinates.count
-
-    if Redmine::VERSION.to_s > '2.5'
-      @subordinate_pages = Paginator.new(@subordinates_count,  @limit, params[:page])
-      @offset = @subordinate_pages.offset
-    else
-      @subordinate_pages = Paginator.new(self, @subordinates_count,  @limit, params[:page])
-      @offset = @subordinate_pages.current.offset
-    end
-
-    @subordinates = @person.subordinates.limit(@limit).offset(@offset)
   end
-
 end
