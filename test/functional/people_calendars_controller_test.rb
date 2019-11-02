@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class PeopleCalendarsControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
+
   fixtures :users
   fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
 
@@ -36,44 +37,41 @@ class PeopleCalendarsControllerTest < ActionController::TestCase
   end
 
   def test_without_authorization
-    get :index
+    compatible_request :get, :index
     assert_response 302
   end
 
   def test_with_deny_user
     @request.session[:user_id] = 2
-    get :index
+    compatible_request :get, :index
     assert_response 403
   end
 
   def test_with_access_rights
     PeopleAcl.create(2, ['view_people'])
     @request.session[:user_id] = 2
-    get :index
+    compatible_request :get, :index
     assert_response :success
   end
 
   def test_get_index
     @request.session[:user_id] = 1
-    get :index
+    compatible_request :get, :index
     assert_response :success
-    assert_template :index
     assert_select 'h2', 'Calendar'
   end
 
   def test_get_index_with_holiday
     @request.session[:user_id] = 1
-    get :index, :month => 1, :year => 2017, :set_filter => 1
+    compatible_request :get, :index, :month => 1, :year => 2017, :set_filter => 1
     assert_response :success
-    assert_template :index
     assert_match /Holiday 2/, @response.body
   end
 
   def test_get_index_with_holidays
     @request.session[:user_id] = 1
-    get :index, :month => 4, :year => 2017, :set_filter => 1
+    compatible_request :get, :index, :month => 4, :year => 2017, :set_filter => 1
     assert_response :success
-    assert_template :index
     assert_select '.holiday .ending' do |elements|
       assert_equal 2, elements.count
     end
@@ -81,17 +79,15 @@ class PeopleCalendarsControllerTest < ActionController::TestCase
 
   def test_get_index_with_birthday
     @request.session[:user_id] = 1
-    get :index, :month => 7, :year => 2017, :set_filter => 1
+    compatible_request :get, :index, :month => 7, :year => 2017, :set_filter => 1
     assert_response :success
-    assert_template :index
     assert_select '.birthday a', :count => 2, :text => 'Redmine Admin'
   end
 
   def test_get_index_without_birthday
     @request.session[:user_id] = 1
-    get :index, :month => 7, :year => 2017, :set_filter => 1, :set_birthdays => 1
+    compatible_request :get, :index, :month => 7, :year => 2017, :set_filter => 1, :set_birthdays => 1
     assert_response :success
-    assert_template :index
     assert_select '.birthday a', :count => 0, :text => 'Redmine Admin'
   end
 end

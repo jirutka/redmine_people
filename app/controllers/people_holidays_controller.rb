@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,9 +20,8 @@
 class PeopleHolidaysController < ApplicationController
   unloadable
 
-  before_filter :check_permissions, :except => [:index]
-  before_filter :find_holiday, :except => [:index, :new, :create]
-  before_filter :build_new_holiday_from_params, :only => [:new, :create]
+  before_action :check_permissions, :except => [:index]
+  before_action :find_holiday, :except => [:index, :new, :create]
 
   def index
     raise Unauthorized unless User.current.allowed_people_to?(:view_people)
@@ -30,12 +29,15 @@ class PeopleHolidaysController < ApplicationController
   end
 
   def new
+    @holiday = PeopleHoliday.new
   end
 
   def edit
   end
 
   def create
+    @holiday = PeopleHoliday.new
+    @holiday.safe_attributes = params[:holiday]
     if @holiday.save
       respond_to do |format|
         format.html {
@@ -43,7 +45,6 @@ class PeopleHolidaysController < ApplicationController
           redirect_to people_holidays_path
         }
       end
-      return
     else
       respond_to do |format|
         format.html {
@@ -62,7 +63,7 @@ class PeopleHolidaysController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render "edit", :id => @holiday }
+        format.html { render 'edit', :id => @holiday }
       end
     end
   end
@@ -78,12 +79,6 @@ class PeopleHolidaysController < ApplicationController
 
   def check_permissions
     raise Unauthorized unless User.current.allowed_people_to?(:manage_calendar)
-  end
-
-  def build_new_holiday_from_params
-    @holiday = PeopleHoliday.new
-    attrs = (params[:holiday] || {}).deep_dup
-    @holiday.safe_attributes = attrs
   end
 
   def find_holiday

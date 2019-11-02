@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,13 +22,13 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class PersonTest < ActiveSupport::TestCase
+  include RedminePeople::TestCase::TestHelper
 
   fixtures :users, :projects, :roles, :members, :member_roles
   fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
 
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                            [:people_information, :departments])
-
+                                          [:people_information, :departments, :time_entries, :people_holidays])
 
   def setup
     # Remove accesses operations
@@ -36,7 +36,14 @@ class PersonTest < ActiveSupport::TestCase
     Setting.plugin_redmine_people = {}
 
     @admin = User.find(1)
-    @params =  { 'firstname' => 'newName', 'mail' => 'new@mail.ru', 'information_attributes' => { 'id' => 4, 'phone' => '89555555555', 'is_system' => QUOTED_TRUE}}
+    @params = { 'firstname' => 'newName',
+                'mail' => 'new@mail.ru',
+                'information_attributes' => {
+                  'id' => 4,
+                  'phone' => '89555555555',
+                  'is_system' => QUOTED_TRUE
+                }
+              }
     @person = Person.find(4)
   end
 
@@ -113,7 +120,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal '89555555555', @person.phone
 
     # Can not change its own system fields
-    assert (not @person.is_system)
+    assert !@person.is_system
   end
 
   def test_save_with_edit_people_access
@@ -134,8 +141,11 @@ class PersonTest < ActiveSupport::TestCase
     person.login = 'login'
 
     person.safe_attributes = { 'lastname' => 'lastname',
-      'firstname' => 'newName', 'mail' => 'new@mail.ru',
-      'information_attributes' => { 'phone' => '89555555555', 'is_system' => QUOTED_TRUE}}
+                               'firstname' => 'newName', 'mail' => 'new@mail.ru',
+                               'information_attributes' => {
+                                 'phone' => '89555555555', 'is_system' => QUOTED_TRUE
+                               }
+                             }
     person.type = 'User'
     person.save!
     assert_equal 'new@mail.ru', person.mail
@@ -174,18 +184,18 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   def test_in_department_scope
-    assert (not Person.in_department(1).any? )
-    assert_equal [1,2,3], Person.in_department(2).map(&:id).sort
+    assert !Person.in_department(1).any?
+    assert_equal [1, 2, 3], Person.in_department(2).map(&:id).sort
     assert_equal [4], Person.in_department(3).map(&:id)
   end
 
   def test_not_in_department_scope
     assert Person.not_in_department(1).map(&:id).include?(4)
-    assert (not Person.not_in_department(2).map(&:id).include?(1))
+    assert !Person.not_in_department(2).map(&:id).include?(1)
   end
 
   def test_visible?
-    if Redmine::VERSION.to_s >= "3.0"
+    if Redmine::VERSION.to_s >= '3.0'
       Member.delete_all
       MemberRole.delete_all
 
@@ -198,7 +208,7 @@ class PersonTest < ActiveSupport::TestCase
 
       # There are no joint projects between person2 and person3
       Member.create_principal_memberships(person2, :project_id => project1.id, :role_ids => [role.id])
-      assert (not person3.visible?(person2))
+      assert !person3.visible?(person2)
 
       # Adds the joint project
       Member.create_principal_memberships(person3, :project_id => project1.id, :role_ids => [role.id])
@@ -209,16 +219,16 @@ class PersonTest < ActiveSupport::TestCase
   def test_add_tag
     User.current = nil
     person = Person.find(4)
-    assert (not person.tags.any?)
+    assert !person.tags.any?
 
     # without access
-    person.safe_attributes = { 'tag_list' => 'Tag1, Tag2'}
+    person.safe_attributes = { 'tag_list' => 'Tag1, Tag2' }
     person.save
-    assert (not person.reload.tag_list.any?)
+    assert !person.reload.tag_list.any?
 
     # with access
     User.current = Person.find(1)
-    person.safe_attributes = { 'tag_list' => 'Tag1, Tag2'}
+    person.safe_attributes = { 'tag_list' => 'Tag1, Tag2' }
     person.save
     assert_equal ['Tag1', 'Tag2'], person.reload.tag_list.sort
   end

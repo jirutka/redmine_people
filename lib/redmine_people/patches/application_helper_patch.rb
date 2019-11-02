@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -28,36 +28,20 @@ module RedminePeople
         base.class_eval do
           unloadable
 
-          alias_method_chain :link_to_user, :people
-          alias_method_chain :avatar, :people
+          alias_method :link_to_user_without_people, :link_to_user
+          alias_method :link_to_user, :link_to_user_with_people
+
+          unless RedminePeople.module_exists?(:AvatarsHelper)
+            include AvatarsHelperPatch::InstanceMethods
+
+            alias_method :avatar_without_people, :avatar
+            alias_method :avatar, :avatar_with_people
+          end
         end
       end
 
-
       module InstanceMethods
-        # include ContactsHelper
-
-        def avatar_with_people(user, options = { })
-          options[:width] = options[:size] || "50" unless options[:width]
-          options[:height] = options[:size] || "50" unless options[:height]
-          options[:size] = "#{options[:width]}x#{options[:height]}" if ActiveRecord::VERSION::MAJOR >= 4
-          if user.blank? || user.is_a?(String) || (user.is_a?(User) && user.anonymous?)
-            return avatar_without_people(user, options)
-          end
-          if user.is_a?(User) && (avatar = user.avatar)
-            avatar_url = url_for :only_path => false, :controller => "people", :action => "avatar", :id => avatar, :size => options[:size]
-            image_tag(avatar_url, options.merge({:class => "gravatar"}))
-          elsif user.respond_to?(:twitter) && !user.twitter.blank?
-            image_tag("https://twitter.com/#{user.twitter}/profile_image?size=original", options.merge({:class => "gravatar"}))
-          elsif !Setting.gravatar_enabled?
-            image_tag('person.png', options.merge({:plugin => "redmine_people", :class => "gravatar"}))
-          else
-            avatar_without_people(user, options)
-          end
-
-        end
-
-        def link_to_user_with_people(user, options={})
+        def link_to_user_with_people(user, options = {})
           if user.is_a?(User)
             name = h(user.name(options[:format]))
             if user.active? && User.current.allowed_people_to?(:view_people, user)
@@ -69,9 +53,7 @@ module RedminePeople
             h(user.to_s)
           end
         end
-
       end
-
     end
   end
 end

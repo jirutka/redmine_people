@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -31,10 +31,20 @@ module RedminePeople
       module InstanceMethods
         # Sets calendar events
         def custom_events=(events)
+          set_custom_events(events, true)
+        end
+
+        def set_custom_events(events, only_for_current_year = false)
           @events = events
           multiply_events
-          @ending_events_by_days = @events.group_by {|event| current_year_date(event.due_date)}
-          @starting_events_by_days = @events.group_by {|event| current_year_date(event.start_date)}
+
+          @ending_events_by_days = @events.group_by do |event|
+            only_for_current_year ? current_year_date(event.due_date) : event.due_date
+          end
+
+          @starting_events_by_days = @events.group_by do |event|
+            only_for_current_year ? current_year_date(event.start_date) : event.start_date
+          end
         end
 
         def weekend?(day)
@@ -78,7 +88,6 @@ module RedminePeople
           mmdd = '0301' if mmdd == '0229' && !Date.parse("#{year}0101").leap?
           Date.parse("#{year}#{mmdd}")
         end
-
       end
     end
   end

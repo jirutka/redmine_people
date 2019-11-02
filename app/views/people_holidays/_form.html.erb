@@ -33,4 +33,28 @@
     </p>
     <%= wikitoolbar_for 'holiday_description' %>
 
+    <% if @holiday.new_record? %>
+      <p><%= label_tag :notify_check, l(:label_people_holiday_notify) %><%= check_box_tag :notify_check, '1', params[:notify_check] == '1' %></p>
+      <p style="display: none;"><%= f.select :notify, notify_options_for_select, :label => '' %></p>
+    <% end %>
+
 <% end %>
+
+<%= javascript_tag do %>
+    $.toggle_notify_people = function() {
+      var checkbox = $('#notify_check');
+      var select = $('#holiday_notify').closest('p');
+      if (checkbox.is(':checked')) {
+        select.show();
+      } else {
+        select.find('option').prop('selected', '');
+        select.hide();
+      }
+    };
+
+    $.toggle_notify_people();
+
+    $('#notify_check').on('click', function() {
+      $.toggle_notify_people();
+    })
+<% end if @holiday.new_record? %>

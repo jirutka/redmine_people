@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -21,21 +21,23 @@
 # See: http://guides.rubyonrails.org/routing.html
 
 resources :people do
-    collection do
-      get :bulk_edit, :context_menu, :edit_mails, :preview_email, :avatar
-      post :bulk_edit, :bulk_update, :send_mails, :add_manager
-      delete :bulk_destroy
-      get 'calendar' => 'people_calendars#index'
-      resources :holidays, :except => :show, :controller => :people_holidays, :as => :people_holidays
-    end
-    member do
-      get :manager
-      get :autocomplete_for_manager
-      delete :destroy_avatar
-      get 'tabs/:tab' => 'people#show', :as => "tabs"
-      get 'load_tab' => 'people#load_tab', :as => "load_tab"
-      delete "remove_subordinate" => "people#remove_subordinate" , :as => "remove_subordinate"
-    end
+  collection do
+    get :bulk_edit, :context_menu, :edit_mails, :preview_email, :avatar
+    post :bulk_edit, :bulk_update, :send_mails, :add_manager
+    delete :bulk_destroy
+    get 'calendar' => 'people_calendars#index'
+    resources :holidays, except: :show, controller: :people_holidays, as: :people_holidays
+  end
+
+  member do
+    get :manager
+    get :autocomplete_for_manager
+    delete :destroy_avatar
+    get 'tabs/:tab' => 'people#show', :as => 'tabs'
+    get 'load_tab' => 'people#load_tab', :as => 'load_tab'
+    delete 'remove_subordinate' => 'people#remove_subordinate', :as => 'remove_subordinate'
+  end
+  resources :people_rates, except: [:index, :show]
 end
 
 resources :departments do
@@ -43,8 +45,8 @@ resources :departments do
     get :autocomplete_for_person
     post :add_people
     delete :remove_person
-    get 'tabs/:tab' => 'departments#show', :as => "tabs"
-    get 'load_tab' => 'departments#load_tab', :as => "load_tab"
+    get 'tabs/:tab' => 'departments#show', :as => 'tabs'
+    get 'load_tab' => 'departments#load_tab', :as => 'load_tab'
   end
 end
 

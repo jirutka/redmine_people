@@ -24,14 +24,14 @@
 
   <%= render :partial => 'form', :locals => {:f => f} %>
 
-  <%= submit_tag l(:button_save) -%>    
+  <%= submit_tag l(:button_save) -%>
 <% end -%>
 
 <% content_for :sidebar do %>
 <% end %>
 
 <% content_for :header_tags do %>
+  <%= select2_assets %>
   <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
-  <%= stylesheet_link_tag :redmine_people, :plugin => 'redmine_people' %>
   <%= robot_exclusion_tag %>
 <% end %>

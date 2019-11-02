@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -30,9 +30,9 @@ class PeopleCalendarsController < ApplicationController
   def index
     raise Unauthorized unless User.current.allowed_people_to?(:view_people)
 
-    if params[:year] and params[:year].to_i > 1900
+    if params[:year] && params[:year].to_i > 1900
       @year = params[:year].to_i
-      if params[:month] and params[:month].to_i > 0 and params[:month].to_i < 13
+      if params[:month] && params[:month].to_i > 0 && params[:month].to_i < 13
         @month = params[:month].to_i
       end
     end
@@ -45,7 +45,7 @@ class PeopleCalendarsController < ApplicationController
     @query.group_by = nil
     if @query.valid?
       events = []
-      events += @query.holidays(:conditions => ["((start_date BETWEEN ? AND ?) OR (end_date BETWEEN ? AND ?))", @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt])
+      events += @query.holidays(:conditions => ['((start_date BETWEEN ? AND ?) OR (end_date BETWEEN ? AND ?))', @calendar.startdt, @calendar.enddt, @calendar.startdt, @calendar.enddt])
       events += @query.birthdays(:month => @calendar.month) if show_birthdays?
 
       @calendar.custom_events = events

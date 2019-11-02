@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,24 +22,32 @@
 module PeopleHelper
 
   def people_tabs(person)
-    tabs = []
-    tabs << {:name => 'activity', :partial => 'activity', :label => l(:label_activity)}
-    tabs << {:name => 'files', :partial => 'attachments', :label => l(:label_attachment_plural)}
-    tabs << {:name => 'projects', :partial => 'projects', :label => l(:label_project_plural)}
-    tabs << {:name => 'subordinates', :partial => 'subordinates', :label => l(:label_people_subordinates)} if person.subordinates.any?
+    tabs = [
+      { name: 'activity', partial: 'activity', label: l(:label_activity)},
+      { name: 'files', partial: 'attachments', label: l(:label_attachment_plural)},
+      { name: 'projects', partial: 'projects', label: l(:label_project_plural)}
+    ]
+
+    tabs << { name: 'subordinates', partial: 'subordinates', label: l(:label_people_subordinates)} if person.subordinates.any?
+
+    if rates_tab_is_available_for?(person)
+      tabs << { name: 'rates', partial: 'rates', label: l(:label_people_rates) }
+    end
+
     tabs
   end
 
-  def person_age(age)
-    RedminePeople.hide_age? ? '' : "(#{age + 1})"
+  def rates_tab_is_available_for?(person)
+    User.current.allowed_people_to?(:view_rates, person) ||
+      (User.current.id == person.id && User.current.allowed_people_to?(:view_own_rates, person))
   end
 
   def birthday_date(person)
     ages = person_age(person.age)
     if person.birthday.day == Date.today.day && person.birthday.month == Date.today.month
-       "#{l(:label_today).capitalize} #{ages}"
+      "#{l(:label_today).capitalize} #{"(#{ages})" unless ages.blank?}".strip
     else
-      "#{person.birthday.day} #{t('date.month_names')[person.birthday.month]} #{ages}"
+      "#{person.birthday.day} #{t('date.month_names')[person.birthday.month]} #{"(#{ages.to_i + 1})" unless ages.blank?}".strip
     end
   end
 
@@ -66,6 +74,7 @@ module PeopleHelper
     end
   end
 
+  # TODO: Perhaps, may move this function into redmine_crm gem
   def people_list_style
     list_styles = people_list_styles_for_select.map(&:last)
     if params[:people_list_style].blank?
@@ -141,4 +150,51 @@ module PeopleHelper
     phone.scan(/[\d+()-]+/).join
   end
 
+  def metric_deviation_html(previous, current, options = {})
+    return if previous.blank? || current.blank?
+
+    content_tag :span, class: 'change', title: deviation_label(previous, current, options) do
+      if current == previous
+        '0%'
+      else
+        content_tag(:span, '', class: arrow_classes(previous, current, options)) +
+          "#{calculate_progress(previous, current).round}%"
+      end
+    end
+  end
+
+  def arrow_classes(previous, current, options = {})
+    prefix = options.fetch(:positive_metric, true) ? '' : 'mirror_'
+    ['caret', (current > previous) ? "#{prefix}pos" : "#{prefix}neg"]
+  end
+
+  def deviation_label(previous, current, options = {})
+    format = options.fetch(:format, :time)
+    deviation = (current - previous).abs
+
+    if format == :time
+      previous = hours_with_minutes(previous)
+      deviation = hours_with_minutes(deviation)
+    else
+      previous = previous.round
+      deviation = deviation.round
+    end
+
+    result = ''
+    result << "#{label_period(options[:period])}\n" if options[:period]
+    result << "#{l(:label_previous)}: #{previous}\n#{l(:label_people_deviation)}: #{deviation}"
+    result.html_safe
+  end
+
+  def label_period(period, date_format = '%m.%d')
+    "#{l(:label_people_period)}: #{period.first.strftime(date_format)} - #{period.last.strftime(date_format)}"
+  end
+
+  def hours_with_minutes(time, label_hour = l(:label_people_hour), label_minute = l(:label_people_minute))
+    "#{time.to_i}#{label_hour} #{(60 * (time % 1)).round}#{label_minute}".html_safe
+  end
+
+  def rate_to_currency(rate)
+    price_to_currency(rate, RedminePeople.settings['rate_currency'], decimal_mark: ',', delimiter: ' ')
+  end
 end

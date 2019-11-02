@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 module RedminePeople
   module Hooks
     class ViewsMyAccountHook < Redmine::Hook::ViewListener
-      render_on :view_my_account, :partial => "my/disabled_fields"
+      render_on :view_my_account, :partial => 'my/disabled_fields'
     end
   end
 end

@@ -1,4 +1,4 @@
-# English strings go here for Rails i18n
+# Russian strings go here for Rails i18n
 ru:
   label_people: Сотрудники
   label_people_edit_person: Редактирование сотрудника
@@ -24,6 +24,7 @@ ru:
   label_people_twitter: Twitter
   label_people_facebook: Facebook
   label_people_linkedin: LinkedIn
+  label_people_workday_length: Продолжительность рабочего дня
   label_people_middlename: Отчество
   label_people_background: Дополнительная информация
   label_people_address: Адрес
@@ -38,6 +39,10 @@ ru:
   people_permission_delete_people: Удаление сотрудников
   people_permission_add_attachments: Добавление файлов
   people_permission_edit_announcement: Редактирование оповещений
+  people_permission_view_performance: Просмотр производительности сотрудников
+  people_permission_view_rates: Просмотр ставок
+  people_permission_edit_rates: Редактирование ставок
+  people_permission_view_own_rates: Просмотр своих ставок
 
   #0.0.2
   label_people_acl_settings: Права доступа
@@ -128,10 +133,40 @@ ru:
   label_people_work_experience_edit: Редактировать опыт работы
   label_people_previous_company_name: Предыдущая компания
   label_people_previous_job_title: Предыдущая должность
-  label_people_job_title: Должность
   label_people_from_date: Дата начала работы
   label_people_to_date: Дата окончания работы
   label_people_to_description: Описание
+
+  label_people_performance: Производительность
+  label_people_total_hours: Всего часов
+  label_people_overtime: Сверхурочное время
+  label_people_weekends: Работа на выходных
+  label_people_hour: ч
+  label_people_minute: м
+  label_people_deviation: Отклонение
+  label_time_spent: Затраченное время
+  label_people_period: Период
+  label_people_rates: Ставки
+  label_people_cost_rate: Внутренняя ставка
+  label_people_bill_rate: Внешняя ставка
+  label_people_cost_rates: Внутренние ставки
+  label_people_bill_rates: Внешние ставки
+  label_people_current_cost_rate: Текущая внутренняя ставка
+  label_people_current_bill_rate: Текущая внешняя ставка
+  label_people_default_cost_rate: Внутренняя ставка по умолчанию
+  label_people_default_bill_rate: Внешняя ставка по умолчанию
+  label_people_rates_history: История ставок
+  label_people_rate_new: Новая ставка
+  label_people_rate_edit: Редактирование ставки
+  label_people_weekly_cost: Еженедельная стоимость
+  label_people_monthly_cost: Ежемесячная стоимость
+  label_people_rate_currency: Валюта ставок
+
+  field_rate: Ставка
+  field_rate_type: Тип ставки
+  field_from_date: Дата начала
+  field_costs: Стоимость
+  notice_people_rate_successfully_destroyed: Ставка успешно удалена
 
   label_people_calendar: Календарь
   label_people_holidays: Праздники
@@ -142,6 +177,9 @@ ru:
   label_people_holiday_end_date: Дата окончания
   label_people_holiday_description: Описание
   label_people_holiday_is_workday: Рабочий день
+  label_people_holiday_notify: Оповестить
+  label_people_holiday_notify_subject: "Добавлен праздник: %{name} (%{from}%{to})."
+  label_people_holidays_next: Следующие праздники
 
   label_people_holiday_new: Новый праздник
   label_people_holiday_edit: Редактировать праздник
@@ -151,3 +189,23 @@ ru:
   people_permission_edit_work_experience: Редактировать опыт работы
   people_permission_edit_own_work_experience: Редактировать собственный опыт работы
   people_permission_manage_calendar: Управление календарем
+
+  notice_failed_to_save_people: "Невозможно сохранить %{count} сотрудника(ов) из %{total} выбранных: %{ids}."
+  people_label_bulk_edit_selected_people: Редактировать всех выбранных сотрудников
+
+
+  label_people_add_tags: Добавить тэги
+  label_people_delete_tags: Снять тэги
+  label_people_report_plural: Отчеты по пользователям
+  label_people_user_activity: Активность пользователей
+  label_people_average_time_per_day: Среднее за день
+  label_people_total_coverage: Покрытие всего
+  label_people_filter_activity_type: Тип активности
+  label_people_filter_time_interval: Интервал времени
+
+  label_activity_type_issue_create: Создание задачи
+  label_activity_type_issue_update: Обовление задачи
+  label_activity_type_spent_time_added: Добавление трудозатрат
+
+  label_people_by_month: За месяц
+  label_people_by_year: За год

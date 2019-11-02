@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -21,25 +21,25 @@ class PeopleHolidayQuery < Query
   self.queried_class = PeopleHoliday
 
   self.available_columns = [
-      QueryColumn.new(:name, :sortable => "#{PeopleHoliday.table_name}.name", :caption => :label_people_holiday_name),
-      QueryColumn.new(:start_date, :sortable => "#{PeopleHoliday.table_name}.start_date", :caption => :label_people_holiday_start_date),
-      QueryColumn.new(:end_date, :sortable => "#{PeopleHoliday.table_name}.end_date", :caption => :label_people_holiday_end_date)
+    QueryColumn.new(:name, :sortable => "#{PeopleHoliday.table_name}.name", :caption => :label_people_holiday_name),
+    QueryColumn.new(:start_date, :sortable => "#{PeopleHoliday.table_name}.start_date", :caption => :label_people_holiday_start_date),
+    QueryColumn.new(:end_date, :sortable => "#{PeopleHoliday.table_name}.end_date", :caption => :label_people_holiday_end_date)
   ]
 
-  def initialize(attributes=nil, *args)
+  def initialize(attributes = nil, *_args)
     super attributes
-    self.filters ||= { 'status_id' => {:operator => "o", :values => [""]} }
+    self.filters ||= { 'status_id' => { :operator => 'o', :values => [''] } }
   end
 
   def initialize_available_filters
-    add_available_filter "name", :type => :string, :order => 0
-    add_available_filter "start_date", :type => :date_past, :order => 1
-    add_available_filter "end_date", :type => :date_past, :order => 2
+    add_available_filter 'name', :type => :string, :order => 0
+    add_available_filter 'start_date', :type => :date_past, :order => 1
+    add_available_filter 'end_date', :type => :date_past, :order => 2
   end
 
   # Returns people holidays
   # Valid options are :conditions
-  def holidays(options={})
+  def holidays(options = {})
     PeopleHoliday.where(options[:conditions]).to_a
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new(e.message)
@@ -47,7 +47,7 @@ class PeopleHolidayQuery < Query
 
   # Returns people birthdays
   # Valid options are :month
-  def birthdays(options={})
+  def birthdays(options = {})
     PeopleInformation.where(birthday_condition(options[:month])).to_a
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new(e.message)
@@ -59,7 +59,7 @@ class PeopleHolidayQuery < Query
     if (ActiveRecord::Base.connection.adapter_name =~ /sqlite/i).present?
       ["CAST(strftime('%m', birthday) as INT) = ?", month]
     else
-      ["extract(month from birthday) = ?", month]
+      ['extract(month from birthday) = ?', month]
     end
   end
 end

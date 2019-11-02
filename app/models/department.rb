@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,10 +23,10 @@ class Department < ActiveRecord::Base
   unloadable
   belongs_to :head, :class_name => 'Person', :foreign_key => 'head_id'
 
-  has_many :people_information, :class_name => "PeopleInformation", :dependent => :nullify
+  has_many :people_information, :class_name => 'PeopleInformation', :dependent => :nullify
 
   if ActiveRecord::VERSION::MAJOR >= 4
-    has_many :people, lambda{ uniq }, :class_name => 'Person', :through => :people_information
+    has_many :people, lambda { Rails.version < '5.1' ? uniq : distinct }, :class_name => 'Person', :through => :people_information
   else
     has_many :people, :class_name => 'Person', :through => :people_information, :uniq => true
   end
@@ -39,21 +39,21 @@ class Department < ActiveRecord::Base
 
   acts_as_attachable_global
 
-  validates_presence_of :name 
-  validates_uniqueness_of :name 
+  validates_presence_of :name
+  validates_uniqueness_of :name
 
-  attr_accessible :name, :background, :parent_id, :head_id
+  attr_protected :id if ActiveRecord::VERSION::MAJOR <= 4
   safe_attributes 'name',
-    'background',
-    'parent_id',
-    'head_id'
+                  'background',
+                  'parent_id',
+                  'head_id'
 
   def to_s
     name
   end
 
   def all_childs
-    Department.where("lft > ? AND rgt < ?", lft, rgt).order('lft')
+    Department.where('lft > ? AND rgt < ?', lft, rgt).order('lft')
   end
 
   def css_classes
@@ -75,21 +75,21 @@ class Department < ActiveRecord::Base
   end
 
   def people_of_branch_department
-    department_ids = (self.all_childs + [self]).map(&:id)
+    department_ids = (all_childs + [self]).map(&:id)
     Person.joins(:information).where("#{PeopleInformation.table_name}.department_id" => department_ids)
   end
 
-  def attachments_visible?(user=User.current)
+  def attachments_visible?(user = User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
-    (user.allowed_people_to?(:manage_departments) || PeopleInformation.find_by_user_id(user.id).try(:department_id) == self.id)
+      (user.allowed_people_to?(:manage_departments) || PeopleInformation.find_by_user_id(user.id).try(:department_id) == id)
   end
 
-  def attachments_editable?(user=User.current)
+  def attachments_editable?(user = User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
       user.allowed_people_to?(:manage_departments)
   end
 
-  def attachments_deletable?(user=User.current)
+  def attachments_deletable?(user = User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
       user.allowed_people_to?(:manage_departments)
   end

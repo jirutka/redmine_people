@@ -14,6 +14,13 @@
     </div>
     <% end %>
 
+    <% if PeopleHoliday.next_holidays.present? %>
+    <div id="next_holidays">
+      <h3><%= l(:label_people_holidays_next) %></h3>
+      <%= render :partial => 'people_holidays/next_holidays' %>
+    </div>
+    <% end %>
+
     <% if Person.all_visible_new_people.present? %>
     <div id="new_people">
       <h3><%= l(:label_people_new_people) %></h3>

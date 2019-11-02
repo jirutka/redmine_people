@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -19,28 +19,40 @@
 
 require 'people_acl'
 require 'redmine_activity_crm_fetcher'
+require 'redmine_people/patches/action_controller_patch'
 
 Rails.configuration.to_prepare do
   require_dependency 'redmine_people/helpers/redmine_people'
 
   require_dependency 'acts_as_attachable_global/init'
+  require_dependency 'redmine_people/patches/application_controller_patch'
   require_dependency 'redmine_people/patches/user_patch'
   require_dependency 'redmine_people/patches/application_helper_patch'
+  require_dependency 'redmine_people/patches/avatars_helper_patch'
   require_dependency 'redmine_people/patches/users_controller_patch'
   require_dependency 'redmine_people/patches/my_controller_patch'
   require_dependency 'redmine_people/patches/calendar_patch'
+  require_dependency 'redmine_people/patches/query_patch'
+  require_dependency 'redmine_people/patches/mailer_patch'
+  require_dependency 'redmine_people/patches/attachments_controller_patch'
 
   require_dependency 'redmine_people/hooks/views_layouts_hook'
   require_dependency 'redmine_people/hooks/views_my_account_hook'
+
+  if Redmine::VERSION.to_s >= '3.4' || Redmine::VERSION::BRANCH != 'stable'
+    require_dependency 'redmine_people/patches/query_filter_patch'
+  end
 end
 
 module RedminePeople
   def self.available_permissions
-    [:edit_people, :view_people, :add_people, :delete_people,
-     :manage_departments,
-     :manage_tags, :manage_public_people_queries, :edit_subordinates,
-     :edit_announcement, :edit_work_experience, :edit_own_work_experience,
-     :manage_calendar]
+    permissions = [
+      :edit_people, :view_people, :add_people, :delete_people, :manage_departments,
+      :manage_tags, :manage_public_people_queries, :edit_subordinates, :edit_announcement,
+      :edit_work_experience, :edit_own_work_experience, :manage_calendar,
+      :view_rates, :edit_rates, :view_own_rates
+    ]
+    permissions
   end
 
   def self.settings() Setting[:plugin_redmine_people] end
@@ -63,5 +75,14 @@ module RedminePeople
 
   def self.hide_age?
     Setting.plugin_redmine_people["hide_age"].to_i > 0
+  end
+
+  # TODO: Not used anywhere. Perhaps need to remove.
+  def self.contacts_plugin_with_select2?
+    Redmine::Plugin.installed?(:redmine_contacts) && Redmine::Plugin.find(:redmine_contacts).version >= '4.0.8'
+  end
+
+  def self.module_exists?(name)
+    const_defined?(name) && const_get(name).instance_of?(Module)
   end
 end

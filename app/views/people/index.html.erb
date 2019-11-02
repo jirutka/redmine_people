@@ -52,7 +52,7 @@
 
 <% html_title l(:label_people) %>
 
-<% if Redmine::VERSION.to_s >= '3.3.4' %>
+<% if Redmine::VERSION.to_s >= '3.4' || Redmine::VERSION::BRANCH != 'stable' %>
     <%= context_menu %>
 <% else %>
     <%= context_menu url_for( {:controller => "people", :action => "context_menu"} ) %>
@@ -61,7 +61,7 @@
 <%= render :partial => 'people/sidebar', :locals => {:tags => @tags} %>
 
 <% content_for :header_tags do %>
-    <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
-	<%= stylesheet_link_tag :redmine_people, :plugin => 'redmine_people' %>
-	<meta name = "format-detection" content = "telephone=no">
+  <%= select2_assets %>
+  <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
+  <meta name = "format-detection" content = "telephone=no">
 <% end %>

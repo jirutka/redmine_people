@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@
 class DepartmentsController < ApplicationController
   unloadable
 
-  before_filter :find_department, :except => [:index, :create, :new]
-  before_filter :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person]
-  before_filter :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
+  before_action :find_department, :except => [:index, :create, :new]
+  before_action :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person]
+  before_action :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
 
   helper :attachments
 
@@ -44,55 +44,54 @@ class DepartmentsController < ApplicationController
     @department.safe_attributes = params[:department]
 
     if @department.save
-      attachments = Attachment.attach_files(@department, params[:attachments])
+      attachments = Attachment.attach_files(@department, params.respond_to?(:to_unsafe_hash) ? params.to_unsafe_hash['attachments'] : params['attachments'])
       render_attachment_warning_if_needed(@department)
 
-      respond_to do |format| 
-        format.html { redirect_to :action => "show", :id => @department } 
+      respond_to do |format|
+        format.html { redirect_to :action => 'show', :id => @department }
         format.api  { head :ok }
       end
     else
       respond_to do |format|
         format.html { render :action => 'edit' }
         format.api  { render_validation_errors(@department) }
-      end      
-    end    
-  end  
+      end
+    end
+  end
 
   def destroy
     if @department.destroy
       flash[:notice] = l(:notice_successful_delete)
       if params[:from] == 'people_settings'
         respond_to do |format|
-          format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" }
+          format.html { redirect_to :controller => 'people_settings', :action => 'index', :tab => 'departments' }
           format.api { render_api_ok }
         end
       else
-        redirect_to :action => "index"
+        redirect_to :action => 'index'
       end
     else
       flash[:error] = l(:notice_unsuccessful_save)
     end
-
-  end  
+  end
 
   def create
     @department = Department.new
     @department.safe_attributes = params[:department]
 
-    if @department.save 
-      respond_to do |format| 
-        format.html { redirect_to :action => "show", :id => @department } 
-        # format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" } 
+    if @department.save
+      respond_to do |format|
+        format.html { redirect_to :action => 'show', :id => @department }
+        # format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" }
         format.api  { head :ok }
       end
     else
       respond_to do |format|
         format.html { render :action => 'new' }
         format.api  { render_validation_errors(@department) }
-      end      
+      end
     end
-  end  
+  end
 
   def add_people
     @people = PeopleInformation.where(:user_id => params[:person_id] || params[:person_ids])
@@ -113,11 +112,10 @@ class DepartmentsController < ApplicationController
     end
   end
 
-
   def autocomplete_for_person
     @people = Person.active.where(:type => 'User').not_in_department(@department).like(params[:q]).limit(100)
     render :layout => false
-  end  
+  end
 
   def load_tab
   end
@@ -132,7 +130,7 @@ class DepartmentsController < ApplicationController
 
   def authorize_people
     User.current.allowed_people_to?(:manage_departments, @person) || deny_access
-  end  
+  end
 
   def load_department_attachments
     @department_attachments = @department.attachments

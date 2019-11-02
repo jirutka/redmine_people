@@ -24,6 +24,7 @@ en:
   label_people_twitter: Twitter
   label_people_facebook: Facebook
   label_people_linkedin: LinkedIn
+  label_people_workday_length: Workday length
   label_people_middlename: Middle name
   label_people_background: Background info
   label_people_address: Address
@@ -38,6 +39,10 @@ en:
   people_permission_delete_people: Delete people
   people_permission_add_attachments: Add atthachments
   people_permission_edit_announcement: Edit announcement
+  people_permission_view_performance: View performance
+  people_permission_view_rates: View rates
+  people_permission_edit_rates: Edit rates
+  people_permission_view_own_rates: View own rates
 
   #0.0.2
   label_people_acl_settings: ACL settings
@@ -107,7 +112,7 @@ en:
   frequency_mday: once a month
 
   announcement_kind_notice: Notice
-  announcement_kind_warning: Warinig
+  announcement_kind_warning: Warning
   announcement_kind_error: Error
   announcement_status_active: Active
   announcement_status_all: All
@@ -128,10 +133,40 @@ en:
   label_people_work_experience_edit: Edit work experience
   label_people_previous_company_name: Previous company name
   label_people_previous_job_title: Previous job title
-  label_people_job_title: Job title
   label_people_from_date: From date
   label_people_to_date: To date
   label_people_to_description: Description
+
+  label_people_performance: Performance
+  label_people_total_hours: Total hours
+  label_people_overtime: Overtime
+  label_people_weekends: Weekends
+  label_people_hour: h
+  label_people_minute: m
+  label_people_deviation: Deviation
+  label_time_spent: Time spent
+  label_people_period: Period
+  label_people_rates: Rates
+  label_people_cost_rate: Cost rate
+  label_people_bill_rate: Bill rate
+  label_people_cost_rates: Cost rates
+  label_people_bill_rates: Bill rates
+  label_people_current_cost_rate: Current cost rate
+  label_people_current_bill_rate: Current bill rate
+  label_people_default_cost_rate: Default cost rate
+  label_people_default_bill_rate: Default bill rate
+  label_people_rates_history: Rates history
+  label_people_rate_new: New people rate
+  label_people_rate_edit: Editing people rate
+  label_people_weekly_cost: Weekly cost
+  label_people_monthly_cost: Monthly cost
+  label_people_rate_currency: Rate currency
+
+  field_rate: Rate
+  field_rate_type: Rate type
+  field_from_date: From date
+  field_costs: Costs
+  notice_people_rate_successfully_destroyed: People rate was successfully destroyed
 
   label_people_calendar: Calendar
   label_people_holidays: Holidays
@@ -142,6 +177,9 @@ en:
   label_people_holiday_end_date: End date
   label_people_holiday_description: Description
   label_people_holiday_is_workday: Is workday
+  label_people_holiday_notify: Notify
+  label_people_holiday_notify_subject: "Holiday %{name} added in date(s) %{from}%{to}."
+  label_people_holidays_next: Next holidays
 
   label_people_holiday_new: New holiday
   label_people_holiday_edit: Edit holiday
@@ -151,3 +189,22 @@ en:
   people_permission_edit_work_experience: Edit work experience
   people_permission_edit_own_work_experience: Edit own work experience
   people_permission_manage_calendar: Manage calendar
+
+  notice_failed_to_save_people: "Failed to save %{count} person(people) on %{total} selected: %{ids}."
+  people_label_bulk_edit_selected_people: Edit all selected people
+
+  label_people_add_tags: Add tags
+  label_people_delete_tags: Delete tags
+  label_people_report_plural: People reports
+  label_people_user_activity: User activity
+  label_people_average_time_per_day: Average per day
+  label_people_total_coverage: Total coverage
+  label_people_filter_activity_type: Activity type
+  label_people_filter_time_interval: Report time interval
+
+  label_activity_type_issue_create: Create issue
+  label_activity_type_issue_update: Update issue
+  label_activity_type_spent_time_added: Add spent time
+
+  label_people_by_month: By month
+  label_people_by_year: By year

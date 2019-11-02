@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -19,14 +19,16 @@
 
 module RedminePeople
   module Helper
+    def person_age(age)
+      RedminePeople.hide_age? ? '' : age.to_s
+    end
 
-    def department_tree_tag(person, options={})
-      return "" if person.department.blank?
+    def department_tree_tag(person, options = {})
+      return '' if person.department.blank?
       person.department.self_and_ancestors.map do |department|
         link_to department.name, department_path(department.id, options)
       end.join(' &#187; ').html_safe
     end
-
   end
 end
 

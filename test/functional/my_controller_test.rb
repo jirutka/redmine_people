@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -29,11 +29,12 @@ class MyControllerTest < ActionController::TestCase
 
   def setup
     @request.session[:user_id] = 2
+    Setting.plugin_redmine_people = {}
   end
 
   def test_account_without_edit_own_data
     with_people_settings 'edit_own_data' => '0' do
-      post :account, { :user => { :firstname => 'newName', :language => 'ru'} }
+      compatible_request :post, :account, :user => { :firstname => 'newName', :language => 'ru' }
 
       assert_redirected_to '/my/account'
 
@@ -45,7 +46,7 @@ class MyControllerTest < ActionController::TestCase
 
   def test_account_with_edit_own_data
     with_people_settings 'edit_own_data' => '1' do
-      post :account, { :user => { :firstname => 'newName', :language => 'ru'} }
+      compatible_request :post, :account, :user => { :firstname => 'newName', :language => 'ru' }
 
       assert_redirected_to '/my/account'
 
@@ -56,11 +57,10 @@ class MyControllerTest < ActionController::TestCase
 
   def test_destroy_without_edit_own_data
     with_people_settings 'edit_own_data' => '0' do
-      post :destroy
+      compatible_request :post, :destroy
 
       assert_response :forbidden
       assert User.find(2).present?
     end
   end
-
 end

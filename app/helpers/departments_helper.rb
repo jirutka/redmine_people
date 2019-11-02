@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -55,6 +55,10 @@ module DepartmentsHelper
       s << content_tag(tag, name_prefix + h(department), tag_options)
     end
     s.html_safe
+  end
+
+  def department_tree_grouped_options_for_select(departments, options = {})
+    content_tag('optgroup', department_tree_options_for_select(departments, options), :label => l('label_department_plural'))
   end
 
   def department_tree_links(departments, options = {})

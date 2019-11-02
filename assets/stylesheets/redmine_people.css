@@ -424,3 +424,181 @@ table.cal td.weekend {
 }
 .no-icon { padding-left: 3px; }
 .icon-cake { background-image: url(../images/cake.png); }
+
+#person_form #person_information_attributes_manager_id_wrap .select2 { width: 20% !important; }
+#person_form .select2-container--default .select2-selection--single { background: #fff url(../images/user_suit.png) no-repeat 2px 50%; }
+
+/**************************************************************/
+/*                 Performance and Rates Tabs                 */
+/**************************************************************/
+#tab-placeholder-performance td.delimiter,
+#tab-placeholder-rates td.delimiter {
+  padding: 10px;
+  border-left: 1px solid #dbdde1;
+}
+
+#tab-placeholder-performance .chart_table,
+#tab-placeholder-rates .chart_table {
+  width: 100%;
+  margin: 20px 0;
+}
+
+#tab-placeholder-performance .date_period_block { float: right; }
+#tab-placeholder-performance tr.header td .issues_count:after { content: "h"; }
+
+/* Chart table */
+
+.chart_table { margin: auto; border-collapse:collapse; text-align: center }
+.chart_table .header { height: 50px; background-color: #eee }
+.chart_table .header .column_data { min-width: 44px; border: 1px solid #c0c0c0; padding: 0px; }
+.chart_table .header .column_data .issues_count { font-weight: bold; }
+.chart_table .column_data.empty { background-color: #eee; min-width: 22px}
+.chart_table .main_block { height: 200px }
+.chart_table .main_block .column_data { vertical-align: bottom; width: 80px; border: 1px solid #c0c0c0; padding: 0px; }
+.chart_table .main_block .column_data .percents { background-color: #BAE0BA; }
+.chart_table .footer { height: 50px }
+.chart_table .footer .column_data { font-weight: bold; padding: 0px; }
+
+
+/* Glance year perfomance table */
+
+.glanceyear-container .glanceyear-content { padding: 10px; text-align: center}
+
+.glanceyear-container .glanceyear-text {
+  color: #aaa;
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0 0;
+  padding: 0;
+}
+
+.glanceyear-container svg rect.day { fill: #eee; shape-rendering: crispedges; }
+.glanceyear-container svg rect.day:hover { stroke: #aaa; stroke-width: 1px; }
+.glanceyear-container svg rect.day[data-count] { fill: #3d9692; }
+.glanceyear-container svg rect.day[data-count='1'] { fill: #f0e79f; }
+.glanceyear-container svg rect.day[data-count='2'] { fill: #5caeaa; }
+.glanceyear-container svg rect.day[data-count='3'] { fill: #277672; }
+
+.glanceyear-container svg text { fill: #CCC; font-size: 9px; }
+.glanceyear-container svg text.month { fill: #AAA; }
+
+.svg-tag {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 3px;
+  color: #eee;
+  font-size: 12px;
+  line-height: 15px;
+  padding: 5px 15px;
+  position: absolute;
+  text-align: center;
+}
+
+.svg-tag:after {
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  bottom: -5px;
+  content: "";
+  height: 0;
+  left: 50%;
+  margin-left: -5px;
+  position: absolute;
+  width: 0;
+}
+
+/* Metrics*/
+
+table.metrics {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.metrics.box {
+  background-color: #eee;
+  width: 250px;
+  margin: 15px;
+  border: 1px solid #c0c0c0;
+  display: inline-block;
+  padding: 20px 5px;
+}
+
+.metrics td {
+  padding-bottom: 25px;
+  border-bottom: 1px solid #dbdde1;
+  text-align: left;
+}
+
+.metrics td.empty {
+  border-top: none;
+}
+
+.metrics .num {
+  color: #444;
+  font-size: 29px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.metrics .change {
+  display: inline-block;
+  color: #999;
+  font-size: 13px;
+  text-align: center;
+}
+
+.metrics p {
+  color: #999;
+  margin: 2px;
+  line-height: 1.4em;
+}
+
+.change>.caret {
+  border-width: 6px;
+  display: block;
+  margin: 0 auto 4px
+}
+
+.change>.neg {
+  border-top-color: #ed5a5a
+}
+
+.change>.pos {
+  border-top: 0;
+  border-bottom: 6px solid #43ac6d
+}
+
+.change>.mirror_pos {
+  border-top: 0;
+  border-bottom: 6px solid #ed5a5a
+}
+
+.change>.mirror_neg {
+  border-top-color: #43ac6d
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: top;
+  border-top: 4px solid #2b2b2b;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  content: ""
+}
+
+.metrics .num>span {
+  font-size: 16px;
+}
+
+.people_user_activity {}
+.user_activity_table { margin: auto; border-collapse:collapse; text-align: center; }
+.user_activity_table .header .column_data { background-color: #eee; border: 1px solid #c0c0c0; }
+.user_activity_table .main_block .column_data { width: 25px; height: 25px; background: white; border: 1px solid #c0c0c0; }
+.user_activity_table .main_block .column_data_yellow { background: #fff4a2; }
+.user_activity_table .main_block .column_data_green { background: #bae0ba; }
+.user_activity_table .main_block .column_data_user_name { text-align: left; padding-right: 15px; }
+.user_activity_table .main_block .column_data_total { background-color: #eee; border: 1px solid #c0c0c0; }
+
+td.costs { font-weight: bold; }

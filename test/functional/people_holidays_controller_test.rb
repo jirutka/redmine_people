@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class PeopleHolidaysControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
+
   fixtures :users
   fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
 
@@ -31,16 +32,21 @@ class PeopleHolidaysControllerTest < ActionController::TestCase
 
   def setup
     @holiday = PeopleHoliday.find(1)
-    @holiday_params = {
-        :name => 'New holiday',
-        :start_date => '2017-05-09',
-        :end_date => '',
-        :description => '',
-        :is_workday => ''
-    }
+    @holiday_params = { :name => 'New holiday',
+                        :start_date => '2017-05-09',
+                        :end_date => '',
+                        :description => '',
+                        :is_workday => ''
+                      }
     # Remove accesses operations
     Setting.plugin_redmine_people = {}
     set_fixtures_attachments_directory
+
+    Setting.host_name = 'mydomain.foo'
+    Setting.protocol = 'http'
+    Setting.plain_text_mail = '0'
+    ActionMailer::Base.deliveries.clear
+    Setting.notified_events = Redmine::Notifiable.all.collect(&:name)
   end
 
   def access_message(action)
@@ -50,13 +56,13 @@ class PeopleHolidaysControllerTest < ActionController::TestCase
   def test_without_authorization
     # Get
     [:index, :new, :edit].each do |action|
-      get action, :id => @holiday.id
+      compatible_request :get, action, :id => @holiday.id
       assert_response 302, access_message(action)
     end
 
     # Post
     [:update, :destroy, :create].each do |action|
-      post action, :id => @holiday.id
+      compatible_request :post, action, :id => @holiday.id
       assert_response 302, access_message(action)
     end
   end
@@ -65,13 +71,13 @@ class PeopleHolidaysControllerTest < ActionController::TestCase
     @request.session[:user_id] = 2
     # Get
     [:index, :new, :edit].each do |action|
-      get action, :id => @holiday.id
+      compatible_request :get, action, :id => @holiday.id
       assert_response 403, access_message(action)
     end
 
     # Post
     [:update, :destroy, :create].each do |action|
-      post action, :id => @holiday.id
+      compatible_request :post, action, :id => @holiday.id
       assert_response 403, access_message(action)
     end
   end
@@ -80,29 +86,28 @@ class PeopleHolidaysControllerTest < ActionController::TestCase
     PeopleAcl.create(2, ['view_people', 'manage_calendar'])
     @request.session[:user_id] = 2
 
-    get :index
+    compatible_request :get, :index
     assert_response :success
 
     # Get
     [:new, :edit].each do |action|
-      get action, :id => @holiday.id
+      compatible_request :get, action, :id => @holiday.id
       assert_response :success
     end
 
     # Post
-    post :create, :id => @holiday.id
+    compatible_request :post, :create, :id => @holiday.id
     assert_response :success
 
     [:update, :destroy].each do |action|
-      post action, :id => @holiday.id
+      compatible_request :post, action, :id => @holiday.id
       assert_response 302
     end
   end
 
   def test_create
     @request.session[:user_id] = 1
-    post :create,
-         :holiday => @holiday_params
+    compatible_request :post, :create, :holiday => @holiday_params
     holiday = PeopleHoliday.last
     assert_response 302
     assert_redirected_to :action => 'index'
@@ -111,11 +116,34 @@ class PeopleHolidaysControllerTest < ActionController::TestCase
 
   def test_update
     @request.session[:user_id] = 1
-    post :update, :id => '1',
-         :holiday => { :name => 'New one holiday' }
+    compatible_request :post, :update, :id => '1', :holiday => { :name => 'New one holiday' }
     holiday = PeopleHoliday.find(1)
     assert_response 302
     assert_redirected_to :action => 'index'
     assert_equal ['New one holiday'], [holiday.name]
+  end
+
+  def test_holiday_notification
+    @request.session[:user_id] = 1
+    @holiday_params[:notify] = 'all'
+    compatible_request :post, :create, :holiday => @holiday_params
+    holiday = PeopleHoliday.last
+    assert_match holiday.name, last_email.text_part.to_s
+  end
+
+  private
+
+  def last_email
+    mail = ActionMailer::Base.deliveries.last
+    assert_not_nil mail
+    mail
+  end
+
+  def text_part
+    last_email.parts.detect { |part| part.content_type.include?('text/plain') }
+  end
+
+  def html_part
+    last_email.parts.detect { |part| part.content_type.include?('text/html') }
   end
 end

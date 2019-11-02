@@ -27,7 +27,7 @@ zh:
   label_people_skype: 微信
   label_people_twitter: 微博
   label_people_facebook: QQ
-  label_people_linkedin: LinkedIn领英
+  label_people_linkedin: 领英
   label_people_middlename: 中间名
   label_people_background: 背景信息
   label_people_address: 地址
@@ -122,7 +122,11 @@ zh:
   label_people_birthday_today: 今日生日
   label_people_birthday_tomorrow: 明日生日
   label_people_birthday_this_week: 本周生日
-  label_people_show_birthday_announcements: 显示生日通知
+  label_people_show_birthday_announcement: 显示生日通知
   label_people_subordinates: 下属
   label_people_manager: 经理
   people_permission_edit_subordinates: 编辑下属
+
+  label_people_hour: 小时
+  label_people_minute: 分钟
+  label_people_deviation: 偏差

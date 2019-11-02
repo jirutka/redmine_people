@@ -2,7 +2,7 @@
 
 <%= labelled_form_for @holiday, :url => people_holiday_path(@holiday),
                       :html => {:id => 'people_holiday', :multipart => true} do |f| %>
-    <%= error_messages_for 'people_holiday' %>
+    <%= error_messages_for 'holiday' %>
     <div class="box tabular">
       <div id="all_attributes">
         <%= render :partial => 'form', :locals => {:f => f} %>

@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2017 RedmineUP
+# Copyright (C) 2011-2019 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 module PeopleHolidaysHelper
   include PeopleHelper
+  include DepartmentsHelper
 
   def retrieve_people_holidays_query
     if params[:query_id].present?
@@ -38,5 +39,10 @@ module PeopleHolidaysHelper
       @query = PeopleHolidayQuery.find(session[:people_holidays_query][:id]) if session[:people_holidays_query][:id]
       @query ||= PeopleHolidayQuery.new(:name => "_", :filters => session[:people_holidays_query][:filters], :group_by => session[:people_holidays_query][:group_by], :column_names => session[:people_holidays_query][:column_names])
     end
+  end
+
+  def notify_options_for_select
+    selected = params[:holiday][:notify] rescue ''
+    options_for_select([['', ''], [l('label_all').humanize, 'all']], selected) << department_tree_grouped_options_for_select(Department.all_visible_departments, :selected => selected.to_i)
   end
 end

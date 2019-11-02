@@ -109,3 +109,16 @@ function showAnnouncement(url){
       }
     });
 }
+
+function updateTab(name, url, data) {
+  $.ajax({
+    url: url,
+    dataType: 'script',
+    data: data,
+    success: function () {
+      if ("replaceState" in window.history) {
+        window.history.replaceState(null, document.title, $('#tab-' + name).attr('href'));
+      }
+    }
+  });
+};
