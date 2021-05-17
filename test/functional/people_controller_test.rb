@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ class PeopleControllerTest < ActionController::TestCase
   # Fixtures with the same names overwriting each other. For example, time_entries will be restored only from the People plugin.
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
                                           [:people_holidays, :people_work_experiences, :departments, :people_information,
-                                           :custom_fields, :custom_values, :attachments, :time_entries, :people_rates])
+                                           :custom_fields, :custom_values, :attachments, :time_entries])
 
   def setup
     @person = Person.find(4)
@@ -248,39 +248,6 @@ class PeopleControllerTest < ActionController::TestCase
     compatible_request :get, :index
     assert_response :success
     assert_select '#next_holidays', :count => 1
-  end
-
-  def test_access_to_rates_tab_without_permissions
-    PeopleAcl.create(@person.id, %w(view_people))
-    with_settings start_of_week: 1 do
-      tab_should_not_be_available(@person.id, 1, 'rates') # Rates tab of other people not available
-      tab_should_not_be_available(@person.id, @person.id, 'rates') # Own rates tab not available
-      tab_should_be_available(1, @person.id, 'rates') # Rates tab available for admin
-    end
-  end
-
-  def test_access_to_rates_tab_with_permission_view_rates
-    PeopleAcl.create(@person.id, %w(view_people view_rates))
-    with_settings start_of_week: 1 do
-      tab_should_be_available(@person.id, 1, 'rates')
-      tab_should_be_available(@person.id, @person.id, 'rates')
-    end
-  end
-
-  def test_access_to_rates_tab_with_permission_view_own_rates
-    PeopleAcl.create(@person.id, %w(view_people view_own_rates))
-    with_settings start_of_week: 1 do
-      tab_should_not_be_available(@person.id, 1, 'rates')
-      tab_should_be_available(@person.id, @person.id, 'rates')
-    end
-  end
-
-  def test_access_to_rates_tab_with_permissions_view_rates_and_view_own_rates
-    PeopleAcl.create(@person.id, %w(view_people view_rates view_own_rates))
-    with_settings start_of_week: 1 do
-      tab_should_be_available(@person.id, 1, 'rates')
-      tab_should_be_available(@person.id, @person.id, 'rates')
-    end
   end
 
   def test_get_index_with_search

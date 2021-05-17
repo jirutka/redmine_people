@@ -1,8 +1,43 @@
 == Redmine People plugin changelog
 
 Redmine People plugin - User management plugin for redmine
-Copyright (C) 2011-2019 RedmineUP
+Copyright (C) 2011-2020 RedmineUP
 http://www.redmineup.com/
+
+== 2020-11-10 v1.6.0
+
+* Added department announcements
+* Fixed work expirence date fields
+* Fixed age announcement bug
+* Fixed leave creation alert
+
+== 2020-08-24 v1.5.2
+
+* Added select2 for tags
+* Dayoffs added to Calendar page
+* Portugal locale updated
+* Chinese locale updated
+* Taiwanese locale updated
+* Removed tags migrations
+* Fixed group-by error
+* Fixed last month bug for perfomance chart
+* Fixed initial install error
+* Updated vcard gem versions
+
+== 2020-02-18 v1.5.1
+
+* Costs and rates moved to Budgets plugin
+* Added Italian locale (Marco Congia) 
+* Changed Chinese locale (Zelphar Yang) 
+
+== 2020-02-18 v1.5.0
+
+* Organization chart 
+* Leave management
+* Redmine 4.1 support
+* Fixed issue csv export bug
+* Fixed delete redirect bug
+
 
 == 2019-05-22 v1.4.1
 

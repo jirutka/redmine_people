@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,52 +17,59 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class PeopleRatesController < ApplicationController
-  before_action :require_login
-  before_action :set_person
-  before_action :check_permissions
-  before_action :set_people_rate, only: [:show, :edit, :update, :destroy]
+class LeaveTypesController < ApplicationController
+  # </PRO>
+  before_action :require_admin
+  before_action :find_leave_type, only: [:edit, :update, :destroy]
 
   def new
-    @people_rate = PeopleRate.new(from_date: Date.today)
-  end
-
-  def edit
+    @leave_type = LeaveType.new
   end
 
   def create
-    @people_rate = PeopleRate.new(user_id: @person.id)
-    @people_rate.safe_attributes = params[:people_rate]
+    @leave_type = LeaveType.new
+    @leave_type.safe_attributes = params[:leave_type]
 
-    if @people_rate.save
+    if @leave_type.save
       flash[:notice] = l(:notice_successful_create)
-      redirect_to tabs_person_path(@person, 'rates')
+      redirect_to people_settings_path(tab: 'leave_types')
     else
       render :new
     end
   end
 
+  def edit
+  end
+
   def update
-    @people_rate.safe_attributes = params[:people_rate]
-    if @people_rate.save
+    @leave_type.safe_attributes = params[:leave_type]
+    if @leave_type.save
       flash[:notice] = l(:notice_successful_update)
-      redirect_to tabs_person_path(@person, 'rates')
+      redirect_to people_settings_path(tab: 'leave_types')
     else
       render :edit
     end
   end
 
   def destroy
-    @people_rate.destroy
-    redirect_to tabs_person_path(@person, 'rates'), notice: l(:notice_people_rate_successfully_destroyed)
+    if @leave_type.destroy
+      flash[:notice] = l(:notice_leave_type_successfully_destroyed)
+    else
+      flash[:error] = @leave_type.errors.full_messages.first
+    end
+
+  rescue Exception => e
+    flash[:error] = e.message
+  ensure
+    redirect_to people_settings_path(tab: 'leave_types')
   end
 
   private
-    def set_people_rate
-      @people_rate = PeopleRate.find(params[:id])
-    end
 
-    def check_permissions
-      render_403 unless User.current.allowed_people_to?(:edit_rates, @person)
-    end
+  def find_leave_type
+    @leave_type = LeaveType.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+  # </PRO>
 end

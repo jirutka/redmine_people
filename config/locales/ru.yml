@@ -1,4 +1,4 @@
-# Russian strings go here for Rails i18n
+# English strings go here for Rails i18n
 ru:
   label_people: Сотрудники
   label_people_edit_person: Редактирование сотрудника
@@ -40,9 +40,8 @@ ru:
   people_permission_add_attachments: Добавление файлов
   people_permission_edit_announcement: Редактирование оповещений
   people_permission_view_performance: Просмотр производительности сотрудников
-  people_permission_view_rates: Просмотр ставок
-  people_permission_edit_rates: Редактирование ставок
-  people_permission_view_own_rates: Просмотр своих ставок
+  people_permission_view_leave: Просмотр отпусков
+  people_permission_edit_leave: Редактирование отпусков
 
   #0.0.2
   label_people_acl_settings: Права доступа
@@ -97,6 +96,7 @@ ru:
   label_announcement_active: Активно
   label_announcement_start_date: Дата начала показа
   label_announcement_end_date: Дата окончания показа
+  label_announcement_end_department: Отдел
   label_announcement_new: Новое оповещение
   label_announcement_plural: Оповещения
   label_announcement_successful_update: Оповещение успешно сохранено
@@ -146,30 +146,13 @@ ru:
   label_people_deviation: Отклонение
   label_time_spent: Затраченное время
   label_people_period: Период
-  label_people_rates: Ставки
-  label_people_cost_rate: Внутренняя ставка
-  label_people_bill_rate: Внешняя ставка
-  label_people_cost_rates: Внутренние ставки
-  label_people_bill_rates: Внешние ставки
-  label_people_current_cost_rate: Текущая внутренняя ставка
-  label_people_current_bill_rate: Текущая внешняя ставка
-  label_people_default_cost_rate: Внутренняя ставка по умолчанию
-  label_people_default_bill_rate: Внешняя ставка по умолчанию
-  label_people_rates_history: История ставок
-  label_people_rate_new: Новая ставка
-  label_people_rate_edit: Редактирование ставки
-  label_people_weekly_cost: Еженедельная стоимость
-  label_people_monthly_cost: Ежемесячная стоимость
-  label_people_rate_currency: Валюта ставок
-
-  field_rate: Ставка
-  field_rate_type: Тип ставки
-  field_from_date: Дата начала
-  field_costs: Стоимость
-  notice_people_rate_successfully_destroyed: Ставка успешно удалена
 
   label_people_calendar: Календарь
   label_people_holidays: Праздники
+  label_people_organization_chart: Структура организации
+  label_people_organization_name: Название организации
+  label_people_set_organization_name: Установить название организации
+  label_people_organization_head: Руководитель организации
   label_people_birthdays: Дни рождения
 
   label_people_holiday_name: Название
@@ -209,3 +192,37 @@ ru:
 
   label_people_by_month: За месяц
   label_people_by_year: За год
+
+  label_people_hour: "ч"
+  label_people_minute: "м"
+
+  label_people_leave_planner: Отпуска
+  label_people_leave_type: Тип выходного
+  label_people_leave_types: Типы отгулов
+  label_people_leave_type_new: Новый тип отгула
+  label_people_leave_type_edit: Редактировать тип отгула
+  label_people_leave_new: Новый отгул
+  label_people_leave_edit: Редактировать отгул
+  label_people_leave_comment: Оставить комментарий
+  label_people_graph: Графиком
+  label_people_not_approved: Не согласовано
+  label_people_scheduled_for: на
+  label_people_added_day_off: Добавлен выходной
+
+  notice_leave_type_successfully_destroyed: Тип отпуска успешно удален
+
+  field_paid: Oплачиваемый
+  field_approvable: Необходимость согласования
+  field_approved: Согласовано
+  field_color: Цвет
+  field_leave_type: Тип отгула
+  field_hours_per_day: Часов/День
+  field_duration: Продолжительность
+  field_hours_per_day_abbreviation: ч/д
+
+  label_people_contact_plural: Контакты
+
+  activerecord:
+    errors:
+      messages:
+        greater_than_or_equal_to_start_date: должна быть позднее либо равна дате начала

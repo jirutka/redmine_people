@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -25,7 +25,11 @@ module RedminePeople
 
     def department_tree_tag(person, options = {})
       return '' if person.department.blank?
-      person.department.self_and_ancestors.map do |department|
+      format_department(person.department, options)
+    end
+
+    def format_department(department, options = {})
+      department.self_and_ancestors.map do |department|
         link_to department.name, department_path(department.id, options)
       end.join(' &#187; ').html_safe
     end

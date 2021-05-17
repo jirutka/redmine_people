@@ -8,7 +8,7 @@
     <% end %>
 
     <% if Person.all_visible_next_birthdays.present? %>
-    <div id="next_birthdays">
+    <div id="next_birthdays" class="person-data">
       <h3><%= l(:label_people_next_birthdays) %></h3>
       <%= render :partial => 'people/person_birthday', :collection => Person.all_visible_next_birthdays %>
     </div>

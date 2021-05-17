@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -30,11 +30,12 @@ class MyControllerTest < ActionController::TestCase
   def setup
     @request.session[:user_id] = 2
     Setting.plugin_redmine_people = {}
+    @my_account_path_query_method = Redmine::VERSION::BRANCH == 'devel' || Redmine::VERSION.to_s >= '4.1' ? :put : :post
   end
 
   def test_account_without_edit_own_data
     with_people_settings 'edit_own_data' => '0' do
-      compatible_request :post, :account, :user => { :firstname => 'newName', :language => 'ru' }
+      compatible_request @my_account_path_query_method, :account, user: { firstname: 'newName', language: 'ru' }
 
       assert_redirected_to '/my/account'
 
@@ -46,7 +47,7 @@ class MyControllerTest < ActionController::TestCase
 
   def test_account_with_edit_own_data
     with_people_settings 'edit_own_data' => '1' do
-      compatible_request :post, :account, :user => { :firstname => 'newName', :language => 'ru' }
+      compatible_request @my_account_path_query_method, :account, user: { firstname: 'newName', language: 'ru' }
 
       assert_redirected_to '/my/account'
 

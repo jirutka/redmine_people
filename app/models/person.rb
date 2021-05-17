@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -39,7 +39,6 @@ class Person < User
   has_one :manager, :through => :information
 
   has_many :time_entries, foreign_key: :user_id, dependent: :destroy
-  has_many :rates, class_name: 'PeopleRate', foreign_key: :user_id, dependent: :destroy
 
   rcrm_acts_as_taggable
 

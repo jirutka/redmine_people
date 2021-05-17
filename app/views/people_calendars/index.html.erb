@@ -9,7 +9,7 @@
     <%= hidden_field_tag 'set_birthdays', params[:birthdays].blank? ? '1' : '0' %>
 
     <fieldset id="options" class="collapsible collapsed">
-      <legend onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
+      <legend class="icon icon-collapsed" onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
       <div style="display: none;">
         <table>
           <tr>

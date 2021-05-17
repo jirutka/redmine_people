@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -31,6 +31,9 @@ module RedminePeople
           alias_method :link_to_user_without_people, :link_to_user
           alias_method :link_to_user, :link_to_user_with_people
 
+          alias_method :format_object_without_people, :format_object
+          alias_method :format_object, :format_object_with_people
+
           unless RedminePeople.module_exists?(:AvatarsHelper)
             include AvatarsHelperPatch::InstanceMethods
 
@@ -51,6 +54,17 @@ module RedminePeople
             end
           else
             h(user.to_s)
+          end
+        end
+
+        def format_object_with_people(object, html = true, &block)
+          case object.class.name
+          when 'Department'
+            html ? format_department(object) : object.to_s
+          when 'Person'
+            html ? link_to_user(object) : object.to_s
+          else
+            format_object_without_people(object, html, &block)
           end
         end
       end

@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,15 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-requires_redmine_crm :version_or_higher => '0.0.43' rescue raise "\n\033[31mRedmine requires newer redmine_crm gem version.\nPlease update with 'bundle update redmine_crm'.\033[0m"
+requires_redmine_crm :version_or_higher => '0.0.54' rescue raise "\n\033[31mRedmine requires newer redmine_crm gem version.\nPlease update with 'bundle update redmine_crm'.\033[0m"
 
 require 'redmine_people'
 
-PEOPLE_VERSION_NUMBER = '1.4.1'
+PEOPLE_VERSION_NUMBER = '1.6.0'
 PEOPLE_VERSION_TYPE = "Light version"
 
-QUOTED_TRUE = ActiveRecord::Base.connection.quoted_true.gsub(/'/, '')
-QUOTED_FALSE = ActiveRecord::Base.connection.quoted_false.gsub(/'/, '')
+QUOTED_TRUE = (ActiveRecord::Base.connection rescue false) && ActiveRecord::Base.connection.quoted_true.gsub(/'/, '')
+QUOTED_FALSE = (ActiveRecord::Base.connection rescue false) && ActiveRecord::Base.connection.quoted_false.gsub(/'/, '')
 
 Redmine::Plugin.register :redmine_people do
   name "Redmine People plugin (#{PEOPLE_VERSION_TYPE})"
@@ -43,8 +43,7 @@ Redmine::Plugin.register :redmine_people do
     hide_age: '0',
     edit_own_data: '1',
     default_group: '',
-    'workday_length' => 8,
-    rate_currency: 'USD'
+    'workday_length' => 8
   }
 
   menu :top_menu, :people, { :controller => 'people', :action => 'index', :project_id => nil }, :caption => :label_people, :if => Proc.new {
@@ -53,3 +52,6 @@ Redmine::Plugin.register :redmine_people do
 
   menu :admin_menu, :people, { :controller => 'people_settings', :action => 'index' }, :caption => :label_people, :html => { :class => 'icon' }
 end
+
+RedmineCrm::Settings.initialize_gem_settings
+RedmineCrm::Currency.add_admin_money_menu

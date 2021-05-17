@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -31,8 +31,8 @@ module RedminePeople
 
       module InstanceMethods
         def avatar_with_people(user, options = {})
-          options[:width] = options[:size] || '50' unless options[:width]
-          options[:height] = options[:size] || '50' unless options[:height]
+          options[:width] = options[:size] || GravatarHelper::DEFAULT_OPTIONS[:size] unless options[:width]
+          options[:height] = options[:size] || GravatarHelper::DEFAULT_OPTIONS[:size] unless options[:height]
           if ActiveRecord::VERSION::MAJOR >= 4
             options[:size] = "#{options[:width]}x#{options[:height]}"
             options.except!(:width, :height)
@@ -41,7 +41,7 @@ module RedminePeople
             return avatar_without_people(user, options)
           end
           if user.is_a?(User) && (avatar = user.avatar)
-            avatar_url = url_for :only_path => false, :controller => 'people', :action => 'avatar', :id => avatar, :size => options[:size]
+            avatar_url = url_for only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: options[:size]
             image_tag(avatar_url, options.merge(:class => 'gravatar'))
           elsif user.respond_to?(:twitter) && !user.twitter.blank?
             image_tag("https://twitter.com/#{user.twitter}/profile_image?size=original", options.merge(:class => 'gravatar'))

@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -129,6 +129,24 @@ class PeopleHolidaysControllerTest < ActionController::TestCase
     compatible_request :post, :create, :holiday => @holiday_params
     holiday = PeopleHoliday.last
     assert_match holiday.name, last_email.text_part.to_s
+  end
+
+  def test_should_send_mail_after_create_people_holiday
+    @request.session[:user_id] = 1
+    assert_equal ActionMailer::Base.deliveries.size, 0
+    assert_difference 'PeopleHoliday.count' do
+      compatible_request :post, :create, holiday: @holiday_params.merge(notify: 'all')
+    end
+    assert ActionMailer::Base.deliveries.size > 0
+  end
+
+  def test_should_not_send_mail_after_create_people_holiday
+    @request.session[:user_id] = 1
+    assert_difference(-> { ActionMailer::Base.deliveries.size }, 0) do
+      assert_difference 'PeopleHoliday.count' do
+        compatible_request :post, :create, holiday: @holiday_params
+      end
+    end
   end
 
   private

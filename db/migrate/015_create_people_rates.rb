@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,18 +18,4 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class CreatePeopleRates < (Rails.version < '5.1') ? ActiveRecord::Migration : ActiveRecord::Migration[4.2]
-  def change
-    create_table :people_rates do |t|
-      t.string :rate_type, null: false
-      t.float :rate
-      t.datetime :from_date
-      t.references :project, index: true, foreign_key: true
-      t.references :user, index: true, foreign_key: true
-
-      t.timestamps null: false
-    end
-
-    add_index :people_rates, [:user_id, :rate_type, :from_date, :project_id],
-              name: 'index_people_rates_on_person_and_type_and_date_and_project', unique: true
-  end
 end

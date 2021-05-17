@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 class DepartmentsController < ApplicationController
   unloadable
 
-  before_action :find_department, :except => [:index, :create, :new]
+  before_action :find_department, :except => [:index, :create, :new, :org_chart]
   before_action :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person]
   before_action :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
 
@@ -44,6 +44,8 @@ class DepartmentsController < ApplicationController
     @department.safe_attributes = params[:department]
 
     if @department.save
+      @department.head.department = @department if @department.head
+
       attachments = Attachment.attach_files(@department, params.respond_to?(:to_unsafe_hash) ? params.to_unsafe_hash['attachments'] : params['attachments'])
       render_attachment_warning_if_needed(@department)
 
@@ -80,6 +82,8 @@ class DepartmentsController < ApplicationController
     @department.safe_attributes = params[:department]
 
     if @department.save
+      @department.head.department = @department if @department.head
+
       respond_to do |format|
         format.html { redirect_to :action => 'show', :id => @department }
         # format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" }
@@ -118,6 +122,9 @@ class DepartmentsController < ApplicationController
   end
 
   def load_tab
+  end
+
+  def org_chart
   end
 
   private

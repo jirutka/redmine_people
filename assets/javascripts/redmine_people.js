@@ -122,3 +122,9 @@ function updateTab(name, url, data) {
     }
   });
 };
+
+function addEditableBarsOnClickListener() {
+  $('.tooltip.editable').on('click', function () {
+    $.ajax(this.getAttribute('edit_url'))
+  });
+};

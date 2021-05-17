@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -44,6 +44,9 @@ module RedminePeople
             filter_options[:values] = Person.managers.where(:id => values).
                                                       to_a.sort! { |x, y| x.name <=> y.name }.
                                                       collect { |m| [m.name.html_safe, m.id.to_s] }
+          end
+          if available_filters[field] && available_filters[field][:type] == :people_tags
+            available_filters[field][:values] = people_tags_values(values) if respond_to?(:people_tags_values)
           end
           true
         end

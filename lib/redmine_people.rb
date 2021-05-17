@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -49,8 +49,7 @@ module RedminePeople
     permissions = [
       :edit_people, :view_people, :add_people, :delete_people, :manage_departments,
       :manage_tags, :manage_public_people_queries, :edit_subordinates, :edit_announcement,
-      :edit_work_experience, :edit_own_work_experience, :manage_calendar,
-      :view_rates, :edit_rates, :view_own_rates
+      :edit_work_experience, :edit_own_work_experience, :manage_calendar
     ]
     permissions
   end
@@ -61,6 +60,10 @@ module RedminePeople
 
   def self.default_list_style
     return 'list_excerpt'
+  end
+
+  def self.organization_name
+    settings['organization_name']
   end
 
   def self.url_exists?(url)

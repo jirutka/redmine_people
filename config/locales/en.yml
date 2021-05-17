@@ -40,9 +40,8 @@ en:
   people_permission_add_attachments: Add atthachments
   people_permission_edit_announcement: Edit announcement
   people_permission_view_performance: View performance
-  people_permission_view_rates: View rates
-  people_permission_edit_rates: Edit rates
-  people_permission_view_own_rates: View own rates
+  people_permission_view_leave: View leave
+  people_permission_edit_leave: Edit leave
 
   #0.0.2
   label_people_acl_settings: ACL settings
@@ -97,6 +96,7 @@ en:
   label_announcement_active: Active
   label_announcement_start_date: Start date
   label_announcement_end_date: End date
+  label_announcement_end_department: Department
   label_announcement_new: New announcement
   label_announcement_plural: Announcements
   label_announcement_successful_update: Announcement succeful updated
@@ -146,30 +146,13 @@ en:
   label_people_deviation: Deviation
   label_time_spent: Time spent
   label_people_period: Period
-  label_people_rates: Rates
-  label_people_cost_rate: Cost rate
-  label_people_bill_rate: Bill rate
-  label_people_cost_rates: Cost rates
-  label_people_bill_rates: Bill rates
-  label_people_current_cost_rate: Current cost rate
-  label_people_current_bill_rate: Current bill rate
-  label_people_default_cost_rate: Default cost rate
-  label_people_default_bill_rate: Default bill rate
-  label_people_rates_history: Rates history
-  label_people_rate_new: New people rate
-  label_people_rate_edit: Editing people rate
-  label_people_weekly_cost: Weekly cost
-  label_people_monthly_cost: Monthly cost
-  label_people_rate_currency: Rate currency
-
-  field_rate: Rate
-  field_rate_type: Rate type
-  field_from_date: From date
-  field_costs: Costs
-  notice_people_rate_successfully_destroyed: People rate was successfully destroyed
 
   label_people_calendar: Calendar
   label_people_holidays: Holidays
+  label_people_organization_chart: Organization chart
+  label_people_organization_name: Organization name
+  label_people_set_organization_name: Set organization name
+  label_people_organization_head: Head of Organization
   label_people_birthdays: Birthdays
 
   label_people_holiday_name: Name
@@ -208,3 +191,36 @@ en:
 
   label_people_by_month: By month
   label_people_by_year: By year
+  label_people_hour: "h"
+  label_people_minute: "m"
+
+  label_people_leave_planner: Leave planner
+  label_people_leave_type: Leave type
+  label_people_leave_types: Leave types
+  label_people_leave_type_new: New leave type
+  label_people_leave_type_edit: Edit leave type
+  label_people_leave_new: New leave
+  label_people_leave_edit: Edit leave
+  label_people_leave_comment: Leave a comment
+  label_people_graph: Graph
+  label_people_not_approved: Not approved
+  label_people_scheduled_for: for
+  label_people_added_day_off: Added day off
+
+  notice_leave_type_successfully_destroyed: Leave type was successfully destroyed
+
+  field_paid: Paid
+  field_approvable: Approvable
+  field_approved: Approved
+  field_color: Color
+  field_leave_type: Leave type
+  field_hours_per_day: Hours/Day
+  field_duration: Duration
+  field_hours_per_day_abbreviation: h/d
+
+  label_people_contact_plural: Contacts
+
+  activerecord:
+    errors:
+      messages:
+        greater_than_or_equal_to_start_date: must be greater than or equal to start date

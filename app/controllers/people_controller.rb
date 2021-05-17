@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class PeopleController < ApplicationController
                                         :destroy_avatar, :load_tab, :remove_subordinate]
   before_action :find_managers, :only => [:manager, :autocomplete_for_manager, :add_manager]
   before_action :authorize_people, :except => [:avatar, :context_menu, :bulk_edit, :bulk_update, :autocomplete_tags,
-                                               :manager, :autocomplete_for_manager, :add_manager]
+                                               :manager, :autocomplete_for_manager, :add_manager, :autocomplete_for_person]
 
   before_action :bulk_find_people, :only => [:context_menu, :bulk_edit, :bulk_update]
   before_action :limit_per_page_option, :only => [:load_tab, :show, :remove_subordinate]
@@ -244,6 +244,13 @@ class PeopleController < ApplicationController
     end
   end
 
+  def autocomplete_for_person
+    @people = User.active.sorted.like(params[:q]).limit(10)
+    @people = @people.visible if Person.respond_to?(:visible)
+    @people = @people.to_a
+    render layout: false
+  end
+
   private
 
   def authorize_people
@@ -270,8 +277,6 @@ class PeopleController < ApplicationController
     case params[:tab] || params[:tab_name]
     when 'performance'
       User.current.allowed_people_to?(:view_performance, @person)
-    when 'rates'
-      rates_tab_is_available_for?(@person)
     else
       true
     end
@@ -338,6 +343,5 @@ class PeopleController < ApplicationController
 
   def get_data_for_tab
     tab = params[:tab] || params[:tab_name]
-    @rates_collector = PersonRatesCollector.new(@person) if tab == 'rates'
   end
 end

@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -29,17 +29,7 @@ module PeopleHelper
     ]
 
     tabs << { name: 'subordinates', partial: 'subordinates', label: l(:label_people_subordinates)} if person.subordinates.any?
-
-    if rates_tab_is_available_for?(person)
-      tabs << { name: 'rates', partial: 'rates', label: l(:label_people_rates) }
-    end
-
     tabs
-  end
-
-  def rates_tab_is_available_for?(person)
-    User.current.allowed_people_to?(:view_rates, person) ||
-      (User.current.id == person.id && User.current.allowed_people_to?(:view_own_rates, person))
   end
 
   def birthday_date(person)
@@ -69,7 +59,7 @@ module PeopleHelper
       session[:people_query] = {:filters => @query.filters, :group_by => @query.group_by, :column_names => @query.column_names}
     else
       # retrieve from session
-      @query = PeopleQuery.find(session[:people_query][:id]) if session[:people_query][:id]
+      @query = PeopleQuery.find_by(id: session[:people_query][:id]) if session[:people_query][:id]
       @query ||= PeopleQuery.new(:name => "_", :filters => session[:people_query][:filters], :group_by => session[:people_query][:group_by], :column_names => session[:people_query][:column_names])
     end
   end
@@ -121,10 +111,10 @@ module PeopleHelper
   def person_tag(person, options={})
     avatar_size = options.delete(:size) || 16
     if person.visible? && !options[:no_link]
-      person_avatar = link_to(avatar(person, :size => avatar_size), person_path(person), :id => "avatar")
+      person_avatar = link_to(avatar(person, size: avatar_size, only_path: options[:only_path]), person_path(person), id: 'avatar')
       person_name = link_to(person.name, person_path(person))
     else
-      person_avatar = avatar(person, :size => avatar_size)
+      person_avatar = avatar(person, size: avatar_size, only_path: options[:only_path])
       person_name = person.name
     end
 
@@ -194,7 +184,9 @@ module PeopleHelper
     "#{time.to_i}#{label_hour} #{(60 * (time % 1)).round}#{label_minute}".html_safe
   end
 
-  def rate_to_currency(rate)
-    price_to_currency(rate, RedminePeople.settings['rate_currency'], decimal_mark: ',', delimiter: ' ')
+  def options_for_select2_people(selected)
+    if selected && (person = Person.all_visible.find_by_id(selected))
+      options_for_select([[person.name, person.id]], selected)
+    end
   end
 end

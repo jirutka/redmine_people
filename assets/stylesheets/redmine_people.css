@@ -63,6 +63,12 @@ div.person.details  table.subject_header td.subject_info li {
 /**************************************************************/
 /*                   PERSON_DATA
 /**************************************************************/
+.person-data div.person { overflow: hidden; margin-bottom: 15px; }
+.person-data div.person div.image { float: left; }
+.person-data div.person div.data { margin-left: 45px; }
+.person-data div.person div.data h4.name { border-bottom: 0px; padding: 0px; margin-bottom: 5px; }
+.person-data div.person div.data p.info { margin: 0px; }
+
 table.person_data {
   width: 100%;
 }
@@ -201,6 +207,11 @@ table.index tbody tr.group td {
   padding: 0.8em 0 0.5em 0.3em;
   font-weight: bold;
   border-bottom: 1px solid #CCC;
+}
+
+.person-table .row {
+  min-height: 18px;
+  height: 18px;
 }
 
 /**************************************************************/
@@ -429,16 +440,14 @@ table.cal td.weekend {
 #person_form .select2-container--default .select2-selection--single { background: #fff url(../images/user_suit.png) no-repeat 2px 50%; }
 
 /**************************************************************/
-/*                 Performance and Rates Tabs                 */
+/*                      Performance Tab                       */
 /**************************************************************/
-#tab-placeholder-performance td.delimiter,
-#tab-placeholder-rates td.delimiter {
+#tab-placeholder-performance td.delimiter {
   padding: 10px;
   border-left: 1px solid #dbdde1;
 }
 
-#tab-placeholder-performance .chart_table,
-#tab-placeholder-rates .chart_table {
+#tab-placeholder-performance .chart_table {
   width: 100%;
   margin: 20px 0;
 }
@@ -592,6 +601,226 @@ table.metrics {
   font-size: 16px;
 }
 
+/**************************************************************/
+/*                     Organization chart                     */
+/**************************************************************/
+div.orgChart {
+  border: 1px solid #cccccc;
+  background-color: #ffffe8;
+  margin: 10px;
+  padding: 20px;
+  overflow: auto;
+}
+
+div.orgChart h2 {
+  margin: 0px;
+  padding: 3px;
+  font-size: 1em;
+  border-bottom: none;
+}
+
+div.orgChart ul {
+  list-style: none;
+  margin: 4px;
+  padding: 0px;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+div.orgChart ul.stack,
+div.orgChart ul.stack ul {
+  text-align: center;
+}
+
+div.orgChart table {
+  width: 100%;
+}
+
+div.orgChart tr.lines td.line {
+  width: 1px;
+  height: 20px;
+}
+
+div.orgChart tr.lines td.top {
+  border-top: 2px solid #ddd;
+}
+
+div.orgChart tr.lines td.left {
+  border-right: 1px solid #ddd;
+}
+
+div.orgChart tr.lines td.right {
+  border-left: 1px solid #ddd;
+}
+
+div.orgChart td {
+  text-align: center;
+  vertical-align: top;
+  padding: 0px 2px;
+}
+
+div.orgChart div.node {
+  cursor: default;
+  border: 1px solid #ddd;
+  display: inline-block;
+  padding: 0 4px;
+  min-width: 140px;
+  /*height: 60px;*/
+  background-color: #d6f6f8;
+  text-align: left;
+/*  line-height: 1.3em;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px #888888;
+  -moz-border-radius: 8px;
+  -moz-box-shadow: 4px 4px 6px #888888;
+  -webkit-border-radius: 8px;
+  -webkit-box-shadow: 4px 4px 6px #888888;
+*/}
+
+div.orgChart div.hasChildren {
+  border: solid 1px #b8d4b0;
+  background-color: #e0fae0;
+}
+
+div.orgChart div.hasChildren.hiddenChildren {
+  border-color: red;
+}
+
+div.orgChart.interactive div.hasChildren {
+  cursor: pointer;
+}
+
+div.orgChart div.node.hover {
+  background-color: #c8eec4;
+}
+
+div.orgChart div.adjunct.node {
+  position: absolute;
+  margin-top: 8px;
+  margin-left: -110px;
+  width: 80px;
+  height: 40px;
+  background-color: #efefef;
+}
+
+div.orgChart div.adjunct-link {
+  display: inline-block;
+  position: absolute;
+  margin-left: -20px;
+  margin-top: 25px;
+  width: 20px;
+  border: 1px dashed black;
+}
+
+div.orgChart .node .person-data div.person div.data {
+  margin-left: 38px;
+}
+
+div.orgChart .node .person-data div.person div.data h4.name {
+  max-height: 30px;
+  overflow: hidden;
+}
+
+div.orgChart .node .person-data div.person div.data p.info {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.orgChart .node .person-data div.person {
+  margin: 0;
+}
+
+/**************************************************************/
+/*            Styles of the chart "Leave Planner"             */
+/**************************************************************/
+.leave-planner-chart .group-subject,
+.leave-planner-chart .group-line,
+.leave-planner-chart .user-subject,
+.leave-planner-chart .user-line {
+  height: 16px;
+  padding: 8px;
+  border-top: 1px solid #c0c0c0;
+}
+
+.leave-planner-chart .user-line {
+  padding: 8px 0;
+}
+
+.leave-planner-chart .dayoff-bar {
+  position: absolute;
+  height: 14px;
+  padding:0;
+  margin:0;
+  border: solid 1px #d5d5d5;
+}
+
+.dayoff-bar.red { background-color: #FFE2E3; border-color: rgb(255, 201, 201); }
+.dayoff-bar.green { background-color: #DFFFCC; border-color: rgb(190, 239, 190); }
+.dayoff-bar.blue { background-color: #DCE7FF; border-color: rgb(189, 189, 233); }
+.dayoff-bar.turquoise { background-color: #C4FDFF; border-color: rgb(151, 222, 214); }
+.dayoff-bar.lightgreen { background-color: #D2FFEF; border-color: rgb(184, 228, 226); }
+.dayoff-bar.yellow { background-color: #FFFD9C; border-color: rgb(234, 234, 94); }
+.dayoff-bar.orange { background-color: #FFDBBA; border-color: rgb(255, 202, 105); }
+.dayoff-bar.purple { background-color: #EFDFFC; border-color: rgb(233, 186, 233); }
+.dayoff-bar.gray { background-color: #e1e1e1; border-color: rgb(198, 198, 198); }
+
+.leave-planner-chart .tooltip { height: 14px; }
+.leave-planner-chart div.tooltip:hover span.tip { top: 14px; }
+.leave-planner-chart .editable { cursor: pointer; }
+
+.leave-planner-chart .group-container .group { display: none; }
+.leave-planner-chart .group-container.open .group { display: block; }
+
+.leave-planner-chart .group-container span.expander {
+  background-image: url(../../../images/bullet_toggle_plus.png);
+  background-position: 0 50%;
+  padding-left: 10px;
+  margin-left: 0;
+  cursor: pointer;
+}
+
+.leave-planner-chart .group-container.open span.expander {
+  background-image: url(../../../images/bullet_toggle_minus.png);
+}
+
+.leave-planner-chart .leave-planner-subjects .group,
+.leave-planner-chart .leave-planner-lines .group {
+  border-top: 1px dotted #c0c0c0;
+  overflow: visible;
+  text-align: left;
+}
+
+.leave-planner-chart .group-container .user-subject {
+  border-top: none;
+  margin-left: 20px;
+}
+
+.leave-planner-chart .group-container .user-line { border-top: none; }
+
+#dayoff_approved_wrap {
+  float: right;
+  margin-right: 1em;
+  padding-left: 30px;
+}
+
+.leave-planner-chart .gantt_subjects_column + td { padding: 2px; }
+
+.leave-planner-chart .gantt_hdr {
+  position:absolute;
+  top:0;
+  height:16px;
+  border-top: 1px solid #c0c0c0;
+  border-bottom: 1px solid #c0c0c0;
+  border-right: 1px solid #c0c0c0;
+  border-left: 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+/**************************************************************/
+/*                      Other styles                          */
+/**************************************************************/
 .people_user_activity {}
 .user_activity_table { margin: auto; border-collapse:collapse; text-align: center; }
 .user_activity_table .header .column_data { background-color: #eee; border: 1px solid #c0c0c0; }
@@ -600,5 +829,3 @@ table.metrics {
 .user_activity_table .main_block .column_data_green { background: #bae0ba; }
 .user_activity_table .main_block .column_data_user_name { text-align: left; padding-right: 15px; }
 .user_activity_table .main_block .column_data_total { background-color: #eee; border: 1px solid #c0c0c0; }
-
-td.costs { font-weight: bold; }

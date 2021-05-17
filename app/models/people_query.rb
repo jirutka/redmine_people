@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -160,8 +160,8 @@ class PeopleQuery < Query
     associations = options[:include] || []
     associations << :information
     unless options[:count_request]
-      associations << :department
-      associations << :email_address if Redmine::VERSION.to_s >= '3.0'
+      preloads  = [:department]
+      preloads << :email_address if Redmine::VERSION.to_s >= '3.0'
     end
 
     unless filters['is_system']
@@ -170,6 +170,7 @@ class PeopleQuery < Query
 
     scope
       .eager_load(associations.uniq)
+      .preload(preloads)
       .where(type: 'User')
       .where(statement)
       .where(options[:conditions])
@@ -207,6 +208,7 @@ class PeopleQuery < Query
 
     objects_scope(options)
       .preload(options[:preload])
+      .includes(:department)
       .joins(joins_for_order_statement(order_option.join(',')))
       .order(order_option)
       .limit(options[:limit])
@@ -225,5 +227,10 @@ class PeopleQuery < Query
     scope = Person.where(:id => values)
     scope = scope.visible if Person.respond_to?(:visible)
     scope.map { |c| [c.name.html_safe, c.id.to_s] }
+  end
+
+  def people_tags_values(values)
+    scope = Person.available_tags.where(name: values)
+    scope.map { |c| [c.name, c.name] }
   end
 end

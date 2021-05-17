@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ module Redmine
         end
         e
       end
-      
+
       protected
 
       # Returns events of type event_type visible by user that occured between from and to
@@ -52,6 +52,7 @@ module Redmine
         raise "#{provider.name} can not provide #{event_type} events." if provider_options.nil?
 
         scope = (provider_options[:scope] || provider)
+        scope = scope.call if scope.is_a?(Proc)
 
         if from && to
           scope = scope.where("#{provider_options[:timestamp]} BETWEEN ? AND ?", from, to)

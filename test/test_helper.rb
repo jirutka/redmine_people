@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2019 RedmineUP
+# Copyright (C) 2011-2020 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -60,6 +60,11 @@ class RedminePeople::TestCase
     def people_in_list
       ids = css_select('table.people #ids_').map { |tag| tag['text'].to_i }
       Person.where(:id => ids).sort_by { |person| ids.index(person.id) }
+    end
+
+    def dayoffs_in_list
+      ids = css_select('table.dayoffs td.id').map { |tag| tag.children.first.content.to_i }
+      Dayoff.where(id: ids).sort_by { |dayoff| ids.index(dayoff.id) }
     end
 
     def announcements_in_list
