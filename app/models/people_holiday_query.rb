@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -64,6 +64,8 @@ class PeopleHolidayQuery < Query
   def birthday_condition(month)
     if (ActiveRecord::Base.connection.adapter_name =~ /sqlite/i).present?
       ["CAST(strftime('%m', birthday) as INT) = ?", month]
+    elsif (ActiveRecord::Base.connection.adapter_name =~ /SQLServer/i).present?
+      ["MONTH(birthday) = ?", month]
     else
       ['extract(month from birthday) = ?', month]
     end

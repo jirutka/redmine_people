@@ -222,6 +222,8 @@ ru:
 
   label_people_contact_plural: Контакты
 
+  people_permission_view_reports: Просмотр отчетов
+
   activerecord:
     errors:
       messages:

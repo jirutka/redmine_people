@@ -829,3 +829,5 @@ div.orgChart .node .person-data div.person {
 .user_activity_table .main_block .column_data_green { background: #bae0ba; }
 .user_activity_table .main_block .column_data_user_name { text-align: left; padding-right: 15px; }
 .user_activity_table .main_block .column_data_total { background-color: #eee; border: 1px solid #c0c0c0; }
+
+div.journal h4 img.gravatar.without-margin {margin: -2px 4px -4px 0;}

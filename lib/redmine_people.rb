@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,39 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-require 'people_acl'
-require 'redmine_activity_crm_fetcher'
-require 'redmine_people/patches/action_controller_patch'
-
-Rails.configuration.to_prepare do
-  require_dependency 'redmine_people/helpers/redmine_people'
-
-  require_dependency 'acts_as_attachable_global/init'
-  require_dependency 'redmine_people/patches/application_controller_patch'
-  require_dependency 'redmine_people/patches/user_patch'
-  require_dependency 'redmine_people/patches/application_helper_patch'
-  require_dependency 'redmine_people/patches/avatars_helper_patch'
-  require_dependency 'redmine_people/patches/users_controller_patch'
-  require_dependency 'redmine_people/patches/my_controller_patch'
-  require_dependency 'redmine_people/patches/calendar_patch'
-  require_dependency 'redmine_people/patches/query_patch'
-  require_dependency 'redmine_people/patches/mailer_patch'
-  require_dependency 'redmine_people/patches/attachments_controller_patch'
-
-  require_dependency 'redmine_people/hooks/views_layouts_hook'
-  require_dependency 'redmine_people/hooks/views_my_account_hook'
-
-  if Redmine::VERSION.to_s >= '3.4' || Redmine::VERSION::BRANCH != 'stable'
-    require_dependency 'redmine_people/patches/query_filter_patch'
-  end
-end
-
 module RedminePeople
   def self.available_permissions
     permissions = [
       :edit_people, :view_people, :add_people, :delete_people, :manage_departments,
       :manage_tags, :manage_public_people_queries, :edit_subordinates, :edit_announcement,
-      :edit_work_experience, :edit_own_work_experience, :manage_calendar
+      :edit_work_experience, :edit_own_work_experience, :manage_calendar, :view_reports
     ]
     permissions
   end
@@ -89,3 +62,30 @@ module RedminePeople
     const_defined?(name) && const_get(name).instance_of?(Module)
   end
 end
+
+REDMINE_PEOPLE_REQUIRED_FILES = [
+  'people_acl',
+  'redmine/activity/crm_fetcher',
+  'redmine_people/patches/action_controller_patch',
+  'redmine_people/helpers/redmine_people',
+  'acts_as_attachable_global/init',
+  'redmine_people/patches/application_controller_patch',
+  'redmine_people/patches/user_patch',
+  'redmine_people/patches/application_helper_patch',
+  'redmine_people/patches/avatars_helper_patch',
+  'redmine_people/patches/users_controller_patch',
+  'redmine_people/patches/my_controller_patch',
+  'redmine_people/patches/calendar_patch',
+  'redmine_people/patches/query_patch',
+  'redmine_people/patches/mailer_patch',
+  'redmine_people/patches/attachments_controller_patch',
+  'redmine_people/hooks/views_layouts_hook',
+  'redmine_people/hooks/views_my_account_hook',
+]
+
+if Redmine::VERSION.to_s >= '3.4'
+  REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch'
+end
+
+base_url = File.dirname(__FILE__)
+REDMINE_PEOPLE_REQUIRED_FILES.each { |file| require(base_url + '/' + file) }

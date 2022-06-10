@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -29,6 +29,10 @@ module RedminePeople
 
         base.class_eval do
           unloadable
+
+          alias_method :'allowed_to?_without_people', :allowed_to?
+          alias_method :allowed_to?, :'allowed_to?_with_people'
+
           if ActiveRecord::VERSION::MAJOR >= 4
             has_one :avatar, lambda { where("#{Attachment.table_name}.description = 'avatar'") }, :class_name => 'Attachment', :as => :container, :dependent => :destroy
           else
@@ -71,6 +75,12 @@ module RedminePeople
           else
             has_permission?(permission)
           end
+        end
+
+        define_method 'allowed_to?_with_people' do |action, context, options={}, &block|
+          return allowed_people_to?(action) if !action.is_a?(Hash) && RedminePeople.available_permissions.include?(action)
+
+          public_send('allowed_to?_without_people', action, context, options, &block)
         end
 
         def has_permission?(permission)

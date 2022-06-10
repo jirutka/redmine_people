@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -41,12 +41,12 @@ module RedminePeople
             return avatar_without_people(user, options)
           end
           if user.is_a?(User) && (avatar = user.avatar)
-            avatar_url = url_for only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: options[:size]
-            image_tag(avatar_url, options.merge(:class => 'gravatar'))
+            avatar_url = url_for protocol: Setting.protocol, only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: options[:size]
+            image_tag(avatar_url, options.merge(class: "gravatar #{'without-margin' if !Setting.gravatar_enabled? && Redmine::VERSION.to_s >= '4'}"))
           elsif user.respond_to?(:twitter) && !user.twitter.blank?
             image_tag("https://twitter.com/#{user.twitter}/profile_image?size=original", options.merge(:class => 'gravatar'))
           elsif !Setting.gravatar_enabled?
-            image_tag('person.png', options.merge(:plugin => 'redmine_people', :class => 'gravatar'))
+            image_tag('person.png', options.merge(:plugin => 'redmine_people', :class => "gravatar #{'without-margin' if Redmine::VERSION.to_s >= '4'}"))
           else
             avatar_without_people(user, options)
           end

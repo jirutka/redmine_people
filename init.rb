@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -19,9 +19,7 @@
 
 requires_redmine_crm :version_or_higher => '0.0.54' rescue raise "\n\033[31mRedmine requires newer redmine_crm gem version.\nPlease update with 'bundle update redmine_crm'.\033[0m"
 
-require 'redmine_people'
-
-PEOPLE_VERSION_NUMBER = '1.6.0'
+PEOPLE_VERSION_NUMBER = '1.6.2'
 PEOPLE_VERSION_TYPE = "Light version"
 
 QUOTED_TRUE = (ActiveRecord::Base.connection rescue false) && ActiveRecord::Base.connection.quoted_true.gsub(/'/, '')
@@ -35,7 +33,7 @@ Redmine::Plugin.register :redmine_people do
   url 'http://redmineup.com/pages/plugins/people'
   author_url 'mailto:support@redmineup.com'
 
-  requires_redmine :version_or_higher => '2.6'
+  requires_redmine :version_or_higher => '3.0'
 
   settings default: {
     users_acl: {},
@@ -52,6 +50,11 @@ Redmine::Plugin.register :redmine_people do
 
   menu :admin_menu, :people, { :controller => 'people_settings', :action => 'index' }, :caption => :label_people, :html => { :class => 'icon' }
 end
+
+if Rails.configuration.respond_to?(:autoloader) && Rails.configuration.autoloader == :zeitwerk
+  Rails.autoloaders.each { |loader| loader.ignore(File.dirname(__FILE__) + '/lib') }
+end
+require File.dirname(__FILE__) + '/lib/redmine_people'
 
 RedmineCrm::Settings.initialize_gem_settings
 RedmineCrm::Currency.add_admin_money_menu

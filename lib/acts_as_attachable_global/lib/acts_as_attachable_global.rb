@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -27,8 +27,7 @@ module Redmine
       module ClassMethods
         def acts_as_attachable_global(options = {})
           if ActiveRecord::VERSION::MAJOR >= 4
-            has_many :attachments, lambda { order("#{Attachment.table_name}.created_on") }, options.merge(:as => :container,
-                                                 :dependent => :destroy)
+            has_many :attachments, -> { order("#{Attachment.table_name}.created_on") }, **options.merge(as: :container, dependent: :destroy)
           else
             has_many :attachments, options.merge(:as => :container,
                                                  :order => "#{Attachment.table_name}.created_on",
@@ -37,7 +36,6 @@ module Redmine
 
           send :include, Redmine::Acts::AttachableGlobal::InstanceMethods
           before_save :attach_saved_attachments
-
         end
       end
 

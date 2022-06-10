@@ -20,7 +20,7 @@
                       <% end %>
                     </div>
                   <%# end %>
-                <% elsif i.is_a? PeopleInformation %>
+                <% elsif i.is_a?(PeopleInformation) && i.person %>
                     <div class="birthday tooltip">
                       <span class="icon icon-cake"></span>
                       <%= link_to i.person.name, person_path(i.person) %>

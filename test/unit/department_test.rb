@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -92,7 +92,7 @@ class DepartmentTest < ActiveSupport::TestCase
     assert_equal [1, 2, 3], @second.people_of_branch_department.map(&:id).sort
 
     # Changes department for user 2
-    PeopleInformation.where(:user_id => 1).first.update_attributes(:department_id => @fifth.id)
+    PeopleInformation.where(:user_id => 1).first.update(department_id: @fifth.id)
     assert_equal [1, 4], @first.people_of_branch_department.map(&:id).sort
   end
 

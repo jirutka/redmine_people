@@ -1,8 +1,27 @@
 == Redmine People plugin changelog
 
 Redmine People plugin - User management plugin for redmine
-Copyright (C) 2011-2020 RedmineUP
+Copyright (C) 2011-2021 RedmineUP
 http://www.redmineup.com/
+
+== 2022-04-11 v1.6.2
+
+* Fixed disabled gravatar bug
+* Fixed announcement description error
+* Fixed empty next year events
+* Redmine 5.0 compatibility
+
+== 2021-05-20 v1.6.1
+
+* Added Redmine 4.2 compatibility
+* Fixed MSSQL birthday error
+* Fixed vcard version for old rubies
+* Fixed LDAP source error on People create
+* Fixed avatar displaying bug for HTTP protocol
+* Fixed reports permission bug
+* Fixed people permission error
+* Updated DE locale
+* Updated BR locale
 
 == 2020-11-10 v1.6.0
 
@@ -27,12 +46,12 @@ http://www.redmineup.com/
 == 2020-02-18 v1.5.1
 
 * Costs and rates moved to Budgets plugin
-* Added Italian locale (Marco Congia) 
-* Changed Chinese locale (Zelphar Yang) 
+* Added Italian locale (Marco Congia)
+* Changed Chinese locale (Zelphar Yang)
 
 == 2020-02-18 v1.5.0
 
-* Organization chart 
+* Organization chart
 * Leave management
 * Redmine 4.1 support
 * Fixed issue csv export bug
@@ -48,10 +67,10 @@ http://www.redmineup.com/
 == 2018-09-12 v1.4.0
 
 * Redmine 4 support
-* Person Cost and Bill rates 
+* Person Cost and Bill rates
 * Workday length
 * Person performance based on workday length
-* Fixed age for birthdays date 
+* Fixed age for birthdays date
 * Fixed deleted issue error
 
 == 2017-09-22 v1.3.2
@@ -64,9 +83,9 @@ http://www.redmineup.com/
 
 * Holidays email announcement
 * Next holidays on sidebar
-* Select2 control for filters and manager selection 
+* Select2 control for filters and manager selection
 * Redmine 3.4 support
-* Chinese translation update 
+* Chinese translation update
 * Birthdays announcement critical bug fixed
 
 == 2017-03-20 v1.3.0
@@ -75,7 +94,7 @@ http://www.redmineup.com/
 * Calendar
 * Holidays list
 * Add manage_departments permission
-* Default group setting 
+* Default group setting
 * Searching popup with autocomplete for manager field
 * Birthday notifications compatibility fixes
 * Phone icon fixed

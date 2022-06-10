@@ -43,6 +43,7 @@ en:
   people_permission_view_leave: View leave
   people_permission_edit_leave: Edit leave
 
+
   #0.0.2
   label_people_acl_settings: ACL settings
   label_people_visibility: People visibility
@@ -219,6 +220,8 @@ en:
   field_hours_per_day_abbreviation: h/d
 
   label_people_contact_plural: Contacts
+
+  people_permission_view_reports: View reports
 
   activerecord:
     errors:

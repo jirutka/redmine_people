@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ module RedminePeople
       module InstanceMethods
         # Sets calendar events
         def custom_events=(events)
-          set_custom_events(events, true)
+          set_custom_events(events, false)
         end
 
         def set_custom_events(events, only_for_current_year = false)

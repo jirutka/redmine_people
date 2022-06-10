@@ -17,20 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class CreateDepartments < Rails.version < '5.1' ? ActiveRecord::Migration : ActiveRecord::Migration[4.2]
-
+class ChangeDescriptionToPeopleAnnouncements < Rails.version < '5.1' ? ActiveRecord::Migration : ActiveRecord::Migration[4.2]
   def change
-    create_table :departments do |t|
-      t.integer   :parent_id, :default => nil
-      t.integer   :lft, :default => nil
-      t.integer   :rgt, :default => nil
-      t.string    :name
-      t.text      :background
-      t.integer   :head_id
-      t.timestamps :null => false
-    end
-    add_index :departments, [:parent_id, :lft, :rgt]
-    add_index :departments, :head_id
+    change_column :people_announcements, :description, :text
   end
-
 end

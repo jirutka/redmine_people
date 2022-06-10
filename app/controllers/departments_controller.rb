@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2020 RedmineUP
+# Copyright (C) 2011-2022 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ class DepartmentsController < ApplicationController
   unloadable
 
   before_action :find_department, :except => [:index, :create, :new, :org_chart]
-  before_action :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person]
+  before_action :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person, :org_chart]
   before_action :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
 
   helper :attachments
@@ -125,6 +125,9 @@ class DepartmentsController < ApplicationController
   end
 
   def org_chart
+    User.current.allowed_people_to?(:manage_departments, @person) ||
+    User.current.allowed_people_to?(:view_people, @person) ||
+    deny_access
   end
 
   private
