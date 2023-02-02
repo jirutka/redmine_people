@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2022 RedmineUP
+# Copyright (C) 2011-2023 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,7 +18,11 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class ChangeDescriptionToPeopleAnnouncements < Rails.version < '5.1' ? ActiveRecord::Migration : ActiveRecord::Migration[4.2]
-  def change
+  def self.up
     change_column :people_announcements, :description, :text
+  end
+
+  def self.down
+    change_column :people_announcements, :description, :string
   end
 end

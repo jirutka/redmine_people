@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2022 RedmineUP
+# Copyright (C) 2011-2023 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -27,7 +27,14 @@ module RedminePeople
 
           editable = User.current.allowed_people_to?(:edit_leave)
           @dayoff_bars = @dayoffs.map do |dayoff|
-            Components::DayoffBar.new(dayoff, date_from, date_to, editable, scale)
+            personal_editable =
+              if dayoff.user_id == User.current.id
+                editable || (User.current.allowed_people_to?(:edit_personal_leave) && !dayoff.approved)
+              else
+                editable
+              end
+
+            Components::DayoffBar.new(dayoff, date_from, date_to, personal_editable, scale)
           end
         end
 

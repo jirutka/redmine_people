@@ -417,7 +417,7 @@ div[aria-describedby=announcement-show] {
 .birthdays{
   margin-top: 20px;
 }
-
+  
 .birthdays:after {
   clear: both;
   content: '';
@@ -437,7 +437,7 @@ table.cal td.weekend {
 .icon-cake { background-image: url(../images/cake.png); }
 
 #person_form #person_information_attributes_manager_id_wrap .select2 { width: 20% !important; }
-#person_form .select2-container--default .select2-selection--single { background: #fff url(../images/user_suit.png) no-repeat 2px 50%; }
+#person_form .select2-container--default .select2-selection--single { background: #fff url(../images/user_suit.png) no-repeat 2px 50%; padding-left: 10px; }
 
 /**************************************************************/
 /*                      Performance Tab                       */
@@ -802,6 +802,7 @@ div.orgChart .node .person-data div.person {
   float: right;
   margin-right: 1em;
   padding-left: 30px;
+  min-width: 15%;
 }
 
 .leave-planner-chart .gantt_subjects_column + td { padding: 2px; }

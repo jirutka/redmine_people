@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2022 RedmineUP
+# Copyright (C) 2011-2023 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -59,3 +59,9 @@ resources :people_settings do
 end
 
 resources :people_queries, except: [:index]
+
+constraints object_type: /(departments)/ do
+  get 'attachments/:object_type/:object_id/edit', to: 'attachments#edit_all', as: 'departments_attachments_edit'
+  patch 'attachments/:object_type/:object_id', to: 'attachments#update_all', as: 'departments_attachments'
+  get 'attachments/:object_type/:object_id/download', to: 'attachments#download_all', as: 'departments_attachments_download'
+end

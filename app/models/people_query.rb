@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2022 RedmineUP
+# Copyright (C) 2011-2023 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@ class PeopleQuery < Query
     QueryColumn.new(:appearance_date, :sortable => "#{PeopleInformation.table_name}.appearance_date", :caption => :label_people_appearance_date),
     QueryColumn.new(:last_login_on, :sortable => "#{Person.table_name}.last_login_on", :caption => :field_last_login_on),
     QueryColumn.new(:department_id, :sortable => "#{Department.table_name}.name", :groupable => "#{PeopleInformation.table_name}.department_id", :caption => :label_people_department),
-    QueryColumn.new(:manager_id, :sortable => "#{Person.table_name}.firstname", :caption => :label_people_manager , :groupable => "#{PeopleInformation.table_name}.manager_id"),
+    QueryColumn.new(:manager_id, :sortable => "#{PeopleInformation.table_name}.manager_id", :caption => :label_people_manager , :groupable => "#{PeopleInformation.table_name}.manager_id"),
     QueryColumn.new(:is_system, :sortable => "#{PeopleInformation.table_name}.is_system", :caption => :label_people_is_system),
     QueryColumn.new(:status, :sortable => "#{Person.table_name}.status", :caption => :field_status),
     QueryColumn.new(:tags, :caption => :label_people_tags_plural),

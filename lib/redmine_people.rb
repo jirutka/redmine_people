@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2022 RedmineUP
+# Copyright (C) 2011-2023 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -83,9 +83,8 @@ REDMINE_PEOPLE_REQUIRED_FILES = [
   'redmine_people/hooks/views_my_account_hook',
 ]
 
-if Redmine::VERSION.to_s >= '3.4'
-  REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch'
-end
+REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch' if Redmine::VERSION.to_s >= '3.4'
+REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/attachments_helper_patch' if Redmine::VERSION.to_s >= '5.0'
 
 base_url = File.dirname(__FILE__)
 REDMINE_PEOPLE_REQUIRED_FILES.each { |file| require(base_url + '/' + file) }

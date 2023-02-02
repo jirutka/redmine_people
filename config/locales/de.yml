@@ -25,9 +25,9 @@ de:
   frequency_mday: monatlich
   frequency_once: einmalig
   frequency_wday: wöchentlich
-  label_activity_type_issue_create: Create issue
-  label_activity_type_issue_update: Update issue
-  label_activity_type_spent_time_added: Add spent time
+  label_activity_type_issue_create: Ticket erstellen
+  label_activity_type_issue_update: Ticket aktualisieren
+  label_activity_type_spent_time_added: Füge aufgewendete Zeit hinzu
   label_announcement: Mitteilung
   label_announcement_active: Aktiv
   label_announcement_description: Beschreibung
@@ -45,7 +45,7 @@ de:
   label_people_acl_settings: ACL Einstellungen
   label_people_add_tag: + Tag hinzufügen
   label_people_add_tags: Tags hinzufügen
-  label_people_added_day_off: Added day off
+  label_people_added_day_off: Ruhetag hinzugefügt
   label_people_address: Adresse
   label_people_age: Alter
   label_people_all: Zeige alle Mitarbeiter
@@ -78,7 +78,7 @@ de:
   label_people_female: Weiblich
   label_people_filter_activity_type: Aktivitätsart
   label_people_filter_time_interval: Report time interval
-  label_people_from_date: From date
+  label_people_from_date: Ab Datum
   label_people_gender: Geschlecht
   label_people_graph: Graph
   label_people_group_plular: Gruppen
@@ -90,7 +90,7 @@ de:
   label_people_holiday_name: Name
   label_people_holiday_new: Neuer Feiertag
   label_people_holiday_notify: Benachrichtigen
-  label_people_holiday_notify_subject: "Holiday %{name} added in date(s) %{from}%{to}."
+  label_people_holiday_notify_subject: "Feiertag %{name} wurde eingetren in date(s) %{from}%{to}."
   label_people_holiday_start_date: Start Datum
   label_people_holidays: Feiertage
   label_people_holidays_next: Nächster Feiertag
@@ -127,7 +127,7 @@ de:
   label_people_person: Person
   label_people_phone: Telefonnummer
   label_people_phone_plural: Telefonnummern
-  label_people_previous_company_name: Previous company name
+  label_people_previous_company_name: Vorheriger Firmenname
   label_people_previous_job_title: Vorherige Stellenbezeichnung
   label_people_report_plural: Mitarbeiterberichte
   label_people_scheduled_for: für
@@ -135,16 +135,15 @@ de:
   label_people_set_organization_name: Setze Unternehmensnamen
   label_people_settings: Miterbeiter Einstellungen
   label_people_show_birthday_announcements: Zeige Geburtstags Benachrichtigungen
-  label_people_show_for_registered_users: Show people for registered users
+  label_people_show_for_registered_users: Plugin People registrierten Benutzern anzeigen
   label_people_show_on_map: Auf der Karte zeigen
-  label_people_show_on_map: Show on map
   label_people_skype: Skype
-  label_people_subordinates: Subordinates
+  label_people_subordinates: Untergeordnete
   label_people_tags_plural: Tags
-  label_people_to_date: To date
-  label_people_to_description: Description
-  label_people_total_coverage: Total coverage
-  label_people_total_hours: Total hours
+  label_people_to_date: Bis Datum
+  label_people_to_description: Beschreibung
+  label_people_total_coverage: Vollständige Abdeckung
+  label_people_total_hours: Gesamtstunden
   label_people_twitter: Twitter
   label_people_use_announcement: Verwende Benachrichtigungen
   label_people_user_activity: Benutzeraktivität
@@ -158,12 +157,12 @@ de:
   label_people_work_experience_edit: Berufserfahrung bearbeiten
   label_people_work_experience_new: Berufserfahrung hinzufügen
   label_people_workday_length: Länge des Arbeitstages
-  label_time_spent: Time spent
-  label_visibility_private: to me only
-  label_visibility_public: to any users
-  notice_failed_to_save_people: "Failed to save %{count} person(people) on %{total} selected: %{ids}."
-  notice_leave_type_successfully_destroyed: Leave type was successfully destroyed
-  people_label_bulk_edit_selected_people: Edit all selected people
+  label_time_spent: Zeitaufwand
+  label_visibility_private: nur für mich
+  label_visibility_public: für alle Benutzer
+  notice_failed_to_save_people: "Fehler beim Speichern von %{count} Person(people) aus %{total} ausgewählten: %{ids}."
+  notice_leave_type_successfully_destroyed: Urlaubstyp wurde erfolgreich gelöscht
+  people_label_bulk_edit_selected_people: Alle ausgewählten Personen bearbeiten
   people_permission_add_attachments: Anhänge hinzufügen
   people_permission_add_people: Mitarbeiter hinzufügen
   people_permission_delete_departments: Abteilungen löschen
@@ -173,11 +172,11 @@ de:
   people_permission_edit_leave: Abwesenheit bearbeiten
   people_permission_edit_own_work_experience: Eigene Berufserfahrung bearbeiten
   people_permission_edit_people: Mitarbeiter bearbeiten
-  people_permission_edit_subordinates: Edit subordinates
+  people_permission_edit_subordinates: Untergebene bearbeiten
   people_permission_edit_work_experience: Berufserfahrung bearbeiten
   people_permission_manage_calendar: Kalender verwalten
   people_permission_manage_departments: Abteilungen verwalten
-  people_permission_manage_public_people_queries: Manage public queries
+  people_permission_manage_public_people_queries: Allgemeine Anfragen verwalten
   people_permission_manage_tags: Tags verwalten
   people_permission_view_leave: Abwesenheit anzeigen
   people_permission_view_people: Mitarbeiter anzeigen
@@ -185,4 +184,4 @@ de:
   activerecord:
     errors:
       messages:
-        greater_than_or_equal_to_start_date: must be greater than or equal to start date
+        greater_than_or_equal_to_start_date: muss größer oder gleich dem Startdatum sein

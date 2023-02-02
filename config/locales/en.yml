@@ -42,6 +42,7 @@ en:
   people_permission_view_performance: View performance
   people_permission_view_leave: View leave
   people_permission_edit_leave: Edit leave
+  people_permission_edit_personal_leave: Edit personal leave
 
 
   #0.0.2
@@ -192,9 +193,8 @@ en:
 
   label_people_by_month: By month
   label_people_by_year: By year
-  label_people_hour: "h"
-  label_people_minute: "m"
 
+  label_people_leave_plural: Leaves
   label_people_leave_planner: Leave planner
   label_people_leave_type: Leave type
   label_people_leave_types: Leave types
@@ -207,6 +207,8 @@ en:
   label_people_not_approved: Not approved
   label_people_scheduled_for: for
   label_people_added_day_off: Added day off
+  label_people_appoved_notification: Day off status changed
+  label_people_notes_notification: Day off notes changed
 
   notice_leave_type_successfully_destroyed: Leave type was successfully destroyed
 

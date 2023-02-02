@@ -1,8 +1,16 @@
 == Redmine People plugin changelog
 
 Redmine People plugin - User management plugin for redmine
-Copyright (C) 2011-2021 RedmineUP
+Copyright (C) 2011-2023 RedmineUP
 http://www.redmineup.com/
+
+== 2023-01-26 v1.6.3
+
+* Added leave requests
+* Added Hungarian translation (Krisztian Engi)
+* Fixed attachments error
+* Fixed textarea preview
+* Fixed grouped order for people list
 
 == 2022-04-11 v1.6.2
 

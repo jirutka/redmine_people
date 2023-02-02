@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2022 RedmineUP
+# Copyright (C) 2011-2023 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -52,6 +52,10 @@ class Department < ActiveRecord::Base
     name
   end
 
+  def visible?(user = nil)
+    user ? (user.allowed_people_to?(:manage_departments) || PeopleInformation.find_by_user_id(user.id).try(:department_id) == id) : true
+  end
+
   def all_childs
     Department.where('lft > ? AND rgt < ?', lft, rgt).order('lft')
   end
@@ -70,6 +74,7 @@ class Department < ActiveRecord::Base
 
   def allowed_parents
     return @allowed_parents if @allowed_parents
+
     @allowed_parents = Department.all - self_and_descendants - [self]
     @allowed_parents << nil
   end

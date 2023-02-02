@@ -42,6 +42,7 @@ ru:
   people_permission_view_performance: Просмотр производительности сотрудников
   people_permission_view_leave: Просмотр отпусков
   people_permission_edit_leave: Редактирование отпусков
+  people_permission_edit_personal_leave: Редактирование собственных отпусков
 
   #0.0.2
   label_people_acl_settings: Права доступа
@@ -193,9 +194,7 @@ ru:
   label_people_by_month: За месяц
   label_people_by_year: За год
 
-  label_people_hour: "ч"
-  label_people_minute: "м"
-
+  label_people_leave_plural: Отпуска/отгулы
   label_people_leave_planner: Отпуска
   label_people_leave_type: Тип выходного
   label_people_leave_types: Типы отгулов
@@ -208,6 +207,8 @@ ru:
   label_people_not_approved: Не согласовано
   label_people_scheduled_for: на
   label_people_added_day_off: Добавлен выходной
+  label_people_appoved_notification: Статус выходного изменился
+  label_people_notes_notification: Примечание выходного изменилось
 
   notice_leave_type_successfully_destroyed: Тип отпуска успешно удален
 

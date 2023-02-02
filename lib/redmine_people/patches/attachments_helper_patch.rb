@@ -17,26 +17,33 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
+require_dependency 'application_helper'
+
 module RedminePeople
   module Patches
-    module MyControllerPatch
+    module AttachmentsHelperPatch
       def self.included(base)
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          before_action :authorize_people, :only => [:destroy]
+          unloadable
+
+          alias_method :container_attachments_download_path_without_people, :container_attachments_download_path
+          alias_method :container_attachments_download_path, :container_attachments_download_path_with_people
         end
       end
 
       module InstanceMethods
-        def authorize_people
-          deny_access unless User.current.allowed_people_to?(:edit_people, User.current)
+        def container_attachments_download_path_with_people(container)
+          return departments_attachments_download_path container.class.name.underscore.pluralize, container.id if container.is_a?(Department)
+
+          container_attachments_download_path_without_people(container)
         end
       end
     end
   end
 end
 
-unless MyController.included_modules.include?(RedminePeople::Patches::MyControllerPatch)
-  MyController.send(:include, RedminePeople::Patches::MyControllerPatch)
+unless AttachmentsHelper.included_modules.include?(RedminePeople::Patches::AttachmentsHelperPatch)
+  AttachmentsHelper.send(:include, RedminePeople::Patches::AttachmentsHelperPatch)
 end
