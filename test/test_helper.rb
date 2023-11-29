@@ -27,9 +27,11 @@ class RedminePeople::TestCase
 
   module TestHelper
     def with_people_settings(options, &block)
+      base_classes = [Symbol, false, true, nil]
+      base_classes << Fixnum if RUBY_VERSION < '3.2.2'
       saved_settings = options.keys.inject({}) do |h, k|
         h[k] = case Setting.plugin_redmine_people[k]
-          when Symbol, false, true, nil, Fixnum
+          when *base_classes
             Setting.plugin_redmine_people[k]
           else
             Setting.plugin_redmine_people[k].dup

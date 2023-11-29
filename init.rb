@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-requires_redmine_crm :version_or_higher => '0.0.59' rescue raise "\n\033[31mRedmine requires newer redmine_crm gem version.\nPlease update with 'bundle update redmine_crm'.\033[0m"
+requires_redmine_crm :version_or_higher => '0.0.62' rescue raise "\n\033[31mRedmine requires newer redmine_crm gem version.\nPlease update with 'bundle update redmine_crm'.\033[0m"
 
-PEOPLE_VERSION_NUMBER = '1.6.3'
+PEOPLE_VERSION_NUMBER = '1.6.4'
 PEOPLE_VERSION_TYPE = "Light version"
 
 QUOTED_TRUE = (ActiveRecord::Base.connection rescue false) && ActiveRecord::Base.connection.quoted_true.gsub(/'/, '')
@@ -54,7 +54,10 @@ end
 if Rails.configuration.respond_to?(:autoloader) && Rails.configuration.autoloader == :zeitwerk
   Rails.autoloaders.each { |loader| loader.ignore(File.dirname(__FILE__) + '/lib') }
 end
-require File.dirname(__FILE__) + '/lib/redmine_people'
+
+Rails.configuration.after_initialize do
+  require File.dirname(__FILE__) + '/lib/redmine_people'
+end
 
 RedmineCrm::Settings.initialize_gem_settings
 RedmineCrm::Currency.add_admin_money_menu

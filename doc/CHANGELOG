@@ -4,6 +4,13 @@ Redmine People plugin - User management plugin for redmine
 Copyright (C) 2011-2023 RedmineUP
 http://www.redmineup.com/
 
+== 2023-11-20 v1.6.4
+
+* Fixed Redmine 5.1 compatibility
+* Fixed bug with People queries
+* Fixed attachments bug for Redmine > 5.0
+* Fixed expanded icons 
+
 == 2023-01-26 v1.6.3
 
 * Added leave requests

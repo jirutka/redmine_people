@@ -75,11 +75,12 @@ class PeopleController < ApplicationController
         limit: @limit,
         offset: @offset
       )
+    else
+      flash[:error] = @query.errors.full_messages.first if @query.errors.present?
+    end
 
-      respond_to do |format|
-        format.html {render partial: people_list_style, layout: false if request.xhr?}
-      end
-
+    respond_to do |format|
+      format.html {render partial: people_list_style, layout: false if request.xhr?}
     end
   end
 

@@ -20,7 +20,8 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 module PeopleCalendarsHelper
-  include CalendarsHelper
+  include CalendarsHelper if Redmine::VERSION.to_s < '5.1'
+  include RedmineCrm::CalendarsHelper
   include PeopleHelper
 
   def show_birthdays?

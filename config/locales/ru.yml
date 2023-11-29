@@ -72,7 +72,7 @@ ru:
   label_people_show_for_registered_users: Показывать сотрудников зарегистрированным пользователям
 
   #1.1.0
-  label_people_tags_plural: Тэги
+  label_people_tags_plural: Теги
   label_visibility_public: всем пользователям
   label_visibility_private: только мне
   label_people_default_list_style: Вид списка по умолчанию
@@ -85,8 +85,8 @@ ru:
   people_permission_manage_public_people_queries: Управление общими запросами
   label_people_add_tag: + добавить тэг
   field_person_full_name: Полное имя
-  label_people_edit_tags: Редактировать тэги
-  people_permission_manage_tags: Редактировать тэги
+  label_people_edit_tags: Редактировать теги
+  people_permission_manage_tags: Редактировать теги
   label_people_hide_age: Скрывать возраст
   label_people_is_system: Системный
   label_people_edit_own_data: Редактировать собственные данные
@@ -178,8 +178,8 @@ ru:
   people_label_bulk_edit_selected_people: Редактировать всех выбранных сотрудников
 
 
-  label_people_add_tags: Добавить тэги
-  label_people_delete_tags: Снять тэги
+  label_people_add_tags: Добавить теги
+  label_people_delete_tags: Снять теги
   label_people_report_plural: Отчеты по пользователям
   label_people_user_activity: Активность пользователей
   label_people_average_time_per_day: Среднее за день
@@ -188,7 +188,7 @@ ru:
   label_people_filter_time_interval: Интервал времени
 
   label_activity_type_issue_create: Создание задачи
-  label_activity_type_issue_update: Обовление задачи
+  label_activity_type_issue_update: Обновление задачи
   label_activity_type_spent_time_added: Добавление трудозатрат
 
   label_people_by_month: За месяц
@@ -212,7 +212,7 @@ ru:
 
   notice_leave_type_successfully_destroyed: Тип отпуска успешно удален
 
-  field_paid: Oплачиваемый
+  field_paid: Оплачиваемый # Russian "О"
   field_approvable: Необходимость согласования
   field_approved: Согласовано
   field_color: Цвет

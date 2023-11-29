@@ -44,6 +44,7 @@ module RedminePeople
   end
 end
 
-unless AttachmentsHelper.included_modules.include?(RedminePeople::Patches::AttachmentsHelperPatch)
+
+if Redmine::VERSION.to_s >= '5.0' && AttachmentsHelper.included_modules.exclude?(RedminePeople::Patches::AttachmentsHelperPatch)
   AttachmentsHelper.send(:include, RedminePeople::Patches::AttachmentsHelperPatch)
 end

@@ -81,10 +81,10 @@ REDMINE_PEOPLE_REQUIRED_FILES = [
   'redmine_people/patches/attachments_controller_patch',
   'redmine_people/hooks/views_layouts_hook',
   'redmine_people/hooks/views_my_account_hook',
+  'redmine_people/patches/attachments_helper_patch',
 ]
 
 REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch' if Redmine::VERSION.to_s >= '3.4'
-REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/attachments_helper_patch' if Redmine::VERSION.to_s >= '5.0'
 
 base_url = File.dirname(__FILE__)
 REDMINE_PEOPLE_REQUIRED_FILES.each { |file| require(base_url + '/' + file) }

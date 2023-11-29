@@ -164,7 +164,7 @@ class PeopleControllerTest < ActionController::TestCase
     assert_equal 'text/plain', attachment.content_type
     assert_equal 'test file', attachment.description
 
-    assert File.exists?(attachment.diskfile)
+    assert File.respond_to?(:exists?) ? File.exists?(attachment.diskfile) : File.exist?(attachment.diskfile)
   end
 
   def test_destroy
