@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ module RedminePeople
           group_name = @group_object ? format_object(@group_object) : "(#{l(:label_blank_value)})"
 
           content_tag :div, id: "group_#{@group_object.try(:id)}", class: 'group-subject' do
-            [content_tag(:span, '&nbsp;'.html_safe, class: 'expander', onclick: %($('.group-container[group_id="#{@group_object.try(:id)}"]').toggleClass('open');)),
+            [content_tag(:span, '&nbsp;'.html_safe, class: 'expander icon icon-expanded', onclick: %($('.group-container[group_id="#{@group_object.try(:id)}"]').toggleClass('open');$(this).toggleClass('icon-expanded icon-collapsed');)),
              group_name].join(' ').html_safe
           end
         end

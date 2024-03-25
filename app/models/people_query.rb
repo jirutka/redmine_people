@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class PeopleQuery < Query
+  attr_accessor :visibility
+
   self.queried_class = Principal
   self.view_permission = :view_people if Redmine::VERSION.to_s > '4.0'
 
@@ -32,7 +34,7 @@ class PeopleQuery < Query
     QueryColumn.new(:lastname, :sortable => "#{Person.table_name}.lastname", :caption => :field_lastname),
     QueryColumn.new(:middlename, :sortable => "#{PeopleInformation.table_name}.middlename", :caption => :label_people_middlename),
     QueryColumn.new(:gender, :sortable => "#{PeopleInformation.table_name}.gender", :groupable => "#{PeopleInformation.table_name}.gender", :caption => :label_people_gender),
-    QueryColumn.new(:email, :sortable => Redmine::VERSION.to_s >= '3.0' ? "email_addresses.address" : "#{Person.table_name}.mail", :caption => :field_mail),
+    QueryColumn.new(:email, :sortable => "email_addresses.address", :caption => :field_mail),
     QueryColumn.new(:address, :sortable => "#{PeopleInformation.table_name}.address", :caption => :label_people_address),
     QueryColumn.new(:phone, :sortable => "#{PeopleInformation.table_name}.phone", :caption => :label_people_phone),
     QueryColumn.new(:skype, :sortable => "#{PeopleInformation.table_name}.skype", :caption => :label_people_skype ),
@@ -64,15 +66,9 @@ class PeopleQuery < Query
   scope :visible, lambda { |*args|
     user = args.shift || User.current
 
-    if Redmine::VERSION.to_s < '2.4'
-      field = 'is_public'
-      public_value = true
-      private_value = false
-    else
-      field = 'visibility'
-      public_value = VISIBILITY_PUBLIC
-      private_value = VISIBILITY_PRIVATE
-    end
+    field = 'visibility'
+    public_value = VISIBILITY_PUBLIC
+    private_value = VISIBILITY_PRIVATE
 
     if user.admin?
       where("#{table_name}.#{field} <> ? OR #{table_name}.user_id = ?", private_value, user.id)
@@ -85,7 +81,7 @@ class PeopleQuery < Query
 
   def visible?(user = User.current)
     return true if user.admin?
-    case visibility
+    case self.visibility
     when VISIBILITY_PUBLIC
       true
     else
@@ -94,27 +90,19 @@ class PeopleQuery < Query
   end
 
   def is_private?
-    visibility == VISIBILITY_PRIVATE
-  end
-
-  def is_public?
-    !is_private?
+    self.visibility == VISIBILITY_PRIVATE
   end
 
   def visibility=(value)
-    if Redmine::VERSION.to_s < '2.4'
-      self.is_public = value.to_i == VISIBILITY_PUBLIC
-    else
-      self[:visibility] = value
-    end
+    self[:visibility] = value
   end
 
   def visibility
-    if Redmine::VERSION.to_s < '2.4'
-      is_public ? VISIBILITY_PUBLIC : VISIBILITY_PRIVATE
-    else
-      self[:visibility]
-    end
+    self[:visibility]
+  end  
+
+  def is_public?
+    !is_private?
   end
 
   def editable_by?(user)
@@ -161,8 +149,7 @@ class PeopleQuery < Query
     associations = options[:include] || []
     associations << :information
     unless options[:count_request]
-      preloads  = [:department]
-      preloads << :email_address if Redmine::VERSION.to_s >= '3.0'
+      preloads  = [:department, :email_address]
     end
 
     unless filters['is_system']

@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -31,22 +31,19 @@ module RedminePeople
 
       module InstanceMethods
         def avatar_with_people(user, options = {})
-          options[:width] = options[:size] || GravatarHelper::DEFAULT_OPTIONS[:size] unless options[:width]
-          options[:height] = options[:size] || GravatarHelper::DEFAULT_OPTIONS[:size] unless options[:height]
-          if ActiveRecord::VERSION::MAJOR >= 4
-            options[:size] = "#{options[:width]}x#{options[:height]}"
-            options.except!(:width, :height)
-          end
+          options[:size] ||= GravatarHelper::DEFAULT_OPTIONS[:size]
+          size2x = options[:size].to_i*2
           if user.blank? || user.is_a?(String) || (user.is_a?(User) && user.anonymous?)
             return avatar_without_people(user, options)
           end
           if user.is_a?(User) && (avatar = user.avatar)
             avatar_url = url_for protocol: Setting.protocol, only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: options[:size]
-            image_tag(avatar_url, options.merge(class: "gravatar #{'without-margin' if !Setting.gravatar_enabled? && Redmine::VERSION.to_s >= '4'}"))
+            options[:srcset] = url_for(protocol: Setting.protocol, only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: size2x) + " 2x"
+            image_tag(avatar_url, options.merge(class: "gravatar #{'without-margin' if !Setting.gravatar_enabled?}"))
           elsif user.respond_to?(:twitter) && !user.twitter.blank?
             image_tag("https://twitter.com/#{user.twitter}/profile_image?size=original", options.merge(:class => 'gravatar'))
           elsif !Setting.gravatar_enabled?
-            image_tag('person.png', options.merge(:plugin => 'redmine_people', :class => "gravatar #{'without-margin' if Redmine::VERSION.to_s >= '4'}"))
+            image_tag('person.png', options.merge(:plugin => 'redmine_people', :class => "gravatar #{'without-margin'}"))
           else
             avatar_without_people(user, options)
           end

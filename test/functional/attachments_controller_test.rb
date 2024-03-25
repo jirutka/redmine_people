@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -26,9 +26,8 @@ class AttachmentsControllerTest < ActionController::TestCase
 
   fixtures :users, :projects, :roles, :members, :member_roles,
            :enabled_modules, :issues, :trackers,
-           :versions, :wiki_pages, :wikis, :documents
-
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+           :versions, :wiki_pages, :wikis, :documents,
+           :email_addresses
 
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
                                           [:departments, :people_information, :attachments])

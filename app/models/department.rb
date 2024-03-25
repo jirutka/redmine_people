@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,29 +20,18 @@
 class Department < ActiveRecord::Base
   include Redmine::SafeAttributes
   acts_as_attachable
-  unloadable
+  
   belongs_to :head, :class_name => 'Person', :foreign_key => 'head_id'
-
   has_many :people_information, :class_name => 'PeopleInformation', :dependent => :nullify
+  has_many :people, lambda { distinct }, :class_name => 'Person', :through => :people_information
 
-  if ActiveRecord::VERSION::MAJOR >= 4
-    has_many :people, lambda { Rails.version < '5.1' ? uniq : distinct }, :class_name => 'Person', :through => :people_information
-  else
-    has_many :people, :class_name => 'Person', :through => :people_information, :uniq => true
-  end
-
-  if Redmine::VERSION.to_s < '3.0'
-    acts_as_nested_set :order => 'name', :dependent => :destroy
-  else
-    include DepartmentNestedSet
-  end
+  include DepartmentNestedSet
 
   acts_as_attachable_global
 
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  attr_protected :id if ActiveRecord::VERSION::MAJOR <= 4
   safe_attributes 'name',
                   'background',
                   'parent_id',

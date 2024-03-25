@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -50,13 +50,11 @@ class RedminePeople::TestCase
     end
 
     def compatible_request(type, action, parameters = {})
-      return send(type, action, :params => parameters) if Rails.version >= '5.1'
-      send(type, action, parameters)
+      send(type, action, :params => parameters)
     end
 
     def compatible_xhr_request(type, action, parameters = {})
-      return send(type, action, :params => parameters, :xhr => true) if Rails.version >= '5.1'
-      xhr type, action, parameters
+      send(type, action, :params => parameters, :xhr => true)
     end
 
     def people_in_list
@@ -76,10 +74,6 @@ class RedminePeople::TestCase
   end
 
   def self.create_fixtures(fixtures_directory, table_names, class_names = {})
-    if ActiveRecord::VERSION::MAJOR >= 4
-      ActiveRecord::FixtureSet.create_fixtures(fixtures_directory, table_names, class_names = {})
-    else
-      ActiveRecord::Fixtures.create_fixtures(fixtures_directory, table_names, class_names = {})
-    end
+    ActiveRecord::FixtureSet.create_fixtures(fixtures_directory, table_names, class_names = {})
   end
 end

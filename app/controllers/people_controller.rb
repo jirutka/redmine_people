@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -59,13 +59,8 @@ class PeopleController < ApplicationController
 
       @people_count = @query.object_count
 
-      if Redmine::VERSION.to_s > '2.5'
-        @people_pages = Paginator.new(@people_count, @limit, params[:page])
-        @offset = @people_pages.offset
-      else
-        @people_pages = Paginator.new(self, @people_count, @limit, params[:page])
-        @offset = @people_pages.current.offset
-      end
+      @people_pages = Paginator.new(@people_count, @limit, params[:page])
+      @offset = @people_pages.offset
 
       @people_count_by_group = @query.object_count_by_group
       @people = @query.results_scope(
@@ -209,7 +204,7 @@ class PeopleController < ApplicationController
   def autocomplete_tags
     if request.xhr?
       @name = params[:q].to_s
-      @tags = Person.all_tag_counts(conditions: ["#{RedmineCrm::Tag.table_name}.name LIKE ?", "%#{@name}%"], limit: 10)
+      @tags = Person.all_tag_counts(conditions: ["#{Redmineup::Tag.table_name}.name LIKE ?", "%#{@name}%"], limit: 10)
       render layout: false, partial: 'person_tag_list', status: 200
     else
       render_404
@@ -224,7 +219,7 @@ class PeopleController < ApplicationController
   end
 
   def autocomplete_for_manager
-    @managers = @managers.like(params[:q]).limit(100).preload(Redmine::VERSION.to_s >= '3.0' ? [:avatar, :email_address] : [:avatar]).to_a
+    @managers = @managers.like(params[:q]).limit(100).preload([:avatar, :email_address]).to_a
   end
 
   def add_manager

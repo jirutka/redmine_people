@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class PeopleHoliday < ActiveRecord::Base
-  unloadable
+  
   include Redmine::SafeAttributes
 
   validates_presence_of :name, :start_date
@@ -29,7 +29,6 @@ class PeopleHoliday < ActiveRecord::Base
 
   scope :between, ->(from, to) { where('NOT (? > end_date OR start_date > ?)', from, to) }
 
-  attr_protected :id if ActiveRecord::VERSION::MAJOR <= 4
   safe_attributes 'name',
                   'start_date',
                   'end_date',

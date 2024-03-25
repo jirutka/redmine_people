@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -66,7 +66,6 @@ end
 REDMINE_PEOPLE_REQUIRED_FILES = [
   'people_acl',
   'redmine/activity/crm_fetcher',
-  'redmine_people/patches/action_controller_patch',
   'redmine_people/helpers/redmine_people',
   'acts_as_attachable_global/init',
   'redmine_people/patches/application_controller_patch',
@@ -84,7 +83,7 @@ REDMINE_PEOPLE_REQUIRED_FILES = [
   'redmine_people/patches/attachments_helper_patch',
 ]
 
-REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch' if Redmine::VERSION.to_s >= '3.4'
+REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch'
 
 base_url = File.dirname(__FILE__)
 REDMINE_PEOPLE_REQUIRED_FILES.each { |file| require(base_url + '/' + file) }

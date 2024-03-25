@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,8 +22,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class UserPatchTest < ActiveSupport::TestCase
-  fixtures :users, :projects, :roles, :members, :member_roles
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+  fixtures :users, :projects, :roles, :members, :member_roles, :email_addresses
 
   def setup
     Setting.plugin_redmine_people = {}

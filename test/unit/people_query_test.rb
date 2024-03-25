@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -37,9 +37,8 @@ class PeopleQueryTest < ActiveSupport::TestCase
            :custom_fields,
            :custom_values,
            :custom_fields_projects,
-           :custom_fields_trackers
-
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+           :custom_fields_trackers,
+           :email_addresses
 
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
                                           [:people_information, :departments, :custom_fields, :custom_values, :queries])

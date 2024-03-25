@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,8 +20,7 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 module PeopleCalendarsHelper
-  include CalendarsHelper if Redmine::VERSION.to_s < '5.1'
-  include RedmineCrm::CalendarsHelper
+  include Redmineup::CalendarsHelper
   include PeopleHelper
 
   def show_birthdays?

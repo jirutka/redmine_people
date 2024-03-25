@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -24,8 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class AccountControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
 
-  fixtures :users, :roles
-  fixtures :email_addresses if Redmine::VERSION.to_s > '3.0'
+  fixtures :users, :roles, :email_addresses
 
   def setup
     User.current = nil

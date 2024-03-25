@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class Person < User
-  unloadable
+  
   include Redmine::SafeAttributes
   include Redmine::Pagination
 
@@ -40,7 +40,7 @@ class Person < User
 
   has_many :time_entries, foreign_key: :user_id, dependent: :destroy
 
-  rcrm_acts_as_taggable
+  up_acts_as_taggable
 
   scope :in_department, lambda { |department|
     department_id = department.is_a?(Department) ? department.id : department.to_i
@@ -51,18 +51,17 @@ class Person < User
     eager_load(:information).where("(#{PeopleInformation.table_name}.department_id != ?) OR (#{PeopleInformation.table_name}.department_id IS NULL)", department_id)
   }
 
-  scope :seach_by_name, lambda { |search| eager_load(ActiveRecord::VERSION::MAJOR >= 4 ? [:information, :email_address] : [:information])
+  scope :seach_by_name, lambda { |search| eager_load([:information, :email_address])
                                           .where("(LOWER(#{Person.table_name}.firstname) LIKE :search OR
                                                    LOWER(#{Person.table_name}.lastname) LIKE :search OR
                                                    LOWER(#{PeopleInformation.table_name}.middlename) LIKE :search OR
                                                    #{concated_names_sql}
                                                    LOWER(#{Person.table_name}.login) LIKE :search OR
-                                                   LOWER(#{(ActiveRecord::VERSION::MAJOR >= 4) ? (EmailAddress.table_name + '.address') : (Person.table_name + '.mail')}) LIKE :search)",
+                                                   LOWER(#{EmailAddress.table_name + '.address'}) LIKE :search)",
                                                    :search => search.downcase + '%') }
 
   scope :managers, lambda { joins("INNER JOIN #{PeopleInformation.table_name} ON #{Person.table_name}.id = #{PeopleInformation.table_name}.manager_id").uniq }
 
-  attr_protected :id if ActiveRecord::VERSION::MAJOR <= 4
   safe_attributes 'custom_field_values',
                   'custom_fields',
                   'information_attributes',
@@ -146,11 +145,8 @@ class Person < User
   end
 
   def visible?(user = User.current)
-    if Redmine::VERSION.to_s >= '3.0'
-      principal = Principal.visible(user).where(:id => id).first
-      return principal.present?
-    end
-    true
+    principal = Principal.visible(user).where(:id => id).first
+    return principal.present?
   end
 
   def attachments_visible?(_user = User.current)
@@ -183,24 +179,16 @@ class Person < User
 
   def all_visible_subordinates(page, limit)
     if visible?
-      # limit = per_page_option
       subordinates_count = subordinates.count
-
-      if Redmine::VERSION.to_s > '2.5'
-        subordinate_pages = Paginator.new(subordinates_count, limit, page)
-        offset = subordinate_pages.offset
-      else
-        subordinate_pages = Paginator.new(self, subordinates_count, limit, page)
-        offset = subordinate_pages.current.offset
-      end
-
+      subordinate_pages = Paginator.new(subordinates_count, limit, page)
+      offset = subordinate_pages.offset
       subordinates.limit(limit).offset(offset)
     end
   end
 
   class << self
     def emails
-      (Redmine::VERSION.to_s >= '3.0' ? joins(:email_address).pluck("LOWER(#{EmailAddress.table_name}.address)") : pluck(:mail)).delete_if { |v| v.blank? }.uniq
+      joins(:email_address).pluck("LOWER(#{EmailAddress.table_name}.address)")
     end
 
     def next_birthdays(limit = 10)
@@ -221,7 +209,7 @@ class Person < User
 
     def all_visible
       scope = Person.active
-      scope = scope.visible if Redmine::VERSION.to_s >= '3.0'
+      scope = scope.visible
       scope
     end
 

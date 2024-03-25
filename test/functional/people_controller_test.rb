@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,8 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class PeopleControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
-  fixtures :users
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+  fixtures :users, :email_addresses
 
   # Fixtures with the same names overwriting each other. For example, time_entries will be restored only from the People plugin.
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
@@ -96,7 +95,7 @@ class PeopleControllerTest < ActionController::TestCase
     @request.session[:user_id] = 1
     compatible_request :get, :index
     assert_response :success
-    assert_select 'h1 a', 'Redmine Admin'
+    assert_select 'h3 a', 'Redmine Admin'
   end
 
   def test_get_index_without_departments
@@ -110,7 +109,7 @@ class PeopleControllerTest < ActionController::TestCase
     @request.session[:user_id] = 1
     compatible_request :get, :show, :id => @person.id
     assert_response :success
-    assert_select 'h1', /Robert Hill/
+    assert_select 'h3', /Robert Hill/
   end
 
   def test_get_new
@@ -256,7 +255,7 @@ class PeopleControllerTest < ActionController::TestCase
     with_settings :user_format => 'lastnamefirstname' do
       compatible_request :get, :index, set_filter: '1', f: [''], search: 'smithjoh'
       assert_response :success
-      assert_select 'table.people td.name h1 a', 1
+      assert_select 'table.people td.name h3 a', 1
     end
   end
 

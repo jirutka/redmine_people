@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ module RedminePeople
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          unloadable
+          
 
           alias_method :container_attachments_download_path_without_people, :container_attachments_download_path
           alias_method :container_attachments_download_path, :container_attachments_download_path_with_people

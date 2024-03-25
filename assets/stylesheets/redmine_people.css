@@ -28,8 +28,9 @@ div.person.details table.subject_header {
   width: 100%;
 }
 
-div.person.details table.subject_header h1 {
-  margin-bottom: 0px;
+
+div.person.details table.subject_header h3 {
+  margin: 0px;
 }
 
 
@@ -165,31 +166,14 @@ table.people.deals.index td.avatar {padding: 10px 10px 10px 10px;}
 
 /*table.people.index td.avatar {margin-left: 50px;}*/
 
-table.people.index td.name h1 { font-size: 20px; font-weight: normal;
+
+table.people.index.excerpt td h3 {
   margin: 0;
   padding: 0;
 }
 
-table.people.index td.name h1.deal_name {
-  font-size: 16px;
-  font-weight: normal;
-  margin: 0;
-  padding: 0;
-}
+table.people.index td.name h3.selected { background-color: #ffb;}
 
-table.people.index td.name h1.selected { background-color: #ffb;}
-table.people.index td.name h2.selected { background-color: #ffb;}
-
-table.people.index td.name h2 {
-  font-size: 13px;
-  color: #777;
-  font-weight: normal;
-  line-height: 140%;
-  padding: 0;
-  margin: 0;
-  background: none;
-  border: none;
-}
 
 div.Right td.name div.info {
   padding-top: 3px;
@@ -436,7 +420,15 @@ table.cal td.weekend {
 .no-icon { padding-left: 3px; }
 .icon-cake { background-image: url(../images/cake.png); }
 
-#person_form #person_information_attributes_manager_id_wrap .select2 { width: 20% !important; }
+.cal .people-event {
+  background: #ddecff;
+  padding: 6px;
+  margin-bottom: 6px;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+}
+
+#person_form .attributes input:is([type="text"]) {width: 60%}
 #person_form .select2-container--default .select2-selection--single { background: #fff url(../images/user_suit.png) no-repeat 2px 50%; padding-left: 10px; }
 
 /**************************************************************/
@@ -772,16 +764,8 @@ div.orgChart .node .person-data div.person {
 .leave-planner-chart .group-container .group { display: none; }
 .leave-planner-chart .group-container.open .group { display: block; }
 
-.leave-planner-chart .group-container span.expander {
-  background-image: url(../../../images/bullet_toggle_plus.png);
-  background-position: 0 50%;
-  padding-left: 10px;
-  margin-left: 0;
-  cursor: pointer;
-}
-
-.leave-planner-chart .group-container.open span.expander {
-  background-image: url(../../../images/bullet_toggle_minus.png);
+.leave-planner-chart .group-container .group-subject {
+  font-weight: bold;
 }
 
 .leave-planner-chart .leave-planner-subjects .group,

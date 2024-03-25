@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class CreateDayoffs < (Rails.version < '5.1') ? ActiveRecord::Migration : ActiveRecord::Migration[4.2]
+class CreateDayoffs < ActiveRecord::Migration[4.2]
   def change
     create_table :dayoffs do |t|
       t.references :user, index: true, foreign_key: true, null: false

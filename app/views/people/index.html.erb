@@ -52,11 +52,7 @@
 
 <% html_title l(:label_people) %>
 
-<% if Redmine::VERSION.to_s >= '3.4' || Redmine::VERSION::BRANCH != 'stable' %>
-    <%= context_menu %>
-<% else %>
-    <%= context_menu url_for( {:controller => "people", :action => "context_menu"} ) %>
-<% end %>
+<%= context_menu %>
 
 <%= render :partial => 'people/sidebar', :locals => {:tags => @tags} %>
 

@@ -1,8 +1,23 @@
 == Redmine People plugin changelog
 
 Redmine People plugin - User management plugin for redmine
-Copyright (C) 2011-2023 RedmineUP
+Copyright (C) 2011-2024 Kirill Bezrukov (RedmineUP)
 http://www.redmineup.com/
+
+== 2024-02-08 v1.6.6
+
+* Changed person form layout
+* Changed styles for headers
+* Fixed calendar for Redmine 5.1+
+* Fixed expanded icons
+* Fixed people select control for Redmine 5.1+
+* Added styles for calendar
+* Added highres avatars support
+
+== 2023-12-19 v1.6.5
+
+* Fixed bug with plugin load
+* Updated zh-TW locale (by Tomy)
 
 == 2023-11-20 v1.6.4
 

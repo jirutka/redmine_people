@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -24,8 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class PersonTest < ActiveSupport::TestCase
   include RedminePeople::TestCase::TestHelper
 
-  fixtures :users, :projects, :roles, :members, :member_roles
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+  fixtures :users, :projects, :roles, :members, :member_roles, :email_addresses
 
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
                                           [:people_information, :departments, :time_entries, :people_holidays])
@@ -62,27 +61,15 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   def test_available_managers
-    if Redmine::VERSION.to_s < '3.2'
-      assert_equal [1, 2, 3, 4, 5, 7, 8, 9], Person.new.available_managers.map(&:id).sort
-      assert_equal [1, 2, 3, 5, 7, 8, 9], @person.available_managers.map(&:id).sort
-      assert_equal [1, 2, 5, 7, 8, 9], Person.find(3).available_managers.map(&:id).sort
-    else
-      assert_equal [1, 2, 3, 4, 7, 8, 9], Person.new.available_managers.map(&:id).sort
-      assert_equal [1, 2, 3, 7, 8, 9], @person.available_managers.map(&:id).sort
-      assert_equal [1, 2, 7, 8, 9], Person.find(3).available_managers.map(&:id).sort
-    end
+    assert_equal [1, 2, 3, 4, 7, 8, 9], Person.new.available_managers.map(&:id).sort
+    assert_equal [1, 2, 3, 7, 8, 9], @person.available_managers.map(&:id).sort
+    assert_equal [1, 2, 7, 8, 9], Person.find(3).available_managers.map(&:id).sort
   end
 
   def test_available_subordinates
-    if Redmine::VERSION.to_s < '3.2'
-      assert_equal [1, 2, 3, 4, 5, 7, 8, 9], Person.new.available_subordinates.map(&:id).sort
-      assert_equal [1, 2, 5, 7, 8, 9], @person.available_subordinates.map(&:id).sort
-      assert_equal [1, 2, 5, 7, 8, 9], Person.find(3).available_subordinates.map(&:id).sort
-    else
-      assert_equal [1, 2, 3, 4, 7, 8, 9], Person.new.available_subordinates.map(&:id).sort
-      assert_equal [1, 2, 7, 8, 9], @person.available_subordinates.map(&:id).sort
-      assert_equal [1, 2, 7, 8, 9], Person.find(3).available_subordinates.map(&:id).sort
-    end
+    assert_equal [1, 2, 3, 4, 7, 8, 9], Person.new.available_subordinates.map(&:id).sort
+    assert_equal [1, 2, 7, 8, 9], @person.available_subordinates.map(&:id).sort
+    assert_equal [1, 2, 7, 8, 9], Person.find(3).available_subordinates.map(&:id).sort
   end
 
   def test_remove_subordinate
@@ -195,25 +182,23 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   def test_visible?
-    if Redmine::VERSION.to_s >= '3.0'
-      Member.delete_all
-      MemberRole.delete_all
+    Member.delete_all
+    MemberRole.delete_all
 
-      role = Role.create!(:name => 'role', :users_visibility => 'members_of_visible_projects', :issues_visibility => 'all')
+    role = Role.create!(:name => 'role', :users_visibility => 'members_of_visible_projects', :issues_visibility => 'all')
 
-      project1 = Project.find(1)
+    project1 = Project.find(1)
 
-      person2 = Person.find(2)
-      person3 = Person.find(3)
+    person2 = Person.find(2)
+    person3 = Person.find(3)
 
-      # There are no joint projects between person2 and person3
-      Member.create_principal_memberships(person2, :project_id => project1.id, :role_ids => [role.id])
-      assert !person3.visible?(person2)
+    # There are no joint projects between person2 and person3
+    Member.create_principal_memberships(person2, :project_id => project1.id, :role_ids => [role.id])
+    assert !person3.visible?(person2)
 
-      # Adds the joint project
-      Member.create_principal_memberships(person3, :project_id => project1.id, :role_ids => [role.id])
-      assert person3.visible?(person2)
-    end
+    # Adds the joint project
+    Member.create_principal_memberships(person3, :project_id => project1.id, :role_ids => [role.id])
+    assert person3.visible?(person2)
   end
 
   def test_add_tag

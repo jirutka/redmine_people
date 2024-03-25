@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -24,8 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class PeopleCalendarsControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
 
-  fixtures :users
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+  fixtures :users, :email_addresses
 
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
                                           [:people_holidays, :departments, :people_information, :custom_fields, :custom_values, :attachments])

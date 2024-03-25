@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -92,11 +92,7 @@ module Redmine
           scope = scope.where(Project.allowed_to_condition(user, "view_#{provider.name.underscore.pluralize}".to_sym, options))
         end
 
-        if ActiveRecord::VERSION::MAJOR >= 4
-          scope.to_a
-        else
-          scope.all(provider_options[:find_options].dup)
-        end
+        scope.to_a
       end
 
       private

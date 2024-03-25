@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -24,8 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class MyControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
 
-  fixtures :users, :projects, :roles, :members, :member_roles
-  fixtures :email_addresses if ActiveRecord::VERSION::MAJOR >= 4
+  fixtures :users, :projects, :roles, :members, :member_roles, :email_addresses
 
   def setup
     @request.session[:user_id] = 2
@@ -64,4 +63,32 @@ class MyControllerTest < ActionController::TestCase
       assert User.find(2).present?
     end
   end
+
+  def test_page_with_issue_query_block
+    tag = RedmineCrm::Tag.create(name: 'test_tag')
+    issue = Issue.find(5)
+    issue.tags << tag
+    query = IssueQuery.create(name: 'tags_query',
+                              visibility: IssueQuery::VISIBILITY_PUBLIC,
+                              user_id: 2,
+                              project_id: issue.project.id,
+                              filters: { 'status_id' => { :operator => '*', :values => [''] } },
+                              column_names:
+                                [:tracker,
+                                 :status,
+                                 :priority,
+                                 :subject,
+                                 :assigned_to,
+                                 :updated_on,
+                                 :tags_relations]
+    )
+    preferences = User.find(2).pref
+    preferences.my_page_layout = { 'top' => ['issuequery'] }
+    preferences.my_page_settings = { 'issuequery' => { query_id: query.id } }
+    preferences.save!
+
+    compatible_request :get, :page
+    assert_response :success
+    assert_select "div#list-top tr#issue-#{issue.id} td.tags a", tag.name
+  end if Redmine::Plugin.installed?(:redmineup_tags)
 end

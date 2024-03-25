@@ -2,7 +2,7 @@
   <%= form_tag({}, :data => {:cm_url => context_menu_people_path}) do %>
   <%= hidden_field_tag 'back_url', url_for(params.respond_to?(:to_unsafe_hash) ? params.to_unsafe_hash : params) %>
   <div class="autoscroll">
-      <table class="people index">
+      <table class="people index excerpt">
       <tbody>
       <% previous_group = false %>
       <% @people.each do |person| %>
@@ -10,7 +10,7 @@
             <% reset_cycle %>
             <tr class="group open">
               <td colspan="<%= @query.columns.size + 2 %>">
-                <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
+                <span class="expander icon icon-expanded" onclick="toggleRowGroup(this);">&nbsp;</span>
                 <%= group.blank? ? 'None' : column_content(@query.group_by_column, person) %> <span class="count">(<%= @people_count_by_group[group] %>)</span>
                 <%= link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}", "toggleAllRowGroups(this)", :class => 'toggle-all') %>
               </td>
@@ -23,14 +23,14 @@
                   <%= check_box_tag "ids[]", person.id, false %>
               </td>
               <td class="avatar">
-                  <%= avatar(person, :size => "32", :height => 32, :width => 32) %>
+                  <%= avatar(person, :size => "32") %>
               </td>
               <td class="name">
-                  <h1><%= link_to person.name, person_path(person) %></h1>
-                  <h2>
+                  <h3><%= link_to person.name, person_path(person) %></h3>
+                  <p>
                       <%= mail_to person.mail %>
                       <div><%= person.phones.first %></div>
-                  </h2>
+                  </p>
               </td>
               <td class="info">
                   <div class="title_and_company" >

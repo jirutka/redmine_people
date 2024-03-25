@@ -1,10 +1,6 @@
 people_queries_001:
   id: 1
-  <% if Redmine::VERSION.to_s < '2.4' %>
-  is_public: true
-  <% else %>
   visibility: 2
-  <% end %>
   type: PeopleQuery
   name: Public query 1
   filters: |
@@ -21,11 +17,7 @@ people_queries_001:
   user_id: 1
 people_queries_002:
   id: 2
-  <% if Redmine::VERSION.to_s < '2.4' %>
-  is_public: true
-  <% else %>
   visibility: 2
-  <% end %>
   type: PeopleQuery
   name: Private query 2
   filters: |
@@ -38,11 +30,7 @@ people_queries_002:
   user_id: 4
 people_queries_003:
   id: 3
-  <% if Redmine::VERSION.to_s < '2.4' %>
-  is_public: false
-  <% else %>
   visibility: 0
-  <% end %>
   type: PeopleQuery
   name: Private query 3
   filters: |

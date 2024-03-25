@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2023 RedmineUP
+# Copyright (C) 2011-2024 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -28,16 +28,11 @@ module RedminePeople
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          unloadable
-
+          
           alias_method :'allowed_to?_without_people', :allowed_to?
           alias_method :allowed_to?, :'allowed_to?_with_people'
 
-          if ActiveRecord::VERSION::MAJOR >= 4
-            has_one :avatar, lambda { where("#{Attachment.table_name}.description = 'avatar'") }, :class_name => 'Attachment', :as => :container, :dependent => :destroy
-          else
-            has_one :avatar, :class_name => 'Attachment', :as => :container, :conditions => "#{Attachment.table_name}.description = 'avatar'", :dependent => :destroy
-          end
+          has_one :avatar, lambda { where("#{Attachment.table_name}.description = 'avatar'") }, :class_name => 'Attachment', :as => :container, :dependent => :destroy
           acts_as_attachable_global
 
           def self.clear_safe_attributes
