@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ module RedminePeople
         include Redmine::Utils::DateCalculation
         include PeopleHelper
         include RedminePeople::Charts::Helpers::ChartHelper
-        include RedminePeople::Helper
+        include RedminePeople::Helpers::PeopleHelper
 
         include AvatarsHelper if RedminePeople.module_exists?(:AvatarsHelper)
 

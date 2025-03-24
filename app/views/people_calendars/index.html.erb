@@ -1,5 +1,5 @@
 <div class="contextual">
-  <%= link_to l(:label_people_holiday_new), new_people_holiday_path, :class => 'icon icon-add' if User.current.allowed_people_to?(:manage_calendar) %>
+  <%= link_to sprite_icon('add', l(:label_people_holiday_new)), new_people_holiday_path, :class => 'icon icon-add' if User.current.allowed_people_to?(:manage_calendar) %>
 </div>
 <h2><%= l(:label_calendar) %></h2>
 
@@ -9,7 +9,10 @@
     <%= hidden_field_tag 'set_birthdays', params[:birthdays].blank? ? '1' : '0' %>
 
     <fieldset id="options" class="collapsible collapsed">
-      <legend class="icon icon-collapsed" onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
+      <legend class="icon icon-collapsed" onclick="toggleFieldset(this);">
+        <%= sprite_icon("angle-right") %>
+        <%= l(:label_options) %>
+      </legend>
       <div style="display: none;">
         <table>
           <tr>
@@ -29,8 +32,8 @@
       <%= label_tag('year', l(:label_year)) %>
       <%= select_year(@year, :prefix => "year", :discard_type => true) %>
 
-      <%= link_to_function l(:button_apply), '$("#query_form").submit()', :class => 'icon icon-checked' %>
-      <%= link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'icon icon-reload' %>
+      <%= link_to_function sprite_icon('checked', l(:button_apply)), '$("#query_form").submit()', :class => 'icon icon-checked' %>
+      <%= link_to sprite_icon('reload', l(:button_clear)), { :project_id => @project, :set_filter => 1 }, :class => 'icon icon-reload' %>
     </p>
 <% end %>
 

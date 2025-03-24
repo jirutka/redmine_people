@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -47,7 +47,6 @@ class PeopleCalendarsController < ApplicationController
       events = []
       events += @query.holidays(conditions: ['((start_date BETWEEN :from AND :to) OR (end_date BETWEEN :from AND :to))', from: @calendar.startdt, to: @calendar.enddt])
       events += @query.birthdays(month: @calendar.month) if show_birthdays?
-      events += @query.dayoffs(conditions: ['((start_date BETWEEN :from AND :to) OR (end_date BETWEEN :from AND :to))', from: @calendar.startdt, to: @calendar.enddt])
 
       @calendar.custom_events = events
     end

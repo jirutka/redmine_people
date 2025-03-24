@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -106,9 +106,12 @@ module DepartmentsHelper
       s << department_tree_li(d)
     end
 
-    (department.people.to_a - [department.head]).each do |person|
-      s << content_tag(:li) do
-        render_tree_node person
+    (department.people.active.to_a - [department.head]).each do |person|
+      members = person.attributes['type'] == 'Group' ? Person.where(id: person.becomes(Group).user_ids) : [person]
+      members.each do |member|
+        s << content_tag(:li) do
+          render_tree_node member
+        end
       end
     end
 

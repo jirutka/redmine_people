@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ class PeopleMailsController < ApplicationController
       rescue Exception => e
         error_people << [contact, e.message]
       end
-      flash[:notice] = l(:notice_email_sent, delivered_people.map { |c| "#{c.name} <span class='icon icon-email'>#{c.emails.first}</span>" }.join(', ')).chomp[0, 500] if delivered_people.any?
+      flash[:notice] = l(:notice_email_sent, delivered_people.map { |c| "#{c.name} <span class='icon icon-email'>#{sprite_icon('email', c.emails.first)}</span>" }.join(', ')).chomp[0, 500] if delivered_people.any?
       flash[:error] = l(:notice_email_error, error_people.map { |e| "#{e[0].name}: #{e[1]}" }.join(', ')).chomp[0, 500] if error_people.any?
     end
 

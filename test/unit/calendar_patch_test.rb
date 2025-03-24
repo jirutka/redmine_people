@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -25,7 +25,12 @@ class CalendarPatchTest < ActiveSupport::TestCase
   RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/', [:people_holidays])
 
   def setup
-    @calendar = Redmine::Helpers::Calendar.new('2017-01-01'.to_date)
-    @calendar.custom_events = PeopleHoliday.between('2017-01-01'.to_date, '2018-01-01'.to_date).to_a
+    @calendar1 = Redmine::Helpers::Calendar.new('2017-01-01'.to_date)
+    @calendar2 = Redmine::Helpers::Calendar.new('2017-01-01'.to_date)
+    birthday = PeopleInformation.find(1)
+    birthday.update_attribute(:birthday, '2017-01-02')
+
+    @calendar1.custom_events = PeopleHoliday.between('2017-01-01'.to_date, '2018-01-01'.to_date).to_a
+    @calendar2.custom_events = [PeopleInformation.find(1)]
   end
 end

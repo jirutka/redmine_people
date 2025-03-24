@@ -1,5 +1,5 @@
 <div class="contextual">
-  <%= link_to l(:button_add), new_people_holiday_path, :class => 'icon icon-add' if User.current.allowed_people_to?(:manage_calendar) %>
+  <%= link_to sprite_icon('add', l(:button_add)), new_people_holiday_path, :class => 'icon icon-add' if User.current.allowed_people_to?(:manage_calendar) %>
 </div>
 <h2><%= l(:label_people_holidays) %></h2>
 <%# unless @people_holidays.blank? %>
@@ -27,9 +27,9 @@
                   <td class=""><%= people_holiday.is_workday ? l(:general_text_Yes) : l(:general_text_No) %></td>
                   <% if User.current.allowed_people_to?(:manage_calendar) %>
                   <td class="">
-                    <%= link_to l(:button_edit), edit_people_holiday_path(people_holiday),
+                    <%= link_to sprite_icon('edit', l(:button_edit)), edit_people_holiday_path(people_holiday),
                                 :class => 'icon icon-edit' %>
-                    <%= link_to l(:button_delete), people_holiday_path(people_holiday),
+                    <%= link_to sprite_icon('del', l(:button_delete)), people_holiday_path(people_holiday),
                                 :data => {:confirm => l(:text_are_you_sure)},
                                 :method => :delete,
                                 :class => 'icon icon-del' %>

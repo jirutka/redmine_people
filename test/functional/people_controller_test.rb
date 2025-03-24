@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -95,7 +95,7 @@ class PeopleControllerTest < ActionController::TestCase
     @request.session[:user_id] = 1
     compatible_request :get, :index
     assert_response :success
-    assert_select 'h3 a', 'Redmine Admin'
+    assert_select 'div a', 'Redmine Admin'
   end
 
   def test_get_index_without_departments
@@ -163,7 +163,7 @@ class PeopleControllerTest < ActionController::TestCase
     assert_equal 'text/plain', attachment.content_type
     assert_equal 'test file', attachment.description
 
-    assert File.respond_to?(:exists?) ? File.exists?(attachment.diskfile) : File.exist?(attachment.diskfile)
+    assert  File.exist?(attachment.diskfile)
   end
 
   def test_destroy
@@ -241,13 +241,13 @@ class PeopleControllerTest < ActionController::TestCase
     @request.session[:user_id] = 1
     compatible_request :get, :index
     assert_response :success
-    assert_select '#next_holidays', :count => 0
+    assert_select 'h3', count: 0, text: /Next holidays/
 
     holiday = PeopleHoliday.new(:start_date => Date.today + 5.day, :name => 'New holiday')
     holiday.save
     compatible_request :get, :index
     assert_response :success
-    assert_select '#next_holidays', :count => 1
+    assert_select 'h3', count: 1, text: /Next holidays/
   end
 
   def test_get_index_with_search
@@ -255,7 +255,7 @@ class PeopleControllerTest < ActionController::TestCase
     with_settings :user_format => 'lastnamefirstname' do
       compatible_request :get, :index, set_filter: '1', f: [''], search: 'smithjoh'
       assert_response :success
-      assert_select 'table.people td.name h3 a', 1
+      assert_select 'table.people td.name div a', 1
     end
   end
 

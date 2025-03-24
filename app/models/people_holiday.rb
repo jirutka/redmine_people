@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class PeopleHoliday < ActiveRecord::Base
-  
+class PeopleHoliday < ApplicationRecord
+
   include Redmine::SafeAttributes
 
   validates_presence_of :name, :start_date
@@ -58,6 +58,10 @@ class PeopleHoliday < ActiveRecord::Base
 
   def notify_department
     Department.find(@notify) unless notify_all?
+  end
+
+  def covers_date?(date)
+    start_date <= date && due_date >= date
   end
 
   private

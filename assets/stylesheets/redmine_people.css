@@ -16,50 +16,35 @@
 /*                   SHOW_PERSON_HEADER
 /**************************************************************/
 
-
-div.person.details {
-  background:  #eee;
+.person.details {
   padding: 6px;
   margin-bottom: 6px;
   border: 1px solid #d7d7d7;
+  background:  #eee;
+  display: flex;
+  justify-content: space-between;
 }
 
-div.person.details table.subject_header {
-  width: 100%;
+.person.details .subject_info {
+  border-left: 1px solid #d0d7de;
+  display: flex;
 }
 
+.person.details .subject_info ul {
+  padding: 0 15px;
+}
 
-div.person.details table.subject_header h3 {
+.person.details .subject_header {
+  display: flex;
+  align-items: start;
+  column-gap: 10px;
+}
+
+.person.details .subject_header h3,
+.person.details .subject_header h2,
+.person.details .subject_header h1 {
   margin: 0px;
 }
-
-
-div.person.details table.subject_header td.avatar {
-  vertical-align: top;
-  vertical-align: top;
-  text-align: right;
-  width: 70px;
-}
-
-div.person.details table.subject_header td.subject_info {
-  padding-left: 15px;
-  padding-right: 15px;
-  border-left: 1px solid #D7D7D7;
-  min-width: 200px;
-  width: 200px;
-}
-
-div.person.details table.subject_header td.subject_info ul {
-  list-style: none;
-  padding-left: 0px;
-}
-
-div.person.details  table.subject_header td.subject_info li {
-  line-height: 20px;
-  white-space: nowrap;
-  min-height: 20px;
-}
-
 
 /**************************************************************/
 /*                   PERSON_DATA
@@ -147,7 +132,6 @@ table.people.index tbody tr:hover { background-color:#ffffdd; }
 table.people.index td {
   vertical-align: top;
   color: #666;
-  font-size: 12px;
   padding: 8px 0;
   border-bottom: 1px solid #efefef;
 }
@@ -171,6 +155,9 @@ table.people.index.excerpt td h3 {
   margin: 0;
   padding: 0;
 }
+
+table.excerpt.index td.name a {color: inherit;}
+table.excerpt.index td.name .header {font-weight: bold;}
 
 table.people.index td.name h3.selected { background-color: #ffb;}
 
@@ -207,15 +194,13 @@ ul.department-tree li {list-style-type:none; margin: 0px 2px 0px 0px; padding: 0
 /**************************************************************/
 /*                   ICONS
 /**************************************************************/
-#admin-menu a.people { background-image: url(../images/user_suit.png);}
+#admin-menu a.people:not(:has(svg)) { background-image: url(../images/user_suit.png);}
 
-.icon-email {background-image: url(../images/email.png);}
-.icon-twitter {background-image: url(../images/twitter.png);}
-.icon-skype {background-image: url(../images/skype.png);}
-.icon-facebook {background-image: url(../images/facebook.png);}
-.icon-linkedin {background-image: url(../images/linkedin.png);}
-
-
+.icon-email:not(:has(svg)) {background-image: url(../images/email.png);}
+.icon-twitter:not(:has(svg)) {background-image: url(../images/twitter.png);}
+.icon-skype:not(:has(svg)) {background-image: url(../images/skype.png);}
+.icon-facebook:not(:has(svg)) {background-image: url(../images/facebook.png);}
+.icon-linkedin:not(:has(svg)) {background-image: url(../images/linkedin.png);}
 
 /**************************************************************/
 /*                            TAGS                            */
@@ -418,7 +403,7 @@ table.cal td.weekend {
   background: #f6f7f8;
 }
 .no-icon { padding-left: 3px; }
-.icon-cake { background-image: url(../images/cake.png); }
+.icon-cake:not(:has(svg)) { background-image: url(../images/cake.png); }
 
 .cal .people-event {
   background: #ddecff;
@@ -429,7 +414,6 @@ table.cal td.weekend {
 }
 
 #person_form .attributes input:is([type="text"]) {width: 60%}
-#person_form .select2-container--default .select2-selection--single { background: #fff url(../images/user_suit.png) no-repeat 2px 50%; padding-left: 10px; }
 
 /**************************************************************/
 /*                      Performance Tab                       */
@@ -816,3 +800,37 @@ div.orgChart .node .person-data div.person {
 .user_activity_table .main_block .column_data_total { background-color: #eee; border: 1px solid #c0c0c0; }
 
 div.journal h4 img.gravatar.without-margin {margin: -2px 4px -4px 0;}
+
+/**************************************************************/
+/*                   QUERY FORM - OPTIONS                     */
+/**************************************************************/
+
+#list-definition {
+  margin: 0 15px;
+  width: auto !important;
+}
+#list-definition > div {
+  margin: 6px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 10px;
+}
+#list-definition > div .field{
+  width: 160px;
+}
+.query-columns label {
+  display:block;
+}
+#list-definition .buttons input[type=button] {
+  width:35px;
+  display:block;
+}
+.query-columns select {
+  min-width:150px;
+}
+
+.query-totals {text-align:right; margin-top:-2.3em; font-size: 93%;}
+.query-totals>span:not(:first-child) {margin-left:0.6em;}
+.query-totals .value {font-weight:bold;}
+body.controller-timelog .query-totals {margin-top:initial;}

@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -137,7 +137,7 @@ class DepartmentsControllerTest < ActionController::TestCase
     assert_equal 'testfile.txt', attachment.filename
     assert_equal 'text/plain', attachment.content_type
     assert_equal 'test file', attachment.description
-    assert File.respond_to?(:exists?) ? File.exists?(attachment.diskfile) : File.exist?(attachment.diskfile)
+    assert File.exist?(attachment.diskfile)
   end
 
   def test_post_destroy

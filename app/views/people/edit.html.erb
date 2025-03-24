@@ -1,5 +1,5 @@
 <div class="contextual">
-    <%= link_to(l(:button_people_edit_profile), edit_user_path(@person), :class => 'icon icon-edit') if User.current.admin? %>
+    <%= link_to(sprite_icon('edit', l(:button_people_edit_profile)), edit_user_path(@person), :class => 'icon icon-edit') if User.current.admin? %>
 </div>
 
 <h2><%= l(:label_people_edit_person) %></h2>

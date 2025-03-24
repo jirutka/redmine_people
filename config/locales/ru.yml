@@ -207,7 +207,7 @@ ru:
   label_people_not_approved: Не согласовано
   label_people_scheduled_for: на
   label_people_added_day_off: Добавлен выходной
-  label_people_appoved_notification: Статус выходного изменился
+  label_people_approved_notification: Статус выходного изменился
   label_people_notes_notification: Примечание выходного изменилось
 
   notice_leave_type_successfully_destroyed: Тип отпуска успешно удален

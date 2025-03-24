@@ -9,6 +9,7 @@
         <%= ("<td class='week-number' title='#{ l(:label_week) }'>#{(day+(11-day.cwday)%7).cweek}</td>".html_safe) if day.cwday == calendar.first_wday %>
         <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if User.current.today == day %><%= ' holiday' if calendar.holiday?(day) && day.month==calendar.month %><%= ' weekend' if calendar.holiday?(day) && calendar.weekend?(day) && day.month==calendar.month %>">
           <p class="day-num"><%= day.day %></p>
+          <% hr = 1 %>
             <% calendar.events_on(day).each do |i| %>
                 <% if i.is_a? PeopleHoliday %>
                   <%# unless calendar.weekend?(day) %>
@@ -22,19 +23,15 @@
                   <%# end %>
                 <% elsif i.is_a?(PeopleInformation) && i.person %>
                     <div class="people-event birthday tooltip">
-                      <span class="icon icon-cake"></span>
+                      <span class="icon icon-cake"><%= sprite_icon('cake') %></span>
                       <%= person_tag(i.person) %>
                       <span class="tip"><%= render_person_tooltip(i.person) %></span>
                     </div>
-                <% elsif i.is_a? Dayoff %>
-                    <div class="people-event dayoff-bar <%= i.color %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %> tooltip">
-                      <span class="icon no-icon"></span>
-                      <%= person_tag(i.user, type: "avatar") %>
-                      <%= i.name %>
-                      <% if i.notes.present? %>
-                          <span class="tip"><%= i.notes %></span>
-                      <% end %>
-                    </div>
+                <% end %>
+
+                <% if calendar.events_on(day).count - 1 >= hr %>
+                  <%= '<hr>'.html_safe %>
+                  <% hr += 1 %>
                 <% end %>
             <% end %>
         </td>

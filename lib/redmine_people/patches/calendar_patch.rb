@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ module RedminePeople
           end
 
           @starting_events_by_days = @events.group_by do |event|
-            only_for_current_year && event.start_date < Date.today ? current_year_date(event.start_date) : event.start_date
+            only_for_current_year && event.start_date && event.start_date < Date.today ? current_year_date(event.start_date) : event.start_date
           end
         end
 

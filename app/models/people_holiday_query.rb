@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -49,12 +49,6 @@ class PeopleHolidayQuery < Query
   # Valid options are :month
   def birthdays(options = {})
     PeopleInformation.where(birthday_condition(options[:month])).to_a
-  rescue ::ActiveRecord::StatementInvalid => e
-    raise StatementInvalid.new(e.message)
-  end
-
-  def dayoffs(options)
-    Dayoff.where(options[:conditions]).to_a
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new(e.message)
   end

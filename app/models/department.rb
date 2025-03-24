@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,10 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class Department < ActiveRecord::Base
+class Department < ApplicationRecord
   include Redmine::SafeAttributes
   acts_as_attachable
-  
+
   belongs_to :head, :class_name => 'Person', :foreign_key => 'head_id'
   has_many :people_information, :class_name => 'PeopleInformation', :dependent => :nullify
   has_many :people, lambda { distinct }, :class_name => 'Person', :through => :people_information

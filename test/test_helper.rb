@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -27,8 +27,8 @@ class RedminePeople::TestCase
 
   module TestHelper
     def with_people_settings(options, &block)
-      base_classes = [Symbol, false, true, nil]
-      base_classes << Fixnum if RUBY_VERSION < '3.2.2'
+      base_classes = [Symbol, false, true, nil, Integer]
+      # base_classes << Fixnum if RUBY_VERSION < '3.2.2'
       saved_settings = options.keys.inject({}) do |h, k|
         h[k] = case Setting.plugin_redmine_people[k]
           when *base_classes
@@ -46,7 +46,8 @@ class RedminePeople::TestCase
     end
 
     def people_uploaded_file(filename, mime)
-      fixture_file_upload("../../plugins/redmine_people/test/fixtures/files/#{filename}", mime, true)
+      file_path = "plugins/redmine_people/test/fixtures/files/#{filename}"
+      fixture_file_upload(Redmine::VERSION.to_s < '4' ? "../../#{file_path}" : File.join(Rails.root, file_path), mime, true)
     end
 
     def compatible_request(type, action, parameters = {})
@@ -60,11 +61,6 @@ class RedminePeople::TestCase
     def people_in_list
       ids = css_select('table.people #ids_').map { |tag| tag['text'].to_i }
       Person.where(:id => ids).sort_by { |person| ids.index(person.id) }
-    end
-
-    def dayoffs_in_list
-      ids = css_select('table.dayoffs td.id').map { |tag| tag.children.first.content.to_i }
-      Dayoff.where(id: ids).sort_by { |dayoff| ids.index(dayoff.id) }
     end
 
     def announcements_in_list

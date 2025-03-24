@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,9 +18,14 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class Person < User
-  
   include Redmine::SafeAttributes
   include Redmine::Pagination
+  include Redmine::Utils::DateCalculation
+  WORKDAY = :workday
+  WEEKEND = :weekend
+  DAYOFF = :dayoff
+  PART_DAYOFF = :part_dayoff
+  HOLIDAY = :holiday
 
   self.inheritance_column = :_type_disabled
 
@@ -236,5 +241,6 @@ class Person < User
       end
       'LOWER(firstname || lastname) LIKE :search OR LOWER(lastname || firstname) LIKE :search OR'
     end
+
   end
 end

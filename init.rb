@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-requires_redmineup version_or_higher: '1.0.5' rescue raise "\n\033[31mRedmine requires newer redmineup gem version.\nPlease update with 'bundle update redmineup'.\033[0m"
+requires_redmineup version_or_higher: '1.0.10' rescue raise "\n\033[31mRedmine requires newer redmineup gem version.\nPlease update with 'bundle update redmineup'.\033[0m"
 
-PEOPLE_VERSION_NUMBER = '1.6.5'
+PEOPLE_VERSION_NUMBER = '1.6.10'
 PEOPLE_VERSION_TYPE = "Light version"
 
 QUOTED_TRUE = (ActiveRecord::Base.connection rescue false) && ActiveRecord::Base.connection.quoted_true.gsub(/'/, '')
@@ -33,7 +33,7 @@ Redmine::Plugin.register :redmine_people do
   url 'http://redmineup.com/pages/plugins/people'
   author_url 'mailto:support@redmineup.com'
 
-  requires_redmine :version_or_higher => '4.0'
+  requires_redmine version_or_higher: '4.0'
 
   settings default: {
     users_acl: {},
@@ -41,14 +41,14 @@ Redmine::Plugin.register :redmine_people do
     hide_age: '0',
     edit_own_data: '1',
     default_group: '',
-    'workday_length' => 8
+    workday_length: 8
   }
 
-  menu :top_menu, :people, { :controller => 'people', :action => 'index', :project_id => nil }, :caption => :label_people, :if => Proc.new {
+  menu :top_menu, :people, { controller: 'people', action: 'index', project_id: nil }, caption: :label_people, if: Proc.new {
     User.current.allowed_people_to?(:view_people)
   }
 
-  menu :admin_menu, :people, { :controller => 'people_settings', :action => 'index' }, :caption => :label_people, :html => { :class => 'icon' }
+  menu :admin_menu, :people, { controller: 'people_settings', action: 'index' }, caption: :label_people, html: { class: 'icon' }, icon: 'user-suit', plugin: :redmine_people
 end
 
 if Rails.configuration.respond_to?(:autoloader) && Rails.configuration.autoloader == :zeitwerk
@@ -59,3 +59,5 @@ require File.dirname(__FILE__) + '/lib/redmine_people'
 
 Redmineup::Settings.initialize_gem_settings
 Redmineup::Currency.add_admin_money_menu
+
+require 'redmineup/patches/compatibility_patch'

@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -66,8 +66,8 @@ end
 REDMINE_PEOPLE_REQUIRED_FILES = [
   'people_acl',
   'redmine/activity/crm_fetcher',
-  'redmine_people/helpers/redmine_people',
-  'acts_as_attachable_global/init',
+  'redmine_people/helpers/people_helper',
+  'redmine/acts/attachable_global',
   'redmine_people/patches/application_controller_patch',
   'redmine_people/patches/user_patch',
   'redmine_people/patches/application_helper_patch',

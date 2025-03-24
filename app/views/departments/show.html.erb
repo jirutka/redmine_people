@@ -4,8 +4,8 @@
 
 <div class="contextual">
   <% if User.current.allowed_people_to?(:manage_departments) %>
-    <%= link_to l(:button_edit), edit_department_path(@department), :class => 'icon icon-edit' %>
-    <%= link_to l(:button_delete), department_path(@department), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
+    <%= link_to sprite_icon('edit', l(:button_edit)), edit_department_path(@department), :class => 'icon icon-edit' %>
+    <%= link_to sprite_icon('del', l(:button_delete)), department_path(@department), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
   <% end %>
 </div>
 

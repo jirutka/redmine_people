@@ -207,7 +207,7 @@ en:
   label_people_not_approved: Not approved
   label_people_scheduled_for: for
   label_people_added_day_off: Added day off
-  label_people_appoved_notification: Day off status changed
+  label_people_approved_notification: Day off status changed
   label_people_notes_notification: Day off notes changed
 
   notice_leave_type_successfully_destroyed: Leave type was successfully destroyed

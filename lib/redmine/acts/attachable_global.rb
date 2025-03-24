@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -96,4 +96,8 @@ module Redmine
       end
     end
   end
+end
+
+unless ActiveRecord::Base.included_modules.include?( Redmine::Acts::AttachableGlobal)
+  ActiveRecord::Base.send(:include,  Redmine::Acts::AttachableGlobal)
 end

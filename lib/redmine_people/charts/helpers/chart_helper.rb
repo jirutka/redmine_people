@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,18 +23,6 @@ module RedminePeople
   module Charts
     module Helpers
       module ChartHelper
-        def tooltip_dayoff_attributes(dayoff, options = {})
-          options = { only_path: true }.merge(options)
-
-          [{ name: l(:field_duration),          value: dayoff.duration },
-           nil,
-           { name: l(:label_people_person),     value: link_to(dayoff.user, person_path(dayoff.user), only_path: options[:only_path]) },
-           { name: l(:label_people_leave_type), value: h(dayoff.leave_type.name) },
-           { name: l(:field_status),            value: dayoff.is_approved? ? l(:field_approved) : l(:label_people_not_approved)},
-           { name: l(:field_start_date),        value: format_date(dayoff.start_date) },
-           { name: l(:field_end_date),          value: format_date(dayoff.due_date) },
-           { name: l(:field_notes),             value: h(dayoff.notes) }]
-        end
 
         def render_attributes(attributes, html = false)
           if html

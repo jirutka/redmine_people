@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2024 RedmineUP
+# Copyright (C) 2011-2025 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class PeopleInformation < ActiveRecord::Base
+class PeopleInformation < ApplicationRecord
   include Redmine::SafeAttributes
   self.table_name = 'people_information'
   self.primary_key = 'user_id'
@@ -36,7 +36,7 @@ class PeopleInformation < ActiveRecord::Base
   end
 
   def due_date
-    nil
+    birthday
   end
 
   def self.reject_information(attributes)

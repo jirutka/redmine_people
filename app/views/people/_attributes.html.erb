@@ -46,25 +46,25 @@
  	<% unless @person.skype.blank? %>
 	<tr>
 	  <th class = "skype"><%= l(:label_people_skype) %>:</th>
-	  <td class="skype icon icon-skype"><%= link_to @person.skype, "skype:#{@person.skype}?call" %></td>
+	  <td class="skype icon icon-skype"><%= link_to sprite_icon('skype', @person.skype, plugin: :redmine_people), "skype:#{@person.skype}?call" %></td>
 	</tr>
 	<% end %>
   <% unless @person.twitter.blank? %>
 	<tr>
 	  <th class = "twitter"><%= l(:label_people_twitter) %>:</th>
-	  <td class="twitter icon icon-twitter"><%= link_to @person.twitter, "http://twitter.com/" + @person.twitter %></td>
+	  <td class="twitter icon icon-twitter"><%= link_to sprite_icon('twitter', @person.twitter, plugin: :redmine_people), "http://twitter.com/" + @person.twitter %></td>
 	</tr>
   <% end %>
   <% unless @person.facebook.blank? %>
 	<tr>
 	  <th class = "facebook"><%= l(:label_people_facebook) %>:</th>
-	  <td class="facebook icon icon-facebook"><%= link_to @person.facebook.gsub(/^.*facebook.com\//, ''), "http://facebook.com/#{@person.facebook}" %></td>
+	  <td class="facebook icon icon-facebook"><%= link_to sprite_icon('facebook', @person.facebook.gsub(/^.*facebook.com\//, ''), plugin: :redmine_people), "http://facebook.com/#{@person.facebook}" %></td>
 	</tr>
   <% end %>
   <% unless @person.linkedin.blank? %>
 	<tr>
 	  <th class = "linkedin"><%= l(:label_people_linkedin) %>:</th>
-	  <td class="linkedin icon icon-linkedin"><%= link_to @person.name, "http://www.linkedin.com/profile/view?id=#{@person.linkedin}"%></td>
+	  <td class="linkedin icon icon-linkedin"><%= link_to sprite_icon('linkedin', @person.name, plugin: :redmine_people), "http://www.linkedin.com/profile/view?id=#{@person.linkedin}"%></td>
 	</tr>
   <% end %>
 
