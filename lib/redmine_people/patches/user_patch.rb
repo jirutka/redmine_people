@@ -101,9 +101,15 @@ module RedminePeople
             end
 
             # Check to edit subordinates.
-            # Works only for persons.
-            if person.respond_to?(:manager_id) && has_permission?(:edit_subordinates) && id == person.manager_id
-              return true
+            # Works for person and nested people.
+            if person.respond_to?(:manager_id) && has_permission?(:edit_subordinates)
+              current_ids = [self.id]
+
+              while current_ids.any?
+                return true if current_ids.include?(person.id)
+
+                current_ids = PeopleInformation.where(manager_id: current_ids).pluck(:user_id)
+              end
             end
           end
 

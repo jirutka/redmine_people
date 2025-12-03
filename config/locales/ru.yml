@@ -33,7 +33,7 @@ ru:
   label_people_appearance_date: Дата начала работы
   label_people_age: Возраст
 
-  people_permission_edit_people: Редактирования сотрудников
+  people_permission_edit_people: Редактирование сотрудников
   people_permission_view_people: Просмотр сотрудников
   people_permission_add_people: Добавление сотрудников
   people_permission_delete_people: Удаление сотрудников
@@ -86,7 +86,7 @@ ru:
   label_people_add_tag: + добавить тэг
   field_person_full_name: Полное имя
   label_people_edit_tags: Редактировать теги
-  people_permission_manage_tags: Редактировать теги
+  people_permission_manage_tags: Редактирование тегов
   label_people_hide_age: Скрывать возраст
   label_people_is_system: Системный
   label_people_edit_own_data: Редактировать собственные данные
@@ -124,7 +124,7 @@ ru:
   label_people_show_birthday_announcements: Уведомления о днях рождениях
   label_people_subordinates: Подчинённые
   label_people_manager: Менеджер
-  people_permission_edit_subordinates: Редактировать подчиненных
+  people_permission_edit_subordinates: Редактирование подчиненных
 
   label_people_default_group: Группа по умолчанию
   label_people_choose_manager: Выберите менеджера
@@ -170,8 +170,8 @@ ru:
 
   people_permission_manage_departments: Управление департаментами
 
-  people_permission_edit_work_experience: Редактировать опыт работы
-  people_permission_edit_own_work_experience: Редактировать собственный опыт работы
+  people_permission_edit_work_experience: Редактирование опыта работы
+  people_permission_edit_own_work_experience: Редактирование собственного опыта работы
   people_permission_manage_calendar: Управление календарем
 
   notice_failed_to_save_people: "Невозможно сохранить %{count} сотрудника(ов) из %{total} выбранных: %{ids}."

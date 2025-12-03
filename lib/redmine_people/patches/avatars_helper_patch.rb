@@ -37,8 +37,8 @@ module RedminePeople
             return avatar_without_people(user, options)
           end
           if user.is_a?(User) && (avatar = user.avatar)
-            avatar_url = url_for protocol: Setting.protocol, only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: options[:size]
-            options[:srcset] = url_for(protocol: Setting.protocol, only_path: options.fetch(:only_path, false), controller: 'people', action: 'avatar', id: avatar, size: size2x) + " 2x"
+            avatar_url = url_for protocol: Setting.protocol, only_path: true, controller: 'people', action: 'avatar', id: avatar, size: options[:size]
+            options[:srcset] = url_for(protocol: Setting.protocol, only_path: true, controller: 'people', action: 'avatar', id: avatar, size: size2x) + " 2x"
             image_tag(avatar_url, options.merge(class: "gravatar #{'without-margin' if !Setting.gravatar_enabled?}"))
           elsif user.respond_to?(:twitter) && !user.twitter.blank?
             image_tag("https://twitter.com/#{user.twitter}/profile_image?size=original", options.merge(:class => 'gravatar'))

@@ -49,11 +49,11 @@
 /**************************************************************/
 /*                   PERSON_DATA
 /**************************************************************/
-.person-data div.person { overflow: hidden; margin-bottom: 15px; }
-.person-data div.person div.image { float: left; }
-.person-data div.person div.data { margin-left: 45px; }
-.person-data div.person div.data h4.name { border-bottom: 0px; padding: 0px; margin-bottom: 5px; }
-.person-data div.person div.data p.info { margin: 0px; }
+div.person { overflow: hidden; margin-bottom: 15px; }
+div.person div.image { float: left; }
+div.person div.data { margin-left: 45px; }
+div.person div.data h4.name { border-bottom: 0px; padding: 0px; margin-bottom: 5px; }
+div.person div.data p.info { margin: 0px; }
 
 table.person_data {
   width: 100%;
@@ -343,12 +343,30 @@ div[aria-describedby=announcement-show] {
 /*                  PEOPLE ATTRIBUTES SIDEBAR                 */
 /**************************************************************/
 
-.tab-placeholder {
-    display: none;
+.person-attributes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
 }
 
-.tab-placeholder.active {
-    display: block !important;
+.attribute {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.attribute .label {
+  width: 120px;
+  font-weight: bold;
+  color: #333;
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.attribute .value {
+  flex: 1;
+  word-break: break-word;
 }
 
 /*****Announcements*****/
@@ -717,6 +735,11 @@ div.orgChart .node .person-data div.person {
   height: 16px;
   padding: 8px;
   border-top: 1px solid #c0c0c0;
+}
+
+.leave-planner-chart .user-line .not-approved {
+  background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 4px, rgba(0, 0, 0, 0) 4px, rgba(0, 0, 0, 0) 8px);
+  padding: 0px 0px 2px 0px;
 }
 
 .leave-planner-chart .user-line {

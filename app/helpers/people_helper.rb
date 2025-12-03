@@ -20,6 +20,7 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 module PeopleHelper
+  include QueriesHelper
 
   def people_tabs(person)
     tabs = [

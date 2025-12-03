@@ -292,4 +292,27 @@ class PeopleControllerTest < ActionController::TestCase
     compatible_xhr_request :get, :load_tab, id: person_id, tab_name: tab_name, partial: tab_name
     assert_response :forbidden
   end
+
+  def test_avatar_helper_returns_avatar_img_tag
+    @request.session[:user_id] = 1
+    person = Person.find(4)
+    avatar_file = people_uploaded_file('testfile_1.png', 'image/png')
+    attachment = Attachment.create(container: person, file: avatar_file, description: 'avatar', author: User.find(1))
+
+    assert person.avatar.present?
+
+    html = avatar(person)
+    assert_match /<img.*src=.*testfile_1\.png.*>/, html
+  end
+
+  def test_avatar_helper_returns_default_when_no_avatar
+    @request.session[:user_id] = 1
+    person = Person.find(4)
+    person.attachments.where(description: 'avatar').destroy_all
+
+    assert person.avatar.blank?
+
+    html = avatar(person)
+    assert_match /<img.*src=.*person*\.png*>/, html
+  end
 end

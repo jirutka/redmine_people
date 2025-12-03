@@ -42,7 +42,6 @@ module RedminePeople
           style = "left: #{coords[:bar_start]}px;"
           style << "height: 7px;" if @dayoff.hours_per_day
           style << "width: #{coords[:bar_end] - coords[:bar_start] - 2}px;"
-          style << 'border: 1px solid #f66;' unless @dayoff.is_approved?
           content_tag(:div, '&nbsp;'.html_safe, style: style, class: css_classes)
         end
 
@@ -60,12 +59,14 @@ module RedminePeople
 
         def tooltip_content_styles
           style = @dayoff.hours_per_day ? 'top: 7px;' : ''
-          style << 'border: 1px solid #f66;' unless @dayoff.is_approved?
           style
         end
 
         def render_tooltip(coords)
-          content_tag(:div, style: tooltip_styles(coords), class: "tooltip #{'editable' if @editable}", edit_url: edit_dayoff_path(@dayoff)) do
+          css_classes = 'tooltip'
+          css_classes += ' editable' if @editable
+          css_classes += ' not-approved' if Dayoff.has_any_approvable_objects? && !@dayoff.is_approved?
+          content_tag(:div, style: tooltip_styles(coords), class: css_classes, edit_url: edit_dayoff_path(@dayoff)) do
             content_tag(:span, style: tooltip_content_styles, class: 'tip') do
               render_attributes(tooltip_dayoff_attributes(@dayoff), true)
             end

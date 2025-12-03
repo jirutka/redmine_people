@@ -4,6 +4,18 @@ Redmine People plugin - User management plugin for redmine
 Copyright (C) 2011-2025 Kirill Bezrukov (RedmineUP)
 http://www.redmineup.com/
 
+== 2025-09-09 v1.6.12
+
+* Added SVG icongs to context menu
+* Fixed dayoff query saving
+* Fixed avatar URL
+
+== 2025-06-26 v1.6.11
+
+* Added description field to query form
+* Added 'approved' dayoff filter
+* Updated permissions to edit nested subordinates
+
 == 2025-03-03 v1.6.10
 
 * Added svg icons for compatibility with Redmine 6
