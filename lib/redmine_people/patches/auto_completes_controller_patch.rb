@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,22 +20,15 @@
 module RedminePeople
   module Patches
     module AutoCompletesControllerPatch
-      def self.included(base)
+      def self.prepended(base)
         base.class_eval do
           include ActionView::Helpers::AssetTagHelper
           include ApplicationHelper
           include AvatarsHelper if RedminePeople.module_exists?(:AvatarsHelper)
-
-          include InstanceMethods
         end
-      end
-
-      module InstanceMethods
       end
     end
   end
 end
 
-unless AutoCompletesController.included_modules.include?(RedminePeople::Patches::AutoCompletesControllerPatch)
-  AutoCompletesController.send(:include, RedminePeople::Patches::AutoCompletesControllerPatch)
-end
+AutoCompletesController.prepend(RedminePeople::Patches::AutoCompletesControllerPatch)

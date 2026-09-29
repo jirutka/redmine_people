@@ -181,6 +181,8 @@ de:
   people_permission_view_leave: Abwesenheit anzeigen
   people_permission_view_people: Mitarbeiter anzeigen
   people_permission_view_performance: Leistung anzeigen
+  label_people_approved_notification: Ruhetag aktualisiert
+
   activerecord:
     errors:
       messages:

@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,26 +20,13 @@
 module RedminePeople
   module Patches
     module AttachmentsControllerPatch
-      def self.included(base)
-        base.send(:include, InstanceMethods)
-
-        base.class_eval do
-          alias_method :destroy_without_people, :destroy
-          alias_method :destroy, :destroy_with_people
-        end
-      end
-
-      module InstanceMethods
-        def destroy_with_people
-          @project = Project.first
-          request.headers['Referer'] = person_path(@attachment.container) if @attachment.container_type == 'Principal'
-          destroy_without_people
-        end
+      def destroy
+        @project = Project.first
+        request.headers['Referer'] = person_path(@attachment.container) if @attachment.container_type == 'Principal'
+        super
       end
     end
   end
 end
 
-unless AttachmentsController.included_modules.include?(RedminePeople::Patches::AttachmentsControllerPatch)
-  AttachmentsController.send(:include, RedminePeople::Patches::AttachmentsControllerPatch)
-end
+AttachmentsController.prepend(RedminePeople::Patches::AttachmentsControllerPatch)

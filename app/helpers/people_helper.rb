@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -111,12 +111,12 @@ module PeopleHelper
 
   def person_tag(person, options={})
     avatar_size = options.delete(:size) || 16
-    if person.visible? && !options[:no_link]
-      person_avatar = link_to(avatar(person, size: avatar_size, only_path: options[:only_path]), person_path(person), id: 'avatar')
-      person_name = link_to(person.name, person_path(person))
-    else
+    if options[:no_link]
       person_avatar = avatar(person, size: avatar_size, only_path: options[:only_path])
       person_name = person.name
+    else
+      person_avatar = link_to(avatar(person, size: avatar_size, only_path: options[:only_path]), person_path(person), id: 'avatar')
+      person_name = link_to(person.name, person_path(person))
     end
 
     case options.delete(:type).to_s
@@ -155,7 +155,7 @@ module PeopleHelper
   end
 
   def arrow_classes(previous, current, options = {})
-    prefix = options.fetch(:positive_metric, true) ? '' : 'mirror_'
+    prefix = options.fetch(:positive_metric, true) ? '' : 'mirror-'
     ['caret', (current > previous) ? "#{prefix}pos" : "#{prefix}neg"]
   end
 

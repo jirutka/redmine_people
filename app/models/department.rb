@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -86,6 +86,10 @@ class Department < ApplicationRecord
   def attachments_deletable?(user = User.current)
     (respond_to?(:visible?) ? visible?(user) : true) &&
       user.allowed_people_to?(:manage_departments)
+  end
+
+  def is_head?(person)
+    person.id == head_id
   end
 
   class << self

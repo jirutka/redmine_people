@@ -1,8 +1,37 @@
 == Redmine People plugin changelog
 
 Redmine People plugin - User management plugin for redmine
-Copyright (C) 2011-2025 Kirill Bezrukov (RedmineUP)
+Copyright (C) 2011-2026 Kirill Bezrukov (RedmineUP)
 http://www.redmineup.com/
+
+== 2026-09-02 v1.7.0
+
+* Switched core patches loading from include to prepend
+* Added people list export to CSV
+* Added REST API for dayoffs
+* Added async loading for the activity tab on the person page
+* Added highlighting of non-working days on the Gantt chart
+* Added ability to send announcements to roles and groups
+* Updated styles for new Redmine themes and versions
+* Fixed notification sending when mentioning an employee in a note
+* Updated sidebar styles on the person page
+* Fixed long text custom field bug
+* Fixed "Authorized applications" error
+* Fixed SQL injection vulnerability
+* Fixed error when generating a letter that mentions an employee
+* Fixed wrong people_url params
+
+== 2026-01-22 v1.6.13
+
+* Added rates tab
+* Added ability to edit own days off
+* Fixed department update when creating a new person without details
+* Fixed avatar display for Redmine 6
+* Fixed non authorised users view bug
+* Fixed n+1 queries of people list
+* Updated permissions for editing nested subordinates
+* Fixed announcement display
+* Updated German translation
 
 == 2025-09-09 v1.6.12
 

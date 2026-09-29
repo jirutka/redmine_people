@@ -13,13 +13,13 @@
 <div class="person details">
   <%= content_tag('span', l(:label_people_is_system), class: 'system') if @person.is_system %>
 
-  <div class="subject_header">
+  <div class="subject-header">
     <div class="avatar">
       <%= link_to avatar(@person, size: "64", full_size: true), @person.avatar %>
     </div>
     <div class="name">
       <h3><%= h @person.name %></h3>
-      <div class="job_title">
+      <div class="job-title">
         <%= h @person.job_title %>
         <% if @person.department %>
           <%= " #{l(:label_people_at_department)} " %>
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <div class="subject_info">
+  <div class="subject-info">
     <ul>
       <% if @person.phones.any? %>
         <li class="phone icon icon-phone">

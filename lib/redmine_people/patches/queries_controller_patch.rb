@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,25 +20,15 @@
 module RedminePeople
   module Patches
     module QueriesControllerPatch
-      def self.included(base)
-        base.class_eval do
-          include InstanceMethods
-        end
+      def redirect_to_dayoff_query(options)
+        redirect_to dayoff_query_path(options)
       end
 
-      module InstanceMethods
-        def redirect_to_dayoff_query(options)
-          redirect_to dayoff_query_path(options)
-        end
-
-        def dayoff_query_path(options)
-          @project ? project_dayoffs_path(options.merge(project_id: @project.id)) : dayoffs_path(options)
-        end
+      def dayoff_query_path(options)
+        @project ? project_dayoffs_path(options.merge(project_id: @project.id)) : dayoffs_path(options)
       end
     end
   end
 end
 
-unless QueriesController.included_modules.include?(RedminePeople::Patches::QueriesControllerPatch)
-  QueriesController.send(:include, RedminePeople::Patches::QueriesControllerPatch)
-end
+QueriesController.prepend(RedminePeople::Patches::QueriesControllerPatch)

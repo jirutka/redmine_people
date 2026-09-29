@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -149,7 +149,8 @@ class PeopleQuery < Query
     associations = options[:include] || []
     associations << :information
     unless options[:count_request]
-      preloads  = [:department, :email_address]
+      preloads = [:department, :email_address]
+      preloads << :custom_values if has_custom_field_column?
     end
 
     unless filters['is_system']
@@ -162,6 +163,11 @@ class PeopleQuery < Query
       .where(type: 'User')
       .where(statement)
       .where(options[:conditions])
+  end
+
+  def group_by_statement
+    groupable = group_by_column&.instance_variable_get(:@groupable)
+    groupable.is_a?(String) ? groupable : super
   end
 
   def object_count

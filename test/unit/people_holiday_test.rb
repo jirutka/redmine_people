@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,5 +22,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class PeopleHolidayTest < ActiveSupport::TestCase
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/', [:people_holidays])
+  include RedminePeople::TestCase::TestHelper
+
+  load_plugin_fixtures :redmine_people,
+                       :people_holidays
 end

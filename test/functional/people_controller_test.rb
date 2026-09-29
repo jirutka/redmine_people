@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,12 +23,20 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class PeopleControllerTest < ActionController::TestCase
   include RedminePeople::TestCase::TestHelper
-  fixtures :users, :email_addresses
 
-  # Fixtures with the same names overwriting each other. For example, time_entries will be restored only from the People plugin.
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                                          [:people_holidays, :people_work_experiences, :departments, :people_information,
-                                           :custom_fields, :custom_values, :attachments, :time_entries])
+  fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles,
+           :enabled_modules, :trackers, :projects_trackers, :issue_statuses,
+           :issues, :enumerations
+
+  load_plugin_fixtures :redmine_people,
+                       :people_holidays,
+                       :people_work_experiences,
+                       :departments,
+                       :people_information,
+                       :custom_fields,
+                       :custom_values,
+                       :attachments,
+                       :time_entries
 
   def setup
     @person = Person.find(4)
@@ -110,6 +118,18 @@ class PeopleControllerTest < ActionController::TestCase
     compatible_request :get, :show, :id => @person.id
     assert_response :success
     assert_select 'h3', /Robert Hill/
+  end
+
+  def test_get_show_without_visible_person
+    Member.delete_all
+    role = Role.create!(:name => 'test_role', :users_visibility => 'members_of_visible_projects')
+    project1 = Project.find(1)
+    Member.create_principal_memberships(Person.find(2), :project_id => project1.id, :role_ids => [role.id])
+    PeopleAcl.create(2, ['view_people'])
+    @request.session[:user_id] = 2
+
+    compatible_request :get, :show, :id => 3
+    assert_response 403
   end
 
   def test_get_new
@@ -315,4 +335,5 @@ class PeopleControllerTest < ActionController::TestCase
     html = avatar(person)
     assert_match /<img.*src=.*person*\.png*>/, html
   end
+
 end

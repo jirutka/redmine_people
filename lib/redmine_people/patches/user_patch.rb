@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -24,14 +24,8 @@ require_dependency 'user'
 module RedminePeople
   module Patches
     module UserPatch
-      def self.included(base) # :nodoc:
-        base.send(:include, InstanceMethods)
-
+      def self.prepended(base)
         base.class_eval do
-          
-          alias_method :'allowed_to?_without_people', :allowed_to?
-          alias_method :allowed_to?, :'allowed_to?_with_people'
-
           has_one :avatar, lambda { where("#{Attachment.table_name}.description = 'avatar'") }, :class_name => 'Attachment', :as => :container, :dependent => :destroy
           acts_as_attachable_global
 
@@ -51,79 +45,91 @@ module RedminePeople
         end
       end
 
-      module InstanceMethods
-        # include ContactsHelper
+      def project
+        @project ||= Project.new
+      end
 
-        def project
-          @project ||= Project.new
+      def allowed_people_to?(permission, person = nil)
+        unless RedminePeople.available_permissions.include?(permission)
+          raise "The permission #{permission} does not exist"
         end
 
-        def allowed_people_to?(permission, person = nil)
-          unless RedminePeople.available_permissions.include?(permission)
-            raise "The permission #{permission} does not exist"
+        return true if admin?
+
+        if respond_to?(:"check_permission_#{permission.to_s}", true)
+          send("check_permission_#{permission}".to_sym, person)
+        else
+          has_permission?(permission)
+        end
+      end
+
+      def allowed_to?(action, context, options={}, &block)
+        return allowed_people_to?(action) if !action.is_a?(Hash) && RedminePeople.available_permissions.include?(action)
+
+        super(action, context, options, &block)
+      end
+
+      def has_permission?(permission)
+        (groups + [self]).any? { |principal| PeopleAcl.allowed_to?(principal, permission) }
+      end
+
+      protected
+
+      def check_permission_view_people(person)
+        return true if person && person.is_a?(User) && person.id == id
+        return true if !anonymous? && Setting.plugin_redmine_people['visibility'].to_i > 0
+
+        has_permission?(:view_people)
+      end
+
+      def check_permission_edit_people(person)
+        return has_permission?(:edit_people) unless person.is_a?(User)
+
+        self_person = becomes(Person)
+        can_edit_person?(self_person, person)
+      end
+
+      def check_permission_view_performance(person)
+        (person.is_a?(User) && person.id == self.id) || has_permission?(:view_performance)
+      end
+
+      private
+
+      def can_edit_person?(self_person, person)
+        return true if can_edit_own_data?(person)
+
+        if has_permission?(:edit_subordinates)
+          return true if can_edit_subordinates?(self_person, person)
+        end
+
+        has_permission?(:edit_people)
+      end
+
+      def can_edit_own_data?(person)
+        person.id == id && Setting.plugin_redmine_people['edit_own_data'].to_i > 0
+      end
+
+      def can_edit_subordinates?(self_person, person)
+        if person.respond_to?(:manager_id)
+          current_ids = [self.id]
+
+          while current_ids.any?
+            return true if current_ids.include?(person.id)
+
+            current_ids = PeopleInformation.where(manager_id: current_ids).pluck(:user_id)
           end
+        end
+        if self_person.department && person.department
+          subordinate_ids = self_person.department.people_of_branch_department.ids
 
-          return true if admin?
-
-          if respond_to?(:"check_permission_#{permission.to_s}", true)
-            send("check_permission_#{permission}".to_sym, person)
-          else
-            has_permission?(permission)
-          end
+          return true if person.department.is_head?(self_person)
+          return true if subordinate_ids.include?(person.id) && self_person.department != person.department
         end
 
-        define_method 'allowed_to?_with_people' do |action, context, options={}, &block|
-          return allowed_people_to?(action) if !action.is_a?(Hash) && RedminePeople.available_permissions.include?(action)
-
-          public_send('allowed_to?_without_people', action, context, options, &block)
-        end
-
-        def has_permission?(permission)
-          (groups + [self]).map { |principal| PeopleAcl.allowed_to?(principal, permission) }.inject { |memo, allowed| memo || allowed }
-        end
-
-        protected
-
-        def check_permission_view_people(person)
-          if person && person.is_a?(User) && person.id == id
-            return true
-          elsif is_a?(User) && !anonymous? && Setting.plugin_redmine_people['visibility'].to_i > 0
-            return true
-          end
-          has_permission?(:view_people)
-        end
-
-        def check_permission_edit_people(person)
-          if person && person.is_a?(User)
-            # Check to edit himself
-            if person.id == id && Setting.plugin_redmine_people['edit_own_data'].to_i > 0
-              return true
-            end
-
-            # Check to edit subordinates.
-            # Works for person and nested people.
-            if person.respond_to?(:manager_id) && has_permission?(:edit_subordinates)
-              current_ids = [self.id]
-
-              while current_ids.any?
-                return true if current_ids.include?(person.id)
-
-                current_ids = PeopleInformation.where(manager_id: current_ids).pluck(:user_id)
-              end
-            end
-          end
-
-          has_permission?(:edit_people)
-        end
-
-        def check_permission_view_performance(person)
-          (person.is_a?(User) && person.id == self.id) || has_permission?(:view_performance)
-        end
+        false
       end
     end
   end
 end
 
-unless User.included_modules.include?(RedminePeople::Patches::UserPatch)
-  User.send(:include, RedminePeople::Patches::UserPatch)
-end
+User.prepend(RedminePeople::Patches::UserPatch)

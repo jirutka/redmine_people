@@ -34,8 +34,8 @@
         <%= @query.new_record? ? l(:label_people) : @query.name %>
         </span>
 
-        <span class="live_search">
-            <%= text_field_tag(:search, params[:search], :autocomplete => "off", :class => "live_search_field", :placeholder => l(:label_people_search) ) %>
+        <span class="live-search">
+            <%= text_field_tag(:search, params[:search], :autocomplete => "off", :class => "live-search-field", :placeholder => l(:label_people_search) ) %>
         </span>
     </h2>
 	<% end %>
@@ -57,7 +57,6 @@
 <%= render :partial => 'people/sidebar', :locals => {:tags => @tags} %>
 
 <% content_for :header_tags do %>
-  <%= select2_assets %>
   <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
   <meta name = "format-detection" content = "telephone=no">
 <% end %>

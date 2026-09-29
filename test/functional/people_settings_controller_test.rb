@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -32,8 +32,9 @@ class PeopleSettingsControllerTest < ActionController::TestCase
            :issue_statuses,
            :email_addresses
 
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                                          [:departments, :people_information])
+  load_plugin_fixtures :redmine_people,
+                       :people_information,
+                       :departments
 
   def setup
     @request.session[:user_id] = 1

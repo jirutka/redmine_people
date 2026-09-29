@@ -1,4 +1,4 @@
-<table class="chart_table">
+<table class="chart-table">
   <tbody>
     <tr class="metrics">
       <% if @prfm_collector.performance.present? %>
@@ -34,7 +34,7 @@
   </tbody>
 </table>
 
-<div class="date_period_block">
+<div class="date-period-block">
   <%= interval_type_select :interval_type, params[:interval_type] %>
   <% if params[:interval_type] == PersonPerformanceCollector::YEAR %>
     <%= year_filter_select :date_period, @person, params[:date_period] %>
@@ -82,14 +82,14 @@
   </script>
 <% else %>
   <div id="performance-histogram" class="autoscroll">
-    <table class="chart_table histogram">
+    <table class="chart-table histogram">
       <tbody>
       <tr class="header">
         <% @prfm_collector.chart_data.each do |data| %>
-          <td class="column_data<%= ' empty' if data[:spent_time].to_i <= 0 %>">
+          <td class="column-data<%= ' empty' if data[:spent_time].to_i <= 0 %>">
 
             <% if data[:spent_time].to_i > 0 %>
-              <p class="issues_count"><%= data[:spent_time] %></p>
+              <p class="issues-count"><%= data[:spent_time] %></p>
 
               <% if data[:performance].to_i > 0 %>
                 <p><%= data[:performance] %>%</p>
@@ -100,9 +100,9 @@
         <% end %>
       </tr>
 
-      <tr class="main_block">
+      <tr class="main-block">
         <% @prfm_collector.chart_data.each do |data| %>
-          <td class="column_data<%= ' empty' if data[:spent_time].to_i <= 0 %>">
+          <td class="column-data<%= ' empty' if data[:spent_time].to_i <= 0 %>">
             <div class="percents" style="height: <%= 20 * data[:height_ratio] %>em"></div>
           </td>
         <% end %>
@@ -110,7 +110,7 @@
 
       <tr class="footer">
         <% (1..@prfm_collector.chart_data.length).each do |i| %>
-          <td class="column_data"><%= i %></td>
+          <td class="column-data"><%= i %></td>
         <% end %>
       </tr>
       </tbody>

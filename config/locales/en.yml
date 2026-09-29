@@ -229,3 +229,5 @@ en:
     errors:
       messages:
         greater_than_or_equal_to_start_date: must be greater than or equal to start date
+
+  label_people_recipients: Recipients

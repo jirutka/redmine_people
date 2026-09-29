@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ class PeopleController < ApplicationController
   before_action :find_person, :only => [:show, :edit, :update, :destroy, :edit_membership, :destroy_membership,
                                         :destroy_avatar, :load_tab, :remove_subordinate]
   before_action :find_managers, :only => [:manager, :autocomplete_for_manager, :add_manager]
-  before_action :authorize_people, :except => [:avatar, :context_menu, :bulk_edit, :bulk_update, :autocomplete_tags,
+  before_action :authorize_people, :except => [:avatar, :context_menu, :bulk_edit, :bulk_update,
                                                :manager, :autocomplete_for_manager, :add_manager, :autocomplete_for_person]
 
   before_action :bulk_find_people, :only => [:context_menu, :bulk_edit, :bulk_update]
@@ -72,14 +72,18 @@ class PeopleController < ApplicationController
       )
     else
       flash[:error] = @query.errors.full_messages.first if @query.errors.present?
+      @people = []
     end
 
     respond_to do |format|
       format.html {render partial: people_list_style, layout: false if request.xhr?}
+      format.csv  {send_data(query_to_csv(@people.to_a, @query, params), :type => 'text/csv; header=present', :filename => 'people.csv')}
     end
   end
 
   def show
+    return deny_access unless @person.visible?(User.current)
+
     respond_to do |format|
       format.html
     end
@@ -201,17 +205,8 @@ class PeopleController < ApplicationController
     render layout: false
   end
 
-  def autocomplete_tags
-    if request.xhr?
-      @name = params[:q].to_s
-      @tags = Person.all_tag_counts(conditions: ["#{Redmineup::Tag.table_name}.name LIKE ?", "%#{@name}%"], limit: 10)
-      render layout: false, partial: 'person_tag_list', status: 200
-    else
-      render_404
-    end
-  end
-
-  def load_tab
+def load_tab
+    @user = @person
   end
 
   def manager

@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,9 +22,16 @@
 
 resources :people do
   collection do
-    get :bulk_edit, :context_menu, :edit_mails, :preview_email, :avatar
+    get :bulk_edit
+    get :context_menu
+    get :edit_mails
+    get :preview_email
+    get :avatar
     get :autocomplete_for_person
-    post :bulk_edit, :bulk_update, :send_mails, :add_manager
+    post :bulk_edit
+    post :bulk_update
+    post :send_mails
+    post :add_manager
     delete :bulk_destroy
     get 'calendar' => 'people_calendars#index'
     resources :holidays, except: :show, controller: :people_holidays, as: :people_holidays

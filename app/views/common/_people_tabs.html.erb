@@ -15,14 +15,18 @@
     <button class="tab-right" onclick="moveTabRight(this);"></button>
   </div>
 </div>
+<% selected_tab_data = tabs.detect {|tab| tab[:name] == selected_tab } %>
 <% tabs.each do |tab| %>
     <% selected = tab[:name] == selected_tab %>
-    <div class="tab-placeholder tab-content <%= 'active loaded' if selected %>" id="tab-placeholder-<%= tab[:name] %>" style="<%= "display: block" if selected %>">
-      <%= render(:partial => tab[:partial]) if selected %>
-    </div>
+    <div class="tab-placeholder tab-content <%= 'active' if selected %>" id="tab-placeholder-<%= tab[:name] %>" style="<%= "display: block" if selected %>"></div>
 <% end %>
 <script type='text/javascript'>
   $(document).ready(displayTabsButtons);
   $(window).resize(displayTabsButtons);
-  $(document).ready(function(){ setupDeferredTabs('<%= load_tab_person_path(@person) %>') });
+  $(document).ready(function(){
+    setupDeferredTabs('<%= load_tab_person_path(@person) %>');
+    <% if selected_tab_data %>
+      loadPeopleTab('<%= selected_tab_data[:name] %>', '<%= selected_tab_data[:partial] %>', '<%= load_tab_person_path(@person) %>');
+    <% end %>
+  });
 </script>

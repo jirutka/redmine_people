@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,7 +22,9 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class CalendarPatchTest < ActiveSupport::TestCase
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/', [:people_holidays])
+
+  load_plugin_fixtures :redmine_people,
+                       :people_holidays
 
   def setup
     @calendar1 = Redmine::Helpers::Calendar.new('2017-01-01'.to_date)

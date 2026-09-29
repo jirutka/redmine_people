@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -20,26 +20,20 @@
 module RedminePeople
   module Patches
     module ApplicationControllerPatch
-      def self.included(base)
-        base.send(:include, InstanceMethods)
-
+      def self.prepended(base)
         base.class_eval do
         end
       end
 
-      module InstanceMethods
-        private
+      private
 
-        def set_person
-          @person = Person.find(params[:person_id])
-        rescue ActiveRecord::RecordNotFound
-          render_404
-        end
+      def set_person
+        @person = Person.find(params[:person_id])
+      rescue ActiveRecord::RecordNotFound
+        render_404
       end
     end
   end
 end
 
-unless ApplicationController.included_modules.include?(RedminePeople::Patches::ApplicationControllerPatch)
-  ApplicationController.send(:include, RedminePeople::Patches::ApplicationControllerPatch)
-end
+ApplicationController.prepend(RedminePeople::Patches::ApplicationControllerPatch)

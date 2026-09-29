@@ -21,7 +21,7 @@ people_information_002:
   phone: 89122222222
   address: 'WALL STREET'
   skype: 'arny'
-  birthday: 1991-07-19
+  birthday: <%= (Date.today - 100.days - 33.years).strftime('%Y-%m-%d') %>
   job_title: architect
   company: IBM
   middlename: Ibn Hattab
@@ -39,7 +39,7 @@ people_information_003:
   phone: 89123333333
   address: 'Blue Oyster Bar'
   skype: 'Orlando'
-  birthday: 1991-07-19
+  birthday: <%= (Date.today - 100.days - 35.years).strftime('%Y-%m-%d') %>
   job_title: disigner
   company: IBM
   middlename: Mikhalych
@@ -57,7 +57,7 @@ people_information_004:
   phone: 89121212121
   address: 'Pushkina street'
   skype: 'Alex'
-  birthday: 1990-07-19
+  birthday: <%= (Date.today - 100.days - 34.years).strftime('%Y-%m-%d') %>
   job_title: builder
   company: IBM
   middlename: Vahtangovich

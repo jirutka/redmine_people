@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -28,8 +28,10 @@ class DepartmentsControllerTest < ActionController::TestCase
            :enabled_modules, :issue_statuses, :issues, :trackers,
            :email_addresses
 
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                                          [:departments, :people_information, :attachments])
+  load_plugin_fixtures :redmine_people,
+                       :departments,
+                       :people_information,
+                       :attachments
   def setup
     Setting.plugin_redmine_people = {}
 
@@ -142,11 +144,10 @@ class DepartmentsControllerTest < ActionController::TestCase
 
   def test_post_destroy
     @request.session[:user_id] = 1
-    compatible_request :post, :destroy, :id => @department.id
-    assert_response 302
-    assert_raises(ActiveRecord::RecordNotFound) do
-      Department.find(2)
+    assert_difference 'Department.count', -1 do
+      compatible_request :delete, :destroy, id: @department.id
     end
+    assert_response 302
   end
 
   def test_add_people_to_department
@@ -182,11 +183,11 @@ class DepartmentsControllerTest < ActionController::TestCase
   def test_destroy_with_manage_departments_access
     PeopleAcl.create(2, ['manage_departments'])
     @request.session[:user_id] = 2
-    compatible_request :post, :destroy, :id => @department.id
-    assert_response 302
-    assert_raises(ActiveRecord::RecordNotFound) do
-      Department.find(2)
+
+    assert_difference 'Department.count', -1 do
+      compatible_request :delete, :destroy, id: @department.id
     end
+    assert_response 302
   end
 
   def test_org_chart_for_admin

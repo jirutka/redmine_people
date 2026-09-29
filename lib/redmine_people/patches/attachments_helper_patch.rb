@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,29 +22,15 @@ require_dependency 'application_helper'
 module RedminePeople
   module Patches
     module AttachmentsHelperPatch
-      def self.included(base)
-        base.send(:include, InstanceMethods)
+      def container_attachments_download_path(container)
+        return departments_attachments_download_path container.class.name.underscore.pluralize, container.id if container.is_a?(Department)
 
-        base.class_eval do
-          
-
-          alias_method :container_attachments_download_path_without_people, :container_attachments_download_path
-          alias_method :container_attachments_download_path, :container_attachments_download_path_with_people
-        end
-      end
-
-      module InstanceMethods
-        def container_attachments_download_path_with_people(container)
-          return departments_attachments_download_path container.class.name.underscore.pluralize, container.id if container.is_a?(Department)
-
-          container_attachments_download_path_without_people(container)
-        end
+        super(container)
       end
     end
   end
 end
 
-
-if Redmine::VERSION.to_s >= '5.0' && AttachmentsHelper.included_modules.exclude?(RedminePeople::Patches::AttachmentsHelperPatch)
-  AttachmentsHelper.send(:include, RedminePeople::Patches::AttachmentsHelperPatch)
+if Redmine::VERSION.to_s >= '5.0'
+  AttachmentsHelper.prepend(RedminePeople::Patches::AttachmentsHelperPatch)
 end

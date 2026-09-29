@@ -25,66 +25,74 @@
   justify-content: space-between;
 }
 
-.person.details .subject_info {
+.person.details .subject-info {
   border-left: 1px solid #d0d7de;
   display: flex;
 }
 
-.person.details .subject_info ul {
+.person.details .subject-info ul {
   padding: 0 15px;
 }
 
-.person.details .subject_header {
+.person.details .subject-header {
   display: flex;
   align-items: start;
   column-gap: 10px;
 }
 
-.person.details .subject_header h3,
-.person.details .subject_header h2,
-.person.details .subject_header h1 {
+.person.details .subject-header h3,
+.person.details .subject-header h2,
+.person.details .subject-header h1 {
   margin: 0px;
 }
 
 /**************************************************************/
 /*                   PERSON_DATA
 /**************************************************************/
-div.person { overflow: hidden; margin-bottom: 15px; }
-div.person div.image { float: left; }
-div.person div.data { margin-left: 45px; }
-div.person div.data h4.name { border-bottom: 0px; padding: 0px; margin-bottom: 5px; }
-div.person div.data p.info { margin: 0px; }
-
-table.person_data {
-  width: 100%;
+.person-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-table.person_data td.name {
-  padding-left: 0px;
-  vertical-align: top;
+.person-card .avatar {
+  flex-shrink: 0;
 }
 
-table.person_data td.avatar {
-  vertical-align: top;
-  width: 38px;
-  padding: 10px 4px 0px 0px;
+.person-card .name {
+  flex: 1;
+  min-width: 0;
 }
 
-table.person_data td.name h4 {
-  letter-spacing: -1px;
-  margin: 7px 0 0 0;
+.person-card .name h4 {
+  margin: 0 0 2px 0;
   padding: 0;
-  line-height: 1.1em;
-  border-bottom: 0px;
+  border-bottom: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
 }
 
+.person-card .name p,
+.person-card .name .job-title,
+.person-card .name .info {
+  margin: 0;
+  font-size: 11px;
+  color: #888;
+}
+
+div.person { overflow: hidden; margin-bottom: 8px; }
+div.person div.image { float: left; }
+div.person div.data { margin-left: 40px; }
+div.person div.data h4.name { border-bottom: 0; padding: 0; margin-bottom: 2px; }
+div.person div.data p.info { margin: 0; font-size: 11px; color: #888; }
 
 div.person .system {
   text-transform: uppercase;
   background: #d22;
   color: #fff;
   font-weight: bold;
-  padding: 0px 2px 0px 2px;
+  padding: 0 2px;
   font-size: 70%;
   margin-right: 2px;
   border-radius: 2px;
@@ -107,7 +115,7 @@ table.list.members td.acls {
 /*                   PEOPLE_TABLE_LIST                        */
 /**************************************************************/
 
-.live_search input.live_search_field {
+.live-search input.live-search-field {
   font-size: 16px;
 }
 
@@ -206,32 +214,6 @@ ul.department-tree li {list-style-type:none; margin: 0px 2px 0px 0px; padding: 0
 /*                            TAGS                            */
 /**************************************************************/
 
-.tag_list {
-  margin-top: 5px;
-  display: inline-block;
-}
-
-span.tag-label-color {
-  background-color: #759FCF;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  padding: 2px 4px;
-  display: inline-block;
-  font-size: 10px;
-  margin: 0px 0px 5px 2px;
-}
-
-span.tag-label-color:hover {
-  background-color: #9DB9D5;
-}
-
-span.tag-label-color a, span.tag-label-color > span {
-  text-decoration: none;
-  font-family: Verdana, sans-serif;
-  font-weight: normal;
-  color: white;
-}
-
 #edit_tags_form.box {
   margin: 1px 5px 0px 0px;
 }
@@ -246,11 +228,6 @@ span.tag-label-color a, span.tag-label-color > span {
 }
 
 div#tags_data span.contextual {float: none; padding-left: 0px;}
-
-span.tag-label, span.tag-input {
-  display: inline-block;
-}
-
 
 #responsible_user ul {margin: 0;  padding: 0;}
 #responsible_user li {list-style-type:none; margin: 3px 2px 0px 0px; padding: 0px 0px 0px 0px;}
@@ -339,6 +316,10 @@ div[aria-describedby=announcement-show] {
   max-width: 800px;
 }
 
+#announcement-show {
+  p { color: initial;}
+}
+
 /**************************************************************/
 /*                  PEOPLE ATTRIBUTES SIDEBAR                 */
 /**************************************************************/
@@ -346,27 +327,26 @@ div[aria-describedby=announcement-show] {
 .person-attributes {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   margin-top: 10px;
 }
 
-.attribute {
+.person-attributes .attribute {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  overflow-wrap: anywhere;
 }
 
-.attribute .label {
+.person-attributes .attribute .label {
   width: 120px;
   font-weight: bold;
   color: #333;
   flex-shrink: 0;
-  margin-bottom: 8px;
 }
 
-.attribute .value {
+.person-attributes .attribute .value {
   flex: 1;
-  word-break: break-word;
 }
 
 /*****Announcements*****/
@@ -374,37 +354,23 @@ div[aria-describedby=announcement-show] {
   width: 100%;
 }
 
-.crm_pull_right{
+.pull-right{
   float: right;
 }
 
-.person_card{
-  float: left;
-  width: 30%;
-  padding: 10px;
-}
-
-.person_card:hover {
+.person-card:hover {
   background-color: #ffffdd;
 }
 
-.person_card a:hover{
+.person-card a:hover{
   text-decoration: none;
 }
 
-.person_card .gravatar{
-  float: left;
-  margin-right: 5px;
-}
-
-.person_card .contacts_header{
-  margin-bottom: 0px;
-}
 
 .birthdays{
   margin-top: 20px;
 }
-  
+
 .birthdays:after {
   clear: both;
   content: '';
@@ -441,26 +407,26 @@ table.cal td.weekend {
   border-left: 1px solid #dbdde1;
 }
 
-#tab-placeholder-performance .chart_table {
+#tab-placeholder-performance .chart-table {
   width: 100%;
   margin: 20px 0;
 }
 
-#tab-placeholder-performance .date_period_block { float: right; }
-#tab-placeholder-performance tr.header td .issues_count:after { content: "h"; }
+#tab-placeholder-performance .date-period-block { float: right; }
+#tab-placeholder-performance tr.header td .issues-count:after { content: "h"; }
 
 /* Chart table */
 
-.chart_table { margin: auto; border-collapse:collapse; text-align: center }
-.chart_table .header { height: 50px; background-color: #eee }
-.chart_table .header .column_data { min-width: 44px; border: 1px solid #c0c0c0; padding: 0px; }
-.chart_table .header .column_data .issues_count { font-weight: bold; }
-.chart_table .column_data.empty { background-color: #eee; min-width: 22px}
-.chart_table .main_block { height: 200px }
-.chart_table .main_block .column_data { vertical-align: bottom; width: 80px; border: 1px solid #c0c0c0; padding: 0px; }
-.chart_table .main_block .column_data .percents { background-color: #BAE0BA; }
-.chart_table .footer { height: 50px }
-.chart_table .footer .column_data { font-weight: bold; padding: 0px; }
+.chart-table { margin: auto; border-collapse:collapse; text-align: center }
+.chart-table .header { height: 50px; background-color: #eee }
+.chart-table .header .column-data { min-width: 44px; border: 1px solid #c0c0c0; padding: 0px; }
+.chart-table .header .column-data .issues-count { font-weight: bold; }
+.chart-table .column-data.empty { background-color: #eee; min-width: 22px}
+.chart-table .main-block { height: 200px }
+.chart-table .main-block .column-data { vertical-align: bottom; width: 80px; border: 1px solid #c0c0c0; padding: 0px; }
+.chart-table .main-block .column-data .percents { background-color: #BAE0BA; }
+.chart-table .footer { height: 50px }
+.chart-table .footer .column-data { font-weight: bold; padding: 0px; }
 
 
 /* Glance year perfomance table */
@@ -537,9 +503,9 @@ table.metrics {
 }
 
 .metrics .num {
-  color: #444;
-  font-size: 29px;
+  font-size: 1.25rem;
   margin-right: 8px;
+  font-weight: bold;
   display: inline-block;
 }
 
@@ -571,12 +537,12 @@ table.metrics {
   border-bottom: 6px solid #43ac6d
 }
 
-.change>.mirror_pos {
+.change>.mirror-pos {
   border-top: 0;
   border-bottom: 6px solid #ed5a5a
 }
 
-.change>.mirror_neg {
+.change>.mirror-neg {
   border-top-color: #43ac6d
 }
 
@@ -796,9 +762,9 @@ div.orgChart .node .person-data div.person {
   min-width: 15%;
 }
 
-.leave-planner-chart .gantt_subjects_column + td { padding: 2px; }
+.leave-planner-chart .gantt-subjects-column + td { padding: 2px; }
 
-.leave-planner-chart .gantt_hdr {
+.leave-planner-chart .gantt-hdr {
   position:absolute;
   top:0;
   height:16px;
@@ -810,17 +776,22 @@ div.orgChart .node .person-data div.person {
   overflow: hidden;
 }
 
+.leave-planner-chart .gantt-hdr.nwday {
+  background-color:#f1f1f1;
+  color:#999;
+}
+
 /**************************************************************/
 /*                      Other styles                          */
 /**************************************************************/
-.people_user_activity {}
-.user_activity_table { margin: auto; border-collapse:collapse; text-align: center; }
-.user_activity_table .header .column_data { background-color: #eee; border: 1px solid #c0c0c0; }
-.user_activity_table .main_block .column_data { width: 25px; height: 25px; background: white; border: 1px solid #c0c0c0; }
-.user_activity_table .main_block .column_data_yellow { background: #fff4a2; }
-.user_activity_table .main_block .column_data_green { background: #bae0ba; }
-.user_activity_table .main_block .column_data_user_name { text-align: left; padding-right: 15px; }
-.user_activity_table .main_block .column_data_total { background-color: #eee; border: 1px solid #c0c0c0; }
+.people-user-activity {}
+.user-activity-table { margin: auto; border-collapse:collapse; text-align: center; }
+.user-activity-table .header .column-data { background-color: #eee; border: 1px solid #c0c0c0; }
+.user-activity-table .main-block .column-data { width: 25px; height: 25px; background: white; border: 1px solid #c0c0c0; }
+.user-activity-table .main-block .column-data-yellow { background: #fff4a2; }
+.user-activity-table .main-block .column-data-green { background: #bae0ba; }
+.user-activity-table .main-block .column-data-user-name { text-align: left; padding-right: 15px; }
+.user-activity-table .main-block .column-data-total { background-color: #eee; border: 1px solid #c0c0c0; }
 
 div.journal h4 img.gravatar.without-margin {margin: -2px 4px -4px 0;}
 

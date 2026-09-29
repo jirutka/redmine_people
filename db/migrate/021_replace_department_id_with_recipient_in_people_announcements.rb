@@ -17,9 +17,35 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class AddDepartmentToPeopleAnnouncements < ActiveRecord::Migration[4.2]
-  def change
+class ReplaceDepartmentIdWithRecipientInPeopleAnnouncements < ActiveRecord::Migration[4.2]
+  def up
+    add_column :people_announcements, :recipient_id, :integer
+    add_column :people_announcements, :recipient_type, :string
+
+    execute <<-SQL
+      UPDATE people_announcements 
+      SET recipient_id = department_id,
+          recipient_type = 'Department'
+      WHERE department_id IS NOT NULL
+    SQL
+
+    add_index :people_announcements, :recipient_id
+
+    remove_column :people_announcements, :department_id
+  end
+
+  def down
     add_column :people_announcements, :department_id, :integer
-    add_index :people_announcements, :department_id
+
+    execute <<-SQL
+      UPDATE people_announcements 
+      SET department_id = recipient_id
+      WHERE recipient_type = 'Department'
+    SQL
+    
+    remove_index :people_announcements, :recipient_id
+
+    remove_column :people_announcements, :recipient_id
+    remove_column :people_announcements, :recipient_type
   end
 end

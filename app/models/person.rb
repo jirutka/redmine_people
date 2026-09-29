@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ class Person < User
                   'custom_fields',
                   'information_attributes',
                   'auth_source_id',
-    :if => lambda { |person, user| (person.new_record? && user.allowed_people_to?(:add_people, person)) || user.allowed_people_to?(:edit_people, person) }
+    :if => lambda { |person, user| safe_attributes_allow_edit?(person, user) }
 
   safe_attributes 'status',
     :if => lambda { |person, user| user.allowed_people_to?(:edit_people, person) && person.id != user.id && !person.admin }
@@ -150,8 +150,7 @@ class Person < User
   end
 
   def visible?(user = User.current)
-    principal = Principal.visible(user).where(:id => id).first
-    return principal.present?
+    Principal.visible(user).where(id: id).first.present?
   end
 
   def attachments_visible?(_user = User.current)
@@ -240,6 +239,11 @@ class Person < User
         return 'LOWER(firstname + lastname) LIKE :search OR LOWER(lastname + firstname) LIKE :search OR'
       end
       'LOWER(firstname || lastname) LIKE :search OR LOWER(lastname || firstname) LIKE :search OR'
+    end
+
+    def safe_attributes_allow_edit?(person, user)
+      (person.new_record? && user.allowed_people_to?(:add_people, person)) ||
+        user.allowed_people_to?(:edit_people, person)
     end
 
   end

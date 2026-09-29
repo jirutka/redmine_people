@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -26,8 +26,11 @@ class PersonTest < ActiveSupport::TestCase
 
   fixtures :users, :projects, :roles, :members, :member_roles, :email_addresses
 
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                                          [:people_information, :departments, :time_entries, :people_holidays])
+  load_plugin_fixtures :redmine_people,
+                       :people_information,
+                       :departments,
+                       :people_holidays,
+                       :time_entries
 
   def setup
     # Remove accesses operations
@@ -107,7 +110,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal '89555555555', @person.phone
 
     # Can not change its own system fields
-    assert !@person.is_system
+    assert_equal false, @person.is_system
   end
 
   def test_save_with_edit_people_access

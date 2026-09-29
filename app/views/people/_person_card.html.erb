@@ -1,0 +1,7 @@
+<div class="person-card" id="person_card_<%= person_card.id %>">
+  <div class="avatar"><%= link_to avatar(person_card, :size => "32"), person_path(person_card), :id => "avatar" %></div>
+  <div class="name">
+    <h4 class="contacts-header"><%= link_to person_card.name, person_path(person_card) %></h4>
+    <span class="job-title"><%= person_card.job_title %></span>
+  </div>
+</div>

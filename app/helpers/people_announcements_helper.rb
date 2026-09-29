@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,5 +22,20 @@
 module PeopleAnnouncementsHelper
   def announcement_status
     params[:announcements_status] || 'active'
+  end
+
+  def recipients_options_for_select
+    selected = @note.recipient ? "#{@note.recipient_type}:#{@note.recipient_id}" : nil
+
+    dept_options = department_tree_options_for_select(Department.all.sort) do |d|
+      value = "Department:#{d.id}"
+      { value: value, selected: (value == selected ? 'selected' : nil) }
+    end
+
+    safe_join([
+      content_tag('optgroup', dept_options,                                                                    label: l('label_department_plural')),
+      content_tag('optgroup', options_for_select(Group.givable.map { |g| [g.to_s, "Group:#{g.id}"] }, selected), label: l(:label_group_plural)),
+      content_tag('optgroup', options_for_select(Role.givable.map  { |r| [r.to_s, "Role:#{r.id}"]  }, selected), label: l(:label_role_plural))
+    ])
   end
 end

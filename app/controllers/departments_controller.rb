@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class DepartmentsController < ApplicationController
-  
+
 
   before_action :find_department, :except => [:index, :create, :new, :org_chart]
   before_action :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person, :org_chart]
@@ -98,8 +98,9 @@ class DepartmentsController < ApplicationController
   end
 
   def add_people
-    @people = PeopleInformation.where(:user_id => params[:person_id] || params[:person_ids])
-    @department.people_information << @people if request.post?
+    @people = Person.where(id: params[:person_id] || params[:person_ids])
+    people_information = @people.map {|person| person.information || person.build_information }
+    @department.people_information << people_information if request.post?
     respond_to do |format|
       format.html { redirect_to :controller => 'departments', :action => 'edit', :id => @department, :tab => 'people' }
       format.js

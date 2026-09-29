@@ -3,7 +3,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -22,10 +22,13 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class PeopleInformationTest < ActiveSupport::TestCase
+  include RedminePeople::TestCase::TestHelper
+
   fixtures :users, :projects, :roles, :members, :member_roles, :email_addresses
 
-  RedminePeople::TestCase.create_fixtures(Redmine::Plugin.find(:redmine_people).directory + '/test/fixtures/',
-                                          [:people_information, :departments])
+  load_plugin_fixtures :redmine_people,
+                       :people_information,
+                       :departments
 
   def setup
     @person_3 = PeopleInformation.find(3)

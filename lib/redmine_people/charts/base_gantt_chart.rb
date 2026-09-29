@@ -1,7 +1,7 @@
 # This file is a part of Redmine People (redmine_people) plugin,
 # humanr resources management plugin for Redmine
 #
-# Copyright (C) 2011-2025 RedmineUP
+# Copyright (C) 2011-2026 RedmineUP
 # http://www.redmineup.com/
 #
 # redmine_people is free software: you can redistribute it and/or modify
@@ -133,7 +133,7 @@ module RedminePeople
         style = "left: #{left}px;"
         style += "height: #{height}px;"
         style += "width: #{width}px;"
-        content_tag(:div, style: style, class: 'gantt_hdr') do
+        content_tag(:div, style: style, class: 'gantt-hdr') do
           content_tag(:small) do
             dates_range_label(from, to) if width >= column_width * 3 - 1
           end
@@ -194,7 +194,7 @@ module RedminePeople
             style << 'background-color: rgb(255, 232, 232); color: rgb(154, 93, 93);'
           end
 
-          css_class = 'gantt_hdr'
+          css_class = 'gantt-hdr'
           css_class << ' nwday' if non_working_week_days.include?(wday)
 
           output << content_tag(:div, style: style, class: css_class) { day_num.day.to_s }

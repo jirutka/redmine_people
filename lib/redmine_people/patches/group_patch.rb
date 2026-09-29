@@ -17,5 +17,18 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
-class CreatePeopleRates < ActiveRecord::Migration[4.2]
+module RedminePeople
+  module Patches
+    module GroupPatch
+      def self.included(base)
+        base.class_eval do
+          has_many :people_announcements, -> { where(recipient_type: 'Group') }, foreign_key: :recipient_id, dependent: :destroy
+        end
+      end
+    end
+  end
+end
+
+unless Group.included_modules.include?(RedminePeople::Patches::GroupPatch)
+  Group.send(:include, RedminePeople::Patches::GroupPatch)
 end

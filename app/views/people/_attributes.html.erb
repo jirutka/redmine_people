@@ -2,7 +2,7 @@
 
 <h3><%= l(:label_people_person) %></h3>
 
-<div class="person attributes vcard">
+<div class="person-attributes vcard">
   <%= call_hook(:view_people_sidebar_attributes_top) %>
 
   <div class="attribute"><div class="label first-name"><%= l(:field_name) %>:</div><div class="value name fn"><%= @person.firstname %></div></div>
@@ -10,7 +10,7 @@
   <div class="attribute"><div class="label last-name"><%= l(:field_lastname) %>:</div><div class="value name ln"><%= @person.lastname %></div></div>
 
   <% if !@person.job_title.blank? %>
-    <div class="attribute"><div class="label job_title"><%= l(:label_people_job_title) %>:</div><div class="value job_title title"><%= @person.job_title %></div></div>
+    <div class="attribute"><div class="label job-title"><%= l(:label_people_job_title) %>:</div><div class="value job-title title"><%= @person.job_title %></div></div>
   <% end %>
 
   <% if !@person.manager.blank? %>

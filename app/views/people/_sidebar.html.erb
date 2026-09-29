@@ -17,7 +17,7 @@
 
     <% if Person.all_visible_new_people.present? %>
     <h3><%= l(:label_people_new_people) %></h3>
-    <%= render :partial => 'people/person_data', :collection => Person.all_visible_new_people %>
+    <%= render :partial => 'people/person_card', :collection => Person.all_visible_new_people %>
     <% end %>
 
 <% end %>
